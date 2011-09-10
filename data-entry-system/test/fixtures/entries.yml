@@ -1,0 +1,7 @@
+one:
+  entry_type: MyString
+  json_blob: MyString
+
+two:
+  entry_type: MyString
+  json_blob: MyString

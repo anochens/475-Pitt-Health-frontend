@@ -1,0 +1,16 @@
+<% title "Entry" %>
+
+<p>
+  <strong>Entry Type:</strong>
+  <%= @entry.entry_type %>
+</p>
+<p>
+  <strong>Json Blob:</strong>
+  <%= @entry.json_blob %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_entry_path(@entry) %> |
+  <%= link_to "Destroy", @entry, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", entries_path %>
+</p>

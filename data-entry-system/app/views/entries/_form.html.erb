@@ -1,0 +1,12 @@
+<%= form_for @entry do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :entry_type %><br />
+    <%= f.text_field :entry_type %>
+  </p>
+  <p>
+    <%= f.label :json_blob %><br />
+    <%= f.text_field :json_blob %>
+  </p>
+  <p><%= f.submit %></p>
+<% end %>

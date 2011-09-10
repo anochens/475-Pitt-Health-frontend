@@ -1,0 +1,19 @@
+<% title "Entries" %>
+
+<table>
+  <tr>
+    <th>Entry Type</th>
+    <th>Json Blob</th>
+  </tr>
+  <% for entry in @entries %>
+    <tr>
+      <td><%= entry.entry_type %></td>
+      <td><%= entry.json_blob %></td>
+      <td><%= link_to "Show", entry %></td>
+      <td><%= link_to "Edit", edit_entry_path(entry) %></td>
+      <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Entry", new_entry_path %></p>
