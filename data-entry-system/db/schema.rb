@@ -10,11 +10,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110910212446) do
+ActiveRecord::Schema.define(:version => 20110910231934) do
 
   create_table "entries", :force => true do |t|
     t.string "entry_type"
-    t.string "json_blob"
+    t.string "json_blob",  :default => "{}"
   end
 
 end

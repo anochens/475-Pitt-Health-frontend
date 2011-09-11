@@ -38,4 +38,18 @@ class EntriesController < ApplicationController
     @entry.destroy
     redirect_to entries_url, :notice => "Successfully destroyed entry."
   end
+
+  def write
+	 j = ActiveSupport::JSON
+
+	 arr = []
+	 Entry.all.each{|e|
+		 json = j.decode(e.json_blob)
+		 json['pk'] = e.id
+		 json['type'] = e.entry_type
+		 arr << json
+	 }
+	 json_string = j.encode(arr)
+  	 render :text => json_string;
+  end   
 end

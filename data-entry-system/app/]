@@ -3,21 +3,17 @@ function create_input(form) {
    var inputs = {};
 
 	$.each(form.serializeArray(), function(i, field) {
-		if(field.name.match('entry') &&
-			field.name != 'entry[entry_type]' && 
+		if(field.name != 'entry[entry_type]' && 
 			field.name != 'entry[json_blob]') {
 			var name = field.name.replace('entry','');
 			name = name.replace('[','');
 			name = name.replace(']','');
 			inputs[name] = field.value;
-			json = JSON.stringify(inputs);
-			alert(json);
-			$('#entry_json_blob').val(json);
 		}
 	});
-	alert($('#entry_json_blob').val());
 
 	console.log(inputs);
+	alert(inputs.toString());
 };
 </script>
 
@@ -28,7 +24,10 @@ function create_input(form) {
     <%= f.label :entry_type %>
     <%= f.select :entry_type, Entry::ENTRY_TYPES %>
   </p>
-  <%= f.hidden_field :json_blob %>
+  <p>
+    <%= f.label :json_blob %>
+    <%= f.text_field :json_blob %>
+  </p>
   <p>
     <%= f.label :title %>
   <input id="entry_title" name="entry[title]" size="30" type="text" />
