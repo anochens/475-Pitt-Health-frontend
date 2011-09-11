@@ -21,24 +21,27 @@ class Entry < ActiveRecord::Base
 
   def summary
 	  return "Entry #{id} (#{entry_type})"
+
   end   
 
-  def prev
-     getParamFromJSON('prev');
-  end   
-
-  def getParamFromJSON(name) 
+  def method_missing(name, *args, &block) 
 	 j = ActiveSupport::JSON
 
-	 blob = @json_blob || '{}'
+	 print "trying to get #{name} with #{args.to_s} (#{args.length})"
 
-    v = j.decode(blob)
+	 return '' if args.length < 1
 
-	 if v.include?(name) && !v[name].nil?
-		 return v[name]
-	 end   
-	 'alan'
-  end  
+    v = j.decode(@json_blob)
+
+	 if v.include?(args[0])
+		 return v[args[0]]
+    else
+	 	 return ''
+	 end
+	 
+	 ''   
+
+  end   
 end
 
                                        
