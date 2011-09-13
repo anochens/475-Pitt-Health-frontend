@@ -1,0 +1,7 @@
+[
+{"title":"First Page","pk":1,"type":"MENU"},
+{"title":"Second page","prev":"1","pk":2,"type":"MENU"},
+{"title":"Item 1","prev":"2","pk":3,"type":"ITEM"},
+{"title":"Hello World","prev":"1","pk":4,"type":"ITEM"},
+{"title":"Goodbye World","prev":"3","pk":5,"type":"ENDPAGE"}
+]
