@@ -1,0 +1,77 @@
+<script>
+function create_input(form) {
+   var inputs = {};
+
+	$.each(form.serializeArray(), function(i, field) {
+		if(field.name.match('entry') &&
+			field.name != 'entry[entry_type]' && 
+			field.name != 'entry[json_blob]') {
+			var name = field.name.replace('entry','');
+			name = name.replace('[','');
+			name = name.replace(']','');
+			inputs[name] = field.value;
+			json = JSON.stringify(inputs);
+			$('#entry_json_blob').val(json);
+		}
+	});
+};
+
+function selectChanged() {
+
+	var newVal = $('#entry_entry_type').val();
+
+	<% 
+	s_prevs = collection_select(:entry, :prev, Entry.all, :id, :summary) 
+	s_prevs.gsub!("\n","")
+
+	l_prevs = label :entry, :prev;
+
+	ePrevsText = "<p>#{l_prevs} #{s_prevs}</p>"
+	%>
+
+   var ePrev = '<p><%= raw(ePrevsText) %></p>';
+
+
+	switch(newVal) {
+   	case 'MENU':
+			$('#content').append(ePrev);			
+
+		break;
+
+		case 'ITEM':
+
+		break;
+
+		case 'ENDPAGE':
+
+		break;
+
+		default:
+	}
+}
+
+$(document).ready(function() {
+	$('#entry_entry_type').change(selectChanged);
+
+	selectChanged( $('entry_entry_type').val() );
+});
+
+</script>
+
+
+<%= form_for @entry do |f| %>
+  <%= f.error_messages %>
+  <div id='content'>
+  <p>
+    <%= f.label :entry_type %>
+    <%= f.select :entry_type, Entry::ENTRY_TYPES %>
+  </p>
+  <%= f.hidden_field :json_blob %>
+  <p>
+    <%= f.label :title %>
+  <input id="entry_title" name="entry[title]" size="30" type="text" />
+  </p>           
+  </div>
+
+  <p><%= f.submit :onclick => 'create_input($(this).closest("form"))' %></p>
+<% end %>
