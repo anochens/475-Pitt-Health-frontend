@@ -45,4 +45,35 @@ Ext.regController('Home', {
         
         this.application.viewport.setActiveItem(this.aboutView);
     },
+    // about action
+    dental: function()
+    {
+        if ( ! this.dentalView)
+        {
+            this.dentalView = this.render({
+                xtype: 'HomeDental',
+            });
+        }
+     
+        var backBtn = this.application.viewport.query('#backBtn')[0];
+        backBtn.show();
+        
+        backBtn.setHandler(function()
+		{
+        	Ext.dispatch({
+        	    controller: 'Home',
+        	    action: 'about',
+        	    historyUrl: 'Home/about',
+        	    //
+        	    animation: {
+        	        type: 'slide',
+        	        reverse: true,
+        	    },
+        	});
+		});
+        
+        this.application.viewport.setActiveItem(this.dentalView);
+    },
+    
+	
 });
