@@ -20,24 +20,39 @@ class Entry < ActiveRecord::Base
   end
 
   def summary
-	  return "Entry #{id} (#{entry_type})"
+	  "#{self.json_blob} (Entry #{id} (#{entry_type}))"
+     "#{getParamFromJSON('title')} (Entry #{id} (#{entry_type}))"
   end   
+  
+  def title
+	  getParamFromJSON('title')
+  end
 
   def prev
-     getParamFromJSON('prev');
+     getParamFromJSON('prev')
+  end   
+
+  def next
+     getParamFromJSON('next')
+  end                         
+
+  def data
+	  getParamFromJSON('data')
+  end   
+
+  def items
+	  getParamFromJSON('items')
   end   
 
   def getParamFromJSON(name) 
 	 j = ActiveSupport::JSON
 
-	 blob = @json_blob || '{}'
+	 blob = @json_blob || self.json_blob || '{}'
 
     v = j.decode(blob)
 
-	 if v.include?(name) && !v[name].nil?
-		 return v[name]
-	 end   
-	 'alan'
+	 return v[name] if v.include?(name) && !v[name].nil?
+	 ''
   end  
 end
 

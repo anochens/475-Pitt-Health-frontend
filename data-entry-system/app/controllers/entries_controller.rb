@@ -47,6 +47,14 @@ class EntriesController < ApplicationController
 		 json = j.decode(e.json_blob)
 		 json['pk'] = e.id
 		 json['type'] = e.entry_type
+
+       if json.include? 'items[]' 
+			 json['items[]'] = json['items[]'].split(",").map{|i| i.to_i}
+		 	 json['items'] = json['items[]']  
+			 json.delete 'items[]'
+		 end   
+
+		 json['prev'] = json['prev'].to_i if json.include? 'prev'
 		 arr << json
 	 }
 	 json_string = j.encode(arr)

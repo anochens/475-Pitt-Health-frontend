@@ -9,7 +9,12 @@ function create_input(form) {
 			var name = field.name.replace('entry','');
 			name = name.replace('[','');
 			name = name.replace(']','');
-			inputs[name] = field.value;
+			if(name in inputs) {
+				inputs[name] += ','+field.value; 
+			}
+			else {
+				inputs[name] = field.value;
+			}
 			json = JSON.stringify(inputs);
 			$('#entry_json_blob').val(json);
 		}
@@ -21,29 +26,47 @@ function selectChanged() {
 	var newVal = $('#entry_entry_type').val();
 
 	<% 
-	s_prevs = collection_select(:entry, :prev, Entry.all, :id, :summary) 
+	all = Entry.all.reject{|e| e.id == @entry.id}
+	s_prevs = collection_select(:entry, :prev, all, :id, :summary, :include_blank => true) 
 	s_prevs.gsub!("\n","")
-
-	l_prevs = label :entry, :prev;
-
+	l_prevs = label :entry, 'Previous';
 	ePrevsText = "<p>#{l_prevs} #{s_prevs}</p>"
+
+	s_items = collection_select(:entry, :items, all, :id, :summary,{}, {:multiple=>true}) 
+	s_items.gsub!("\n","")
+	l_items = label :entry, :items;
+	eItemsText = "<p>#{l_items} #{s_items}</p>"
+
+	s_next = collection_select(:entry, :next, all, :id, :summary) 
+	s_next.gsub!("\n","")
+	l_next = label :entry, :next;
+	eNextText = "<p>#{l_next} #{s_next}</p>"
+
+	b_data = text_area(:entry, :data, :size=>'100x10')
+	l_data = label :entry, :data;
+	eDataText = "<p>#{l_data} #{b_data}</p>"
 	%>
 
    var ePrev = '<p><%= raw(ePrevsText) %></p>';
+   var eItems = '<p><%= raw(eItemsText) %></p>';
+   var eNext = '<p><%= raw(eNextText) %></p>';
+   var eData = '<p><%= raw(eDataText) %></p>';
 
+	$('#extra').empty();
 
 	switch(newVal) {
    	case 'MENU':
-			$('#content').append(ePrev);			
-
+			$('#extra').append(ePrev);			
+			$('#extra').append(eItems);			
 		break;
 
 		case 'ITEM':
+			$('#extra').append(eNext);			
 
 		break;
 
 		case 'ENDPAGE':
-
+			$('#extra').append(eData);			
 		break;
 
 		default:
@@ -71,6 +94,10 @@ $(document).ready(function() {
     <%= f.label :title %>
   <input id="entry_title" name="entry[title]" size="30" type="text" />
   </p>           
+  </div>
+
+  <div id='extra'>
+
   </div>
 
   <p><%= f.submit :onclick => 'create_input($(this).closest("form"))' %></p>
