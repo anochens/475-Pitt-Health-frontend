@@ -20,8 +20,7 @@ class Entry < ActiveRecord::Base
   end
 
   def summary
-	  "#{self.json_blob} (Entry #{id} (#{entry_type}))"
-     "#{getParamFromJSON('title')} (Entry #{id} (#{entry_type}))"
+     "#{title} (Entry #{id} (#{entry_type}))"
   end   
   
   def title
@@ -41,7 +40,7 @@ class Entry < ActiveRecord::Base
   end   
 
   def items
-	  getParamFromJSON('items')
+	  getParamFromJSON('items[]').split(",")
   end   
 
   def getParamFromJSON(name) 
