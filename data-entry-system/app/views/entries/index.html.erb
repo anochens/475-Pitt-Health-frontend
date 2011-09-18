@@ -1,5 +1,16 @@
 <% title "Entries" %>
 
+<script>
+$(document).ready( function() {
+	$('[id^=destroy]')
+	  .bind('ajax:success', function(evt, data, status, xhr){
+		 $(this).closest('tr').remove();   
+	  });
+});
+
+
+</script>
+
 <table>
   <tr>
     <th>PK</th>
@@ -13,7 +24,7 @@
       <td><%= entry.json_blob %></td>
       <td><%= link_to "Show", entry %></td>
       <td><%= link_to "Edit", edit_entry_path(entry) %></td>
-      <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete, :remote => true, :id=>"destroy_#{entry.id}" %></td>
     </tr>
   <% end %>
 </table>
