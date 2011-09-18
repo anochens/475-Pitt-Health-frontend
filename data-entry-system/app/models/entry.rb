@@ -28,11 +28,11 @@ class Entry < ActiveRecord::Base
   end
 
   def prev
-     getParamFromJSON('prev')
+     getParamFromJSON('prev').to_i
   end   
 
   def next
-     getParamFromJSON('next')
+     getParamFromJSON('next').to_i
   end                         
 
   def data
@@ -46,7 +46,7 @@ class Entry < ActiveRecord::Base
   def getParamFromJSON(name) 
 	 j = ActiveSupport::JSON
 
-	 blob = @json_blob || self.json_blob || '{}'
+	 blob = self.json_blob || '{}'
 
     v = j.decode(blob)
 
