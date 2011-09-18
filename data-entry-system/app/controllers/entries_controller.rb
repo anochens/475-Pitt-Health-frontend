@@ -48,16 +48,22 @@ class EntriesController < ApplicationController
 		 json['pk'] = e.id
 		 json['type'] = e.entry_type
 
-       if json.include? 'items[]' 
-			 json['items[]'] = json['items[]'].split(",").map{|i| i.to_i}
-		 	 json['items'] = json['items[]']  
-			 json.delete 'items[]'
-		 end   
+		 # change fields like field[]='1,2' to field=[1,2]
+	    Entry::MULTI_FIELDS.each{|f|
+			 if json.include? "#{f}[]" 
+				 json["#{f}[]"] = json["#{f}[]"].split(",").map{|i| i.to_i}
+				 json[f] = json["#{f}[]"]  
+				 json.delete "#{f}[]"
+			 end   
+		 }
 
-		 json['prev'] = json['prev'].to_i if json.include? 'prev'
+	    Entry::INTEGER_FIELDS.each{|f|
+			 json[f] = json[f].to_i if json.include? f
+		 }
 		 arr << json
 	 }
 	 json_string = j.encode(arr)
+
   	 render :text => json_string;
   end   
 end
