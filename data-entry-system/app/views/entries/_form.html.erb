@@ -29,14 +29,7 @@ function selectChanged() {
 	all = Entry.all.reject{|e| e.id == @entry.id}.sort_by{|e| e.id.to_i}
 	items = all.select{|e| e.entry_type == Entry::ENTRY_ITEM}
 	menus = all.select{|e| e.entry_type == Entry::ENTRY_MENU}
-	endpages = all.select{|e| e.entry_type == Entry::ENTRY_ENDPAGE}
 	
-   # make the 'previous' select box
-	s_prevs = collection_select(:entry, :prev, all - items - endpages, :id, :id_title, :include_blank => true) 
-	s_prevs.gsub!("\n","")
-	l_prevs = label :entry, 'Previous';
-	ePrevsText = "<p>#{l_prevs} #{s_prevs}</p>"
-
    # make the 'items' multi-select box
 	s_items = collection_select(:entry, :items, items, :id, :id_title, {}, {:multiple => true}) 
 	s_items.gsub!("\n","")
@@ -55,7 +48,6 @@ function selectChanged() {
 	eDataText = "<p>#{l_data} #{b_data}</p>"
 	%>
 
-   var ePrev  = '<p><%= raw(ePrevsText) %></p>';
    var eItems = '<p><%= raw(eItemsText) %></p>';
    var eNext  = '<p><%= raw(eNextText) %> </p>';
    var eData  = '<p><%= raw(eDataText) %> </p>';
@@ -64,7 +56,6 @@ function selectChanged() {
 
 	switch(newVal) {
    	case 'MENU':
-			$('#extra').append(ePrev);			
 			$('#extra').append(eItems);			
 		break;
 
