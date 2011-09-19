@@ -1,5 +1,5 @@
 function loadfile(success, primarykey, action){
-	var url='data/sampledata.json';
+	var url='sampledata.json';
 	window.jsondata=[];
 	$.getJSON(url, function(data){
 		for(var i=0;i<data.length;i++){
