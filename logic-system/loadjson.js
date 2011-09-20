@@ -1,17 +1,18 @@
-function loadfile(success, primarykey, action){
-	var url='sampledata.json';
-	window.jsondata=[];
+function loadfile(success, primarykey, action, filename){
+	//var url='data/sampledata.json';
+	var url=filename;
+	window.jsondata=[]; //creates a global array to store JSON elements
 	$.getJSON(url, function(data){
 		for(var i=0;i<data.length;i++){
-			window.jsondata[data[i].pk]=data[i];
+			window.jsondata[data[i].pk]=data[i]; //the primarykey will be the index in which the JSON element is st
 		}
 		success(primarykey, action);
 	});
 }
 
-function displayInfo(primarykey, action) {
+function displayInfo(primarykey, action, filename) {
 	if(typeof window.jsondata === "undefined"){
-		return loadfile(doDisplay, primarykey, action);
+		return loadfile(doDisplay, primarykey, action, filename);
 	}
 	doDisplay(primarykey, action);
 }
