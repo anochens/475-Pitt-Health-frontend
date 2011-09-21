@@ -1,5 +1,5 @@
 App.views.HomeIndex = Ext.extend(Ext.Panel, {
-	html: '<a href="#Home/about" class="menu-item">North</a> <a href="#Home/south" class="menu-item">South</a>  <a href="#Home/east" class="menu-item">East</a> <a href="#Home/west" class="menu-item">West</a>',
+	html: '<a href="#Home/mothers" class="menu-item">Pregnant Mothers</a> <a href="#Home/infants" class="menu-item">Infants <2 yo</a>  <a href="#Home/children5" class="menu-item">Children <5 yo</a> <a href="#Home/children6" class="menu-item">Children <6 yo</a> <a href="#Home/adults" class="menu-item">Adults (General)</a>',
 	scroll: 'vertical',
 	styleHtmlContent: true,
 	style: 'background: #d8e2ef',

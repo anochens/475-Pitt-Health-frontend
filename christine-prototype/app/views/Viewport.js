@@ -5,7 +5,7 @@ App.views.Viewport = Ext.extend(Ext.Panel, {
     dockedItems: [
         {
         	xtype: 'toolbar',
-        	title: 'Christine',
+        	title: 'Health Resources',
         	items: [
     	        {
     	            text: 'Back',
