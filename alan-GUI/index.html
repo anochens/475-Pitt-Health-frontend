@@ -1,0 +1,153 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Health Resources</title> 
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.js"></script>
+	<script type="text/javascript" src="loadjson.js"></script>
+
+	<script>
+
+	function setBack(pk) {
+  		window.back.push(pk);
+		$('#back-button').show();
+		$('#back-button').unbind('click').click(function (){
+      	goBack();
+		});
+	}
+
+	function goBack() {
+   	var last = window.back.pop();
+      if(back.length == 0) {
+			$('#back-button').hide();
+		}
+		
+		if(last) {
+			transitionTo(last);
+		}
+
+		
+
+	}
+
+	function transitionTo(pk, from) {
+   	var res = displayInfo(pk,'SHOW');
+
+		if(!res) return;
+
+		if(res['type'] == 'MENU') {
+			showMenu();
+			makeMenu(res['items'], res['pk']);
+		}
+
+		if(res['type'] == 'ENDPAGE') {
+      	hideMenu();
+			showData(res['data']);
+		}
+
+		setTitle(res['title']);
+
+		if(typeof from !== 'undefined') {
+			setBack(from);
+		}
+
+
+	}
+
+	function setTitle(title) {
+		$('#header_line').html(title);
+		document.title = title;
+	}
+
+	function createMenuItem(elem, text, next, from) {
+		var cloned = $(elem).clone();
+		var ul = $('#main-menu');
+
+		cloned.find(':only-child:last').html(text);
+		cloned.find(':only-child:last').attr('next',next);
+		cloned.attr('id', 'to_'+next);
+      cloned.click(function() {
+			transitionTo(next, from)
+		});
+
+		cloned.show();
+
+		ul.append(cloned);
+	}
+
+	function emptyMenu() {
+   	 $('[id^="to_"]').remove()
+	}
+
+	function emptyData() {
+   	$('#main-data').empty();
+	}
+
+	function hideMenu() {
+   	emptyMenu();
+		$('#main-menu-wrapper').hide();
+	}
+
+	function showMenu() {
+		emptyMenu();
+		emptyData();
+		$('#main-menu-wrapper').show();
+	}
+
+	function showData(data) {
+   	$('#main-data').html(data);
+	}
+
+	//assume elem 1 is the base menu
+	function makeBaseMenu() {
+		var baseMenuPK = 1;
+   	var res = displayInfo(baseMenuPK,'SHOW');
+		makeMenu(res['items'], baseMenuPK);
+	}
+
+	function makeMenu(items, from) {
+		for(var i=0;i<items.length;i++) {
+			itemdata = displayInfo(items[i], 'SHOW');
+			createMenuItem($('#base-item'), itemdata['title'], itemdata['next'], from);
+		}
+	}
+
+	</script>
+</head> 
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<a href="" data-icon="back" id='back-button'>Back</a>
+		<h1 id='header_line'>Health Resources</h1>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+		<div id='main-menu-wrapper'>
+		<ul data-role="listview" data-theme="e" data-filter="true" id='main-menu'>
+			<li id='base-item' ><a href=""></a></li>
+		</ul>
+		</div>
+		<div id='main-data'></div>
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+<script>
+
+$(document).ready(function() {
+	$('#base-item').hide();
+	makeBaseMenu();
+	window.back = [];
+	$('#back-button').hide();
+});
+
+</script>
+
+</body>
+</html>
