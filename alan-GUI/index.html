@@ -22,22 +22,17 @@
 
 	function goBack() {
    	var last = window.back.pop();
+
+		//if we are on the root page, hide the back button
       if(back.length == 0) {
 			$('#back-button').hide();
 		}
 		
-		if(last) {
-			transitionTo(last);
-		}
-
-		
-
+		transitionTo(last);
 	}
 
 	function transitionTo(pk, from) {
    	var res = displayInfo(pk,'SHOW');
-
-		if(!res) return;
 
 		if(res['type'] == 'MENU') {
 			showMenu();
@@ -54,12 +49,10 @@
 		if(typeof from !== 'undefined') {
 			setBack(from);
 		}
-
-
 	}
 
 	function setTitle(title) {
-		$('#header_line').html(title);
+		$('#header-line').html(title);
 		document.title = title;
 	}
 
@@ -102,7 +95,7 @@
    	$('#main-data').html(data);
 	}
 
-	//assume elem 1 is the base menu
+	//assume elem with pk 1 is the base menu
 	function makeBaseMenu() {
 		var baseMenuPK = 1;
    	var res = displayInfo(baseMenuPK,'SHOW');
@@ -124,8 +117,8 @@
 
 	<div data-role="header">
 		<a href="" data-icon="back" id='back-button'>Back</a>
-		<h1 id='header_line'>Health Resources</h1>
-	</div><!-- /header -->
+		<h1 id='header-line'>Health Resources</h1>
+	</div>
 
 	<div data-role="content">	
 		<div id='main-menu-wrapper'>
@@ -133,7 +126,19 @@
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
 		</div>
-		<div id='main-data'></div>
+		<style>
+
+pre {
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+
+		</style>
+		<pre style='padding-right:20%'><div id='main-data'></div></pre>
 	</div><!-- /content -->
 
 </div><!-- /page -->
