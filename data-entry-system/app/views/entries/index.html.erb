@@ -1,6 +1,8 @@
 <% title "Entries" %>
 
 <script>
+// This makes the destroy links work remotely, and removes the row that 
+// was destroyed.
 $(document).ready( function() {
 	$('[id^=destroy]')
 	  .bind('ajax:success', function(evt, data, status, xhr){
@@ -13,20 +15,20 @@ $(document).ready( function() {
 
 <table>
   <tr>
-    <th>PK</th>
-    <th>Type</th>
-    <th>Json Blob</th>
+    <th id='heading_PK'>PK</th>
+    <th id='heading_type'>Type</th>
+    <th id='heading_json_blob'>Json Blob</th>
   </tr>
   <% for entry in @entries %>
     <tr>
-      <td><%= entry.id %></td>
-      <td><%= entry.entry_type %></td>
-      <td><%= entry.json_blob %></td>
-      <td><%= link_to "Show", entry %></td>
-      <td><%= link_to "Edit", edit_entry_path(entry) %></td>
+      <td id='id_<%= entry.id %>'><%= entry.id %></td>
+      <td id='type_<%= entry.id %>'><%= entry.entry_type %></td>
+      <td id='json_blob_<%= entry.id %>'><%= entry.json_blob %></td>
+      <td><%= link_to "Show", entry, :id => "show_#{entry.id}" %></td>
+      <td><%= link_to "Edit", edit_entry_path(entry), :id => "edit_#{entry.id}" %></td>
       <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete, :remote => true, :id=>"destroy_#{entry.id}" %></td>
     </tr>
   <% end %>
 </table>
 
-<p><%= link_to "New Entry", new_entry_path %></p>
+<p><%= link_to "New Entry", new_entry_path, :id=>'new_entry_link' %></p>

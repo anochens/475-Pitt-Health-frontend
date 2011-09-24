@@ -10,7 +10,7 @@
 </p>
 
 <p>
-  <%= link_to "Edit", edit_entry_path(@entry) %> |
-  <%= link_to "Destroy", @entry, :confirm => 'Are you sure?', :method => :delete %> |
-  <%= link_to "View All", entries_path %>
+  <%= link_to "Edit", edit_entry_path(@entry), :id=>'edit_link' %> |
+  <%= link_to "Destroy", @entry, :confirm => 'Are you sure?', :method => :delete, :id=>'destroy_link' %> |
+  <%= link_to "View All", entries_path, :id=>'index_link' %>
 </p>
