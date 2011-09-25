@@ -40,7 +40,10 @@ class Entry < ActiveRecord::Base
 
 	 v = j.decode(self.json_blob)
 
-	 v['items[]'] = '' unless v.include? 'items[]'
+	 if v['entry_type'] == Entry::ENTRY_MENU && !v.include?('items[]')
+		 v['items[]'] = '' 
+	 end   
+	 
 
 	 self.json_blob = j.encode v
   end

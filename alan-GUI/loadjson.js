@@ -1,40 +1,28 @@
 function loadfile(success, primarykey, action, filename){
-	// var url='data/sampledata.json';
-	// var url=filename;
-	// window.jsondata=[]; //creates a global array to store JSON elements
-	// $.getJSON(url, function(data){
-	// 	for(var i=0;i<data.length;i++){
-	// 		window.jsondata[data[i].pk]=data[i]; //the primarykey will be the index in which the JSON element is st
-	// 	}
-	// 	success(primarykey, action);
-	// });
-	
 	window.jsondata=[]; //creates a global array to store JSON elements
+	data = [];
 	$.ajax({
 	  url: filename,
 	  async: false,
 	  dataType: 'json',
-	  success: function (data) {
-		for(var i=0;i<data.length;i++){
-			window.jsondata[data[i].pk]=data[i]; //the primarykey will be the index in which the JSON element is st
-		}
-		success(primarykey, action);
-		alert('loaded');
-		},
-		complete: function(data, s) {
-			console.log(data);
-			alert(s);
-		}
+	  success: function(d) { data = d; }
 	});
+
+	for(var i=0;i<data.length;i++){
+		window.jsondata[data[i].pk]=data[i]; //the primarykey will be the index in which the JSON element is st
+	}
+	return success(primarykey, action);
 }
 
 function displayInfo(primarykey, action, filename) {
-	filename = '../testdata.json';
+	if(typeof filename === 'undefined') {
+		filename = 'sampledata.json';
+
+	}
 	if(typeof window.jsondata === "undefined"){
-	alert('2');
 		return loadfile(doDisplay, primarykey, action, filename);
 	}
-	doDisplay(primarykey, action);
+	return doDisplay(primarykey, action);
 }
 
 function doDisplay(primarykey, action){
@@ -45,15 +33,17 @@ function doDisplay(primarykey, action){
 	if(objectofinterest==null){
 		return null; //if we can't find the corresponding primarykey
 	}
+	if(action == 'SHOW') {
+		return window.jsondata[primarykey];
+	}                         
 	if(objectofinterest.type=="MENU"){
 		elementNum = action.split("ITEM")[1]; //expecting ITEMx, where x = the primary key of the action
 		if(objectofinterest.items[elementNum]!=null){
 			pk = objectofinterest.items[elementNum];
-			console.log(window.jsondata[pk]); //just to log the information to see if the output is correct
 			return window.jsondata[pk];
 		}
 		else{
-			return null
+			return null;
 		}
 	}
 	if(objectofinterest.type=="ENDPAGE"){
