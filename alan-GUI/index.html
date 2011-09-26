@@ -1,9 +1,9 @@
-<!DOCTYPE html> 
-<html> 
-	<head> 
-	<title>Health Resources</title> 
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>Health Resources</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.css" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
@@ -27,7 +27,7 @@
       if(back.length == 0) {
 			$('#back-button').hide();
 		}
-		
+
 		transitionTo(last);
 	}
 
@@ -63,7 +63,7 @@
 		cloned.find(':only-child:last').html(text);
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
-      cloned.click(function() {
+        cloned.click(function() {
 			transitionTo(next, from)
 		});
 
@@ -73,15 +73,15 @@
 	}
 
 	function emptyMenu() {
-   	 $('[id^="to_"]').remove()
+   		$('[id^="to_"]').remove()
 	}
 
 	function emptyData() {
-   	$('#main-data').empty();
+   		$('#main-data').empty();
 	}
 
 	function hideMenu() {
-   	emptyMenu();
+   		emptyMenu();
 		$('#main-menu-wrapper').hide();
 	}
 
@@ -92,14 +92,21 @@
 	}
 
 	function showData(data) {
-   	$('#main-data').html(data);
+   		$('#main-data').html(data);
 	}
 
 	//assume elem with pk 1 is the base menu
 	function makeBaseMenu() {
 		var baseMenuPK = 1;
-   	var res = displayInfo(baseMenuPK,'SHOW');
+   		var res = displayInfo(baseMenuPK,'SHOW');
 		makeMenu(res['items'], baseMenuPK);
+	}
+
+	function goToBaseMenu() {
+		transitionTo(1);
+		window.back = [];
+		$('#back-button').hide();
+
 	}
 
 	function makeMenu(items, from) {
@@ -110,19 +117,19 @@
 	}
 
 	</script>
-</head> 
-<body> 
+</head>
+<body>
 
-<div data-role="page">
-
-	<div data-role="header">
+<div data-role="page" data-theme="b">
+	<div data-role="header" data-theme="b">
 		<a href="" data-icon="back" id='back-button'>Back</a>
+		<a href="" data-icon="home" id='home-button' onclick='goToBaseMenu();'>Home</a>
 		<h1 id='header-line'>Health Resources</h1>
 	</div>
 
-	<div data-role="content">	
+	<div data-role="content">
 		<div id='main-menu-wrapper'>
-		<ul data-role="listview" data-theme="e" data-filter="true" id='main-menu'>
+		<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
 		</div>
