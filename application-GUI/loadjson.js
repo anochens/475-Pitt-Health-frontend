@@ -16,7 +16,7 @@ function loadfile(success, primarykey, action, filename){
 
 function displayInfo(primarykey, action, filename) {
 	if(typeof filename === 'undefined') {
-		filename = 'sampledata.json';
+		filename = 'data.json';
 
 	}
 	if(typeof window.jsondata === "undefined"){
