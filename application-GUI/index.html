@@ -13,18 +13,18 @@
 	<script>
 
 	function setBack(pk) {
-  		window.back.push(pk);
+		window.back.push(pk);
 		$('#back-button').show();
 		$('#back-button').unbind('click').click(function (){
-      	goBack();
+			goBack();
 		});
 	}
 
 	function goBack() {
-   	var last = window.back.pop();
+		var last = window.back.pop();
 
 		//if we are on the root page, hide the back button
-      if(back.length == 0) {
+		if(back.length == 0) {
 			$('#back-button').hide();
 		}
 
@@ -32,7 +32,7 @@
 	}
 
 	function transitionTo(pk, from) {
-   	var res = getEntryFromFile(pk);
+		var res = getEntryFromFile(pk);
 
 		if(res['type'] == 'MENU') {
 			showMenu();
@@ -40,7 +40,7 @@
 		}
 
 		if(res['type'] == 'ENDPAGE') {
-      	hideMenu();
+			hideMenu();
 			showData(res['data']);
 		}
 
@@ -63,7 +63,7 @@
 		cloned.find(':only-child:last').html(text);
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
-        cloned.click(function() {
+		cloned.click(function() {
 			transitionTo(next, from)
 		});
 
@@ -73,15 +73,15 @@
 	}
 
 	function emptyMenu() {
-   		$('[id^="to_"]').remove()
+		$('[id^="to_"]').remove()
 	}
 
 	function emptyData() {
-   		$('#main-data').empty();
+		$('#main-data').empty();
 	}
 
 	function hideMenu() {
-   		emptyMenu();
+		emptyMenu();
 		$('#main-menu-wrapper').hide();
 	}
 
@@ -92,13 +92,13 @@
 	}
 
 	function showData(data) {
-   		$('#main-data').html(data);
+		$('#main-data').html(data);
 	}
 
 	//assume elem with pk 1 is the base menu
 	function makeBaseMenu() {
 		var baseMenuPK = 1;
-   	var res = getEntryFromFile(baseMenuPK);
+		var res = getEntryFromFile(baseMenuPK);
 		makeMenu(res['items'], baseMenuPK);
 	}
 
@@ -134,16 +134,13 @@
 		</ul>
 		</div>
 		<style>
-
-pre {
-	white-space: pre-wrap; /* css-3 */
-	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-	white-space: -pre-wrap; /* Opera 4-6 */
-	white-space: -o-pre-wrap; /* Opera 7 */
-	word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
-
-
+			pre {
+				white-space: pre-wrap; /* css-3 */
+				white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+				white-space: -pre-wrap; /* Opera 4-6 */
+				white-space: -o-pre-wrap; /* Opera 7 */
+				word-wrap: break-word; /* Internet Explorer 5.5+ */
+			}
 		</style>
 		<pre style='padding-right:20%'><div id='main-data'></div></pre>
 	</div><!-- /content -->

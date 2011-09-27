@@ -12,17 +12,13 @@
   <script language="javascript">
 
 
-	function testLogicSystem(){
-		assertEquals("If you pass in 6 as primary key and ITEM0 as action", {title:"Item 1", prev:"2", pk:3, type:"ITEM"}, displayInfo(6, 'ITEM0', '../../data/sampledata.json'));
-	}
-	
 	function testNulljsondata(){
 		window.jsondata=[];
-		assertNull("If window.jsondata is null, should return null", doDisplay(3, "ITEM0"));
+		assertNull("If window.jsondata is null, should return null", getEntryFromFile(3, "ITEM0"));
 	}
 	
 	function testWrongFile(){
-		assertEquals("If file does not exist", undefined, loadfile(doDisplay, 6, "ITEM0", '../../data/sampldata.json'));
+		assertEquals("If file does not exist", undefined, loadfile(getEntryFromFile, 6, "ITEM0", '../../data/sampldata.json'));
 	}
 	
 	function testWrongFileTwo(){
