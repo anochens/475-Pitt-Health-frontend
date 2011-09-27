@@ -32,7 +32,7 @@
 	}
 
 	function transitionTo(pk, from) {
-   	var res = displayInfo(pk,'SHOW');
+   	var res = getEntryFromFile(pk);
 
 		if(res['type'] == 'MENU') {
 			showMenu();
@@ -98,7 +98,7 @@
 	//assume elem with pk 1 is the base menu
 	function makeBaseMenu() {
 		var baseMenuPK = 1;
-   		var res = displayInfo(baseMenuPK,'SHOW');
+   	var res = getEntryFromFile(baseMenuPK);
 		makeMenu(res['items'], baseMenuPK);
 	}
 
@@ -111,7 +111,7 @@
 
 	function makeMenu(items, from) {
 		for(var i=0;i<items.length;i++) {
-			itemdata = displayInfo(items[i], 'SHOW');
+			itemdata = getEntryFromFile(items[i]);
 			createMenuItem($('#base-item'), itemdata['title'], itemdata['next'], from);
 		}
 	}

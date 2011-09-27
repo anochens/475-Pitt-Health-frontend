@@ -1,4 +1,4 @@
-function loadfile(success, primarykey, action, filename){
+function loadfile(successFunction, primarykey, filename){
 	window.jsondata=[]; //creates a global array to store JSON elements
 	data = [];
 	$.ajax({
@@ -9,45 +9,35 @@ function loadfile(success, primarykey, action, filename){
 	});
 
 	for(var i=0;i<data.length;i++){
-		window.jsondata[data[i].pk]=data[i]; //the primarykey will be the index in which the JSON element is st
+		window.jsondata[data[i].pk]=data[i]; 
 	}
-	return success(primarykey, action);
+	return successFunction(primarykey);
 }
 
-function displayInfo(primarykey, action, filename) {
+function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {
 		filename = 'data.json';
 
 	}
 	if(typeof window.jsondata === "undefined"){
-		return loadfile(doDisplay, primarykey, action, filename);
+		return loadfile(getEntry, primarykey, filename);
 	}
-	return doDisplay(primarykey, action);
+	return getEntry(primarykey);
 }
 
-function doDisplay(primarykey, action){
-	var objectofinterest = null; //the element from the JSON file
+function getEntry(primarykey){
+	var entry = null; //the element from the JSON file
 	if(primarykey in window.jsondata){
-		objectofinterest = window.jsondata[primarykey];
+		entry = window.jsondata[primarykey];
 	}
-	if(objectofinterest==null){
-		return null; //if we can't find the corresponding primarykey
+	if(!entry) {
+		throw "Can't find an entry with primary key "+primarykey;
+		return;
 	}
-	if(action == 'SHOW') {
-		return window.jsondata[primarykey];
-	}                         
-	if(objectofinterest.type=="MENU"){
-		elementNum = action.split("ITEM")[1]; //expecting ITEMx, where x = the primary key of the action
-		if(objectofinterest.items[elementNum]!=null){
-			pk = objectofinterest.items[elementNum];
-			return window.jsondata[pk];
-		}
-		else{
-			return null;
-		}
+
+	if(entry.type=="ENDPAGE"){
+		//do some bookmark stuff?
 	}
-	if(objectofinterest.type=="ENDPAGE"){
-		//Bookmark (figure out if it already exists in bookmark)
-			// add if not in bookmark, remove if already in bookmark
-	}
+
+	return window.jsondata[primarykey];
 }
