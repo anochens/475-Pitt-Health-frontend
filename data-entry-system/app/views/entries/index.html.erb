@@ -15,18 +15,19 @@ $(document).ready( function() {
 
 <table>
   <tr>
-    <th id='heading_PK'>PK</th>
-    <th id='heading_type'>Type</th>
-    <th id='heading_json_blob'>Json Blob</th>
+    <th>PK</th>
+    <th>Type</th>
+    <th>Json Blob</th>
+	<th>&nbsp;</th>
   </tr>
   <% for entry in @entries %>
     <tr>
       <td id='id_<%= entry.id %>'><%= entry.id %></td>
       <td id='type_<%= entry.id %>'><%= entry.entry_type %></td>
       <td id='json_blob_<%= entry.id %>'><%= entry.json_blob %></td>
-      <td><%= link_to "Show", entry, :id => "show_#{entry.id}" %></td>
-      <td><%= link_to "Edit", edit_entry_path(entry), :id => "edit_#{entry.id}" %></td>
-      <td><%= link_to "Destroy", entry, :confirm => 'Are you sure?', :method => :delete, :remote => true, :id=>"destroy_#{entry.id}" %></td>
+      <td><%= link_to "Show", entry, :id => "show_#{entry.id}" %>
+      <%= link_to(image_tag("/images/edit.gif", :border => 0), edit_entry_path(entry), :id => "edit_#{entry.id}") %>
+      <%= link_to(image_tag("/images/delete.gif", :border => 0), entry, :confirm => 'Are you sure?', :method => :delete, :remote => true, :id=>"destroy_#{entry.id}" )%></td>
     </tr>
   <% end %>
 </table>
