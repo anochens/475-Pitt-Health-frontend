@@ -28,7 +28,7 @@ function getEntryFromFile(primarykey, filename) {
 	}
 
 	if(typeof window.jsondata === "undefined"){
-		loadFile(getEntry, primarykey, filename);
+		loadFile(filename);
 	}
 	return getEntry(primarykey);
 }
