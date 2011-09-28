@@ -6,8 +6,6 @@ scripts/jquery.mobile-1.0b3.min.css
 scripts/jquery-1.6.3.min.js
 scripts/jquery.mobile-1.0b3.min.js
 scripts/loadjson.js
-scripts/qunit.css
-scripts/qunit.js
 scripts/images/icons-18-black.png
 scripts/images/icons-18-white.png
 scripts/images/icons-36-black.png

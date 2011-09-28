@@ -1,26 +1,34 @@
-function loadfile(successFunction, primarykey, filename){
-	window.jsondata=[]; //creates a global array to store JSON elements
+function loadFile(filename){
+	window.jsondata=[];
 	data = [];
+
 	$.ajax({
 	  url: filename,
 	  async: false,
 	  dataType: 'json',
-	  success: function(d) { data = d; }
+	  success: function(d) { data = d; },
+	  error: function (jq, text, ethrown) {
+		  console.log(jq);
+		  console.log(text);
+		  console.log(ethrown);
+		  throw 'Error: '+text;
+		  return;
+     		
+	  }
 	});
 
 	for(var i=0;i<data.length;i++){
 		window.jsondata[data[i].pk]=data[i]; 
 	}
-	return successFunction(primarykey);
 }
 
 function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {
 		filename = 'data.json';
-
 	}
+
 	if(typeof window.jsondata === "undefined"){
-		return loadfile(getEntry, primarykey, filename);
+		loadFile(getEntry, primarykey, filename);
 	}
 	return getEntry(primarykey);
 }
