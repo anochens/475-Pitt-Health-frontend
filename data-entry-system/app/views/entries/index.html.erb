@@ -15,17 +15,23 @@ $(document).ready( function() {
 
 <table>
   <tr>
-    <th>PK</th>
-    <th>Type</th>
-    <th>Json Blob</th>
+    <th align="center">PK</th>
+    <th align="center">Type</th>
+    <th align="center">JSON Blob</th>
 	<th>&nbsp;</th>
   </tr>
   <% for entry in @entries %>
     <tr>
-      <td id='id_<%= entry.id %>'><%= entry.id %></td>
-      <td id='type_<%= entry.id %>'><%= entry.entry_type %></td>
-      <td id='json_blob_<%= entry.id %>'><%= entry.json_blob %></td>
-      <td><%= link_to "Show", entry, :id => "show_#{entry.id}" %>
+      <td id='id_<%= entry.id %>' align="center"><%= entry.id %></td>
+      <td id='type_<%= entry.id %>' align="center"><%= entry.entry_type %></td>
+      <% @jsonarray=((entry.json_blob.delete "{}")).split(",") %>
+	  <td id='json_blob_<%= entry.id %>'>
+		<% for json in @jsonarray %>
+		<% @entryarray=(json.delete "\"").split(":")%>
+		<%= @entryarray[0].capitalize %>: <%= link_to @entryarray[1], entry %><br/>
+		<%end%>
+	  </td>
+      <td>
       <%= link_to(image_tag("/images/edit.gif", :border => 0), edit_entry_path(entry), :id => "edit_#{entry.id}") %>
       <%= link_to(image_tag("/images/delete.gif", :border => 0), entry, :confirm => 'Are you sure?', :method => :delete, :remote => true, :id=>"destroy_#{entry.id}" )%></td>
     </tr>
