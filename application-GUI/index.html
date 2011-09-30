@@ -31,7 +31,9 @@
 		transitionTo(last);
 	}
 	
-	document.addEventListener("deviceready", onDeviceReady, false);
+	function onLoad() {
+		document.addEventListener("deviceready", onDeviceReady, false);
+	}
 	
 	function onDeviceReady() {
 		document.addEventListener("backbutton", goBack, false);	
