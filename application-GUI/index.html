@@ -30,6 +30,14 @@
 
 		transitionTo(last);
 	}
+	
+	document.addEventListener("deviceready", onDeviceReady, false);
+	
+	function onDeviceReady() {
+		document.addEventListener("backbutton", goBack, false);	
+	}
+	
+
 
 	function transitionTo(pk, from) {
 		var res = getEntryFromFile(pk);
