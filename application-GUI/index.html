@@ -117,6 +117,7 @@
 
 	function showData(data) {
 		$('#main-data').html(data);
+		parseNumbers();
 	}
 
 	//assume elem with pk 1 is the base menu
@@ -145,6 +146,19 @@
 			createMenuItem($('#base-item'), itemdata['title'], next, from);
 		}
 	}
+	
+	function parseNumbers(){
+		var data = $("#main-data").html();
+		var regex = /^(??:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
+		var numbers = data.match(regex);
+		for (var i=0; i<numbers.length; i++){
+			var tellink = "<a href=\"tel:"+numbers[i]+"\">"+numbers[i]+"</a>";
+			data.replace(numbers[i], tellink);
+			i++;
+		}
+		$('#main-data').html(data);
+	}
+	
 
 	</script>
 </head>
@@ -170,9 +184,17 @@
 				white-space: -pre-wrap; /* Opera 4-6 */
 				white-space: -o-pre-wrap; /* Opera 7 */
 				word-wrap: break-word; /* Internet Explorer 5.5+ */
-			}
+				
+			}		
 		</style>
-		<pre style='padding-right:20%'><div id='main-data'></div></pre>
+		
+		
+		<pre style="font-family:arial;
+				font-size:12pt;padding-right:20%">
+				<div id='main-data'>
+					
+				</div></pre>
+				
 	</div><!-- /content -->
 
 	<div data-role="footer" data-theme="b" data-position='fixed'>&nbsp;
