@@ -3,7 +3,7 @@ CACHE MANIFEST
 index.html
 data.json
 scripts/loadjson.js
-scripts/bookmarksFUnctions.js
+scripts/bookmarksFunctions.js
 lib/jquery.mobile-1.0b3.min.css
 lib/jquery-1.6.3.min.js
 lib/jquery.mobile-1.0b3.min.js
