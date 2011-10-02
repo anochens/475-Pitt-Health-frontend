@@ -28,7 +28,7 @@ $(document).ready( function() {
 		Title: <%= link_to entry.title, entry %><br/>
 		<% if entry.entry_type == "ENDPAGE" %>
 			<% if entry.data != "" %>
-				Data: <%= entry.data %><br/>
+				Data: <%= truncate(entry.data, :length => 45)%><br/>
 			<% end %>
 		<% elsif entry.entry_type == "MENU"%>
 			<% if entry.items != "" %>
