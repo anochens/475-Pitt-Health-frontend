@@ -17,19 +17,31 @@ $(document).ready( function() {
   <tr>
     <th align="center">PK</th>
     <th align="center">Type</th>
-    <th align="center">JSON Blob</th>
+    <th align="center">Content</th>
 	<th>&nbsp;</th>
   </tr>
   <% for entry in @entries %>
     <tr>
       <td id='id_<%= entry.id %>' align="center"><%= entry.id %></td>
       <td id='type_<%= entry.id %>' align="center"><%= entry.entry_type %></td>
-      <% @jsonarray=((entry.json_blob.delete "{}")).split(",") %>
 	  <td id='json_blob_<%= entry.id %>'>
-		<% for json in @jsonarray %>
-		<% @entryarray=(json.delete "\"").split(":")%>
-		<%= @entryarray[0].capitalize %>: <%= link_to @entryarray[1], entry %><br/>
+		Title: <%= link_to entry.title, entry %><br/>
+		<% if entry.entry_type == "ENDPAGE" %>
+			<% if entry.data != "" %>
+				Data: <%= entry.data %><br/>
+			<% end %>
+		<% elsif entry.entry_type == "MENU"%>
+			<% if entry.items != "" %>
+				Items: <%= entry.items %><br/>
+			<% end %>
+		<% elsif entry.entry_type == "ITEM"%>
+			<% if entry.next != 0 %>
+				Next: <%= entry.next %><br/>
+			<% end %>
+		<% else %>
+			No available data for this entry
 		<%end%>
+
 	  </td>
       <td>
       <%= link_to(image_tag("/images/edit.gif", :border => 0), edit_entry_path(entry), :id => "edit_#{entry.id}") %>

@@ -1,4 +1,9 @@
 class EntriesController < ApplicationController
+  
+  USER_ID, PASSWORD = "healthcare", "password"
+
+     before_filter :authenticate
+     
   def index
     @entries = Entry.all
   end
@@ -66,4 +71,11 @@ class EntriesController < ApplicationController
 
   	 render :text => json_string;
   end   
+  
+  private
+     def authenticate
+        authenticate_or_request_with_http_basic do |id, password|
+            password == PASSWORD
+        end
+     end
 end
