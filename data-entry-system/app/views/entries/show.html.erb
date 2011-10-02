@@ -5,8 +5,26 @@
   <%= @entry.entry_type %>
 </p>
 <p>
-  <strong>Json Blob:</strong>
-  <%= @entry.json_blob %>
+	<strong>Content:</strong><br/>
+	  <!-- <%= @entry.json_blob %> -->
+		Title: <%= @entry.title%><br/>
+		<% if @entry.entry_type == "ENDPAGE" %>
+			<% if @entry.data != "" %>
+				Data: <%= @entry.data %><br/>
+			<% end %>
+		<% elsif @entry.entry_type == "MENU"%>
+			<% if @entry.items != [] %>
+				Items: <%= @entry.items %><br/>
+			<% else %>
+				Items: None
+			<% end %>
+		<% elsif @entry.entry_type == "ITEM"%>
+			<% if @entry.next != 0 %>
+				Next: <%= @entry.next %><br/>
+			<% end %>
+		<% else %>
+			No available data for this @entry
+		<%end%>
 </p>
 
 <p>
