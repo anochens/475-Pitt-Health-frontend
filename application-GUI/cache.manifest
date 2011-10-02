@@ -2,11 +2,12 @@ CACHE MANIFEST
 
 index.html
 data.json
-scripts/jquery.mobile-1.0b3.min.css
-scripts/jquery-1.6.3.min.js
-scripts/jquery.mobile-1.0b3.min.js
 scripts/loadjson.js
-scripts/images/icons-18-black.png
-scripts/images/icons-18-white.png
-scripts/images/icons-36-black.png
-scripts/images/icons-36-white.png
+scripts/bookmarksFunctions.js
+lib/jquery.mobile-1.0b3.min.css
+lib/jquery-1.6.3.min.js
+lib/jquery.mobile-1.0b3.min.js
+lib/images/icons-18-black.png
+lib/images/icons-18-white.png
+lib/images/icons-36-black.png
+lib/images/icons-36-white.png

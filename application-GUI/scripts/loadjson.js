@@ -3,18 +3,17 @@ function loadFile(filename){
 	data = [];
 
 	$.ajax({
-	  url: filename,
-	  async: false,
-	  dataType: 'json',
-	  success: function(d) { data = d; },
-	  error: function (jq, text, ethrown) {
-		  console.log(jq);
-		  console.log(text);
-		  console.log(ethrown);
-		  throw 'Error: '+text;
-		  return;
-     		
-	  }
+		url: filename,
+		async: false,
+		dataType: 'json',
+		success: function(d) { data = d; },
+		error: function (jq, text, ethrown) {
+			console.log(jq);
+			console.log(text);
+			console.log(ethrown);
+			throw 'Error: '+text;
+			return;
+		}
 	});
 
 	for(var i=0;i<data.length;i++){
