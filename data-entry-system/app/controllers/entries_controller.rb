@@ -69,7 +69,7 @@ class EntriesController < ApplicationController
 	 }
 	 json_string = j.encode(arr)
 
-  	 render :text => json_string;
+  	 render :json => json_string;
   end   
   
   private
