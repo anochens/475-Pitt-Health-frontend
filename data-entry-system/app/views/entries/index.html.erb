@@ -5,7 +5,8 @@
 // was destroyed.
 $(document).ready( function() {
 	$('[id^=destroy]')
-	  .bind('ajax:success', function(evt, data, status, xhr){
+	  .bind('ajax:complete', function(evt, data, status, xhr){
+		console.log(status);
 		 $(this).closest('tr').remove();   
 	  });
 });
@@ -28,7 +29,7 @@ $(document).ready( function() {
 		Title: <%= link_to entry.title, entry %><br/>
 		<% if entry.entry_type == "ENDPAGE" %>
 			<% if entry.data != "" %>
-				Data: <%= truncate(entry.data, :length => 45)%><br/>
+				Data: <%= truncate(entry.data, :length => 45) %><br/>
 			<% end %>
 		<% elsif entry.entry_type == "MENU"%>
 			<% if entry.items != "" %>
@@ -36,6 +37,7 @@ $(document).ready( function() {
 			<% end %>
 		<% elsif entry.entry_type == "ITEM"%>
 			<% if entry.next != 0 %>
+				<% @nextEntry = Entry.find(entry.next)%>
 				Next: <%= entry.next %><br/>
 			<% end %>
 		<% else %>
