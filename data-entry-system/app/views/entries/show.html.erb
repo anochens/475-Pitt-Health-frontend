@@ -8,7 +8,8 @@
 	<strong>Title: </strong><%= @entry.title%><br/>
 		<% if @entry.entry_type == "ENDPAGE" %>
 			<% if @entry.data != "" %>
-				<strong>Data: </strong><%= @entry.data %><br/>
+				<strong>Data: </strong>
+				<pre><%= word_wrap(@entry.data) %></pre><br/>
 			<% end %>
 		<% elsif @entry.entry_type == "MENU"%>
 			<strong>Items: </strong>
