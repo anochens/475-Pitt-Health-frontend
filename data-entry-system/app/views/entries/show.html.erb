@@ -5,27 +5,35 @@
   <%= @entry.entry_type %>
 </p>
 <p>
-	<strong>Content:</strong><br/>
-	  <!-- <%= @entry.json_blob %> -->
-		Title: <%= @entry.title%><br/>
+	<strong>Title: </strong><%= @entry.title%><br/>
 		<% if @entry.entry_type == "ENDPAGE" %>
 			<% if @entry.data != "" %>
-				Data: <%= @entry.data %><br/>
+				<strong>Data: </strong><%= @entry.data %><br/>
 			<% end %>
 		<% elsif @entry.entry_type == "MENU"%>
+			<strong>Items: </strong>
 			<% if @entry.items != [] %>
-				Items: <%= @entry.items %><br/>
+			<ul>
+				<% for item in @entry.items %>
+					<% @entryItem = Entry.find(item) %>
+					<li> <%= link_to @entryItem.title, @entryItem %></li>
+				<%end%>			
 			<% else %>
-				Items: None
+				None
 			<% end %>
+			</ul>
 		<% elsif @entry.entry_type == "ITEM"%>
 			<% if @entry.next != 0 %>
-				Next: <%= @entry.next %><br/>
+				<% @nextEntry = Entry.find(entry.next)%>
+				<strong>Next: </strong>
+				<li> <%= link_to @nextEntry.title, @nextEntry %></li>
+				<br/>
 			<% end %>
 		<% else %>
 			No available data for this @entry
 		<%end%>
 </p>
+
 
 <p>
   <%= link_to "Edit", edit_entry_path(@entry), :id=>'edit_link' %> |

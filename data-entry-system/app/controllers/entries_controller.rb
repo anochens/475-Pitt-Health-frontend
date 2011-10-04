@@ -41,7 +41,7 @@ class EntriesController < ApplicationController
   def destroy
     @entry = Entry.find(params[:id])
     @entry.destroy
-    redirect_to entries_url, :notice => "Successfully destroyed entry."
+    redirect_to entries_url
   end
 
   def write
@@ -69,7 +69,7 @@ class EntriesController < ApplicationController
 	 }
 	 json_string = j.encode(arr)
 
-  	 render :text => json_string;
+  	 render :json => json_string;
   end   
   
   private

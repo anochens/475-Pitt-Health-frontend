@@ -6,7 +6,6 @@
 $(document).ready( function() {
 	$('[id^=destroy]')
 	  .bind('ajax:complete', function(evt, data, status, xhr){
-		console.log(status);
 		 $(this).closest('tr').remove();   
 	  });
 });
@@ -32,13 +31,21 @@ $(document).ready( function() {
 				Data: <%= truncate(entry.data, :length => 45) %><br/>
 			<% end %>
 		<% elsif entry.entry_type == "MENU"%>
-			<% if entry.items != "" %>
-				Items: <%= entry.items %><br/>
+				Items: 
+			<% if entry.items != [] %>
+			<ul>
+				<% for item in entry.items %>
+					<% @entryItem = Entry.find(item) %>
+					<li> <%= link_to @entryItem.title, @entryItem %></li>
+				<%end%>
+			<% else %>
+				None
 			<% end %>
+		</ul>
 		<% elsif entry.entry_type == "ITEM"%>
 			<% if entry.next != 0 %>
 				<% @nextEntry = Entry.find(entry.next)%>
-				Next: <%= entry.next %><br/>
+				Next: <%= link_to @nextEntry.title, @nextEntry %><br/>
 			<% end %>
 		<% else %>
 			No available data for this entry
