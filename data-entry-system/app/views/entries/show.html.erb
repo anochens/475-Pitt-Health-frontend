@@ -24,7 +24,7 @@
 			</ul>
 		<% elsif @entry.entry_type == "ITEM"%>
 			<% if @entry.next != 0 %>
-				<% @nextEntry = Entry.find(entry.next)%>
+				<% @nextEntry = Entry.find(@entry.next)%>
 				<strong>Next: </strong>
 				<li> <%= link_to @nextEntry.title, @nextEntry %></li>
 				<br/>
@@ -36,6 +36,7 @@
 
 
 <p>
+	<%= link_to "New Entry", new_entry_path, :id=>'new_entry_link' %> |
   <%= link_to "Edit", edit_entry_path(@entry), :id=>'edit_link' %> |
   <%= link_to "Destroy", @entry, :confirm => 'Are you sure?', :method => :delete, :id=>'destroy_link' %> |
   <%= link_to "View All", entries_path, :id=>'index_link' %>

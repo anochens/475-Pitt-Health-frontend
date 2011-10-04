@@ -10,9 +10,9 @@ $(document).ready( function() {
 	  });
 });
 
-
 </script>
-
+<p><%= link_to "New Entry", new_entry_path, :id=>'new_entry_link' %></p>
+<p><%= link_to "JSON File (Right click to download)", "entries/write.json" %></p>
 <table>
   <tr>
     <th align="center">PK</th>
@@ -28,7 +28,7 @@ $(document).ready( function() {
 		Title: <%= link_to entry.title, entry %><br/>
 		<% if entry.entry_type == "ENDPAGE" %>
 			<% if entry.data != "" %>
-				Data: <%= truncate(entry.data, :length => 45) %><br/>
+				Data: <%= truncate(entry.data, :length => 45, :separator => " ") %><br/>
 			<% end %>
 		<% elsif entry.entry_type == "MENU"%>
 				Items: 
@@ -59,4 +59,3 @@ $(document).ready( function() {
   <% end %>
 </table>
 
-<p><%= link_to "New Entry", new_entry_path, :id=>'new_entry_link' %></p>
