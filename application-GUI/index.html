@@ -108,9 +108,9 @@
 
 	function showData(data) {
 		$('#main-data').html(data);
-		parseNumbers();
-		parseEmails();
-		parseLinks();
+		addLinks(/\(?([0-9]{1})\)?[-. ]?\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g, true, 7);
+		addLinks(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi, false, true);
+		addLinks(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
 	}
 
 	//assume elem with pk 1 is the base menu
@@ -140,38 +140,29 @@
 		}
 	}
 	
-	function parseNumbers(){
+	function addLinks(regex, doLengthFiltering, isEmail, length) {
 		var data = $("#main-data").html();
-		var numbers = data.match(/\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})/g);
-		for (var i=0; i<numbers.length; i++) {
-			if (numbers[i].length >= 7){
-				var tellink = "<a href=\"tel:"+numbers[i]+"\">"+numbers[i]+"</a>";	
-				data = data.replace(numbers[i], tellink);
+		var text = data.match(regex);
+		if (text == null){
+			return;
+		}
+			for (var i=0; i<text.length; i++){
+				if (isEmail == true){
+					var emaillink = "<a href=\"mailto:"+text[i]+"\">"+text[i]+"</a>";	
+					data = data.replace(text[i], emaillink);
+				}	
+				else if (doLengthFiltering == true){
+					if (text[i].length >= 7){
+						var tellink = "<a href=\"tel:"+text[i]+"\">"+text[i]+"</a>";	
+						data = data.replace(text[i], tellink);
+					}
+				}
+				else {
+					var link = "<a href=\""+text[i]+"\" target=\"_blank\">"+text[i]+"</a>";	
+					data = data.replace(text[i], link);
+				}
+
 			}
-		}
-		$('#main-data').html(data);
-	}
-	
-	function parseEmails(){
-		var data = $("#main-data").html();
-		var emails = data.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi);
-		for (var i=0; i<emails.length; i++) {
-				var emaillink = "<a href=\"mailto:"+emails[i]+"\">"+emails[i]+"</a>";	
-				data = data.replace(emails[i], emaillink);
-		}
-		$('#main-data').html(data);
-	}
-	
-	function parseLinks(){
-		var data = $("#main-data").html();
-		var links = data.match(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
-		console.log(links);
-				for (var i=0; i<links.length; i++) {
-				var link = "<a href=\""+links[i]+"\" target=\"_blank\">"+links[i]+"</a>";	
-				console.log(link);
-				data = data.replace(links[i], link);
-				
-		}
 		$('#main-data').html(data);
 	}
 
