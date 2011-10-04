@@ -88,6 +88,7 @@ class Entry < ActiveRecord::Base
 	 return v[name] if v.include?(name) && !v[name].nil?
 	 ''
   end  
+  
 end
 
                                        
