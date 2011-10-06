@@ -11,12 +11,11 @@
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
-	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="http://static.jquery.com/ui/css/base2.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="http://static.jquery.com/ui/css/demo-docs-theme/ui.theme.css" type="text/css" media="all" />
 		<script>
 	$(function() {
 		var availableTags = returnTitles();
-		console.log(returnTitles(););
+		console.log(availableTags);
 		$( "#tags" ).autocomplete({
 			source: availableTags
 		});

@@ -24,7 +24,7 @@ function loadFile(filename){
 	console.log(window.titles);
 }
 function returnTitles(){
-if(window.titles==='undefined'){
+if(typeof window.titles==='undefined'){
 loadFile('data.json');
 }
 return window.titles;
