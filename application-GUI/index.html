@@ -11,7 +11,16 @@
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
-
+	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
+		<script>
+	$(function() {
+		var availableTags = returnTitles();
+		console.log(availableTags);
+		$( "#tags" ).autocomplete({
+			source: availableTags
+		});
+	});
+	</script>
 	<script>
 	function setBack(pk) {
 		window.back.push(pk);
@@ -194,8 +203,11 @@
 	</div>
 
 	<div data-role="content">
+		<div data-role="fieldcontain">
+		<input type="search" name="password" id="tags" value="" />
+		</div>
 		<div id='main-menu-wrapper'>
-		<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
+		<ul data-role="listview" data-theme="c"  id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
 		</div>

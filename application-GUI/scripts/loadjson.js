@@ -1,7 +1,8 @@
 function loadFile(filename){
 	window.jsondata=[];
 	data = [];
-
+	window.titles=[];
+	
 	$.ajax({
 		url: filename,
 		async: false,
@@ -12,13 +13,21 @@ function loadFile(filename){
 			console.log(text);
 			console.log(ethrown);
 			throw 'Error: '+text;
-			return;
+			return ;
 		}
 	});
 
 	for(var i=0;i<data.length;i++){
 		window.jsondata[data[i].pk]=data[i]; 
+		window.titles[i]=data[i].title;
 	}
+	console.log(window.titles);
+}
+function returnTitles(){
+if(typeof window.titles==='undefined'){
+loadFile('data.json');
+}
+return window.titles;
 }
 
 function getEntryFromFile(primarykey, filename) {
