@@ -190,11 +190,15 @@
 	function search() {
 	var searchValue=$('#search').val();
 	var availableTags = returnTitles();
+	var pks=[];
 	 $.each(availableTags, function() {
-				if(searchValue==this.data||searchValue==this.title){
-               			 alert(this.data);
+				var title=this.title;
+				if(title.indexOf(searchValue)>0{
+               			 alert(this.pk);
+						 pks.push(this.pk)
 				}
             });
+	console.log(pks);
 	}
 
 	</script>
