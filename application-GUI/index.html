@@ -37,7 +37,7 @@
 		//if we are on the root page, hide the back button
 		if(back.length == 0) {
 			$('#back-button').hide();
-			$('#home-buton').hide();
+			$('#home-button').hide();
 		}
 
 		if(last == 0) {
@@ -52,6 +52,7 @@
 	function transitionTo(pk, from) {
 		$('#bookmarks-button').show();
 		$('#email-button').hide();
+		$('#sms-button').hide();
 		var res = getEntryFromFile(pk);
 		window.currentPK = pk;
 		setTitle(res['title']);
@@ -115,6 +116,7 @@
 	function showData(data) {
 		$('#main-data').html(data);
 		showMailerButton();
+		showSMSButton();
 		addLinks(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g, true, 7);
 		addLinks(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi, false, true);
 		addLinks(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
@@ -186,6 +188,25 @@
 		$('#email-button').show();
 		$('#email-button').attr("href", "mailto:?subject="+encodeURIComponent(document.title)+"&body=" + encodeURIComponent(data));
 	}
+	
+	function showSMSButton(){
+		var message = $("#main-data").html();
+		var shorttext;
+		$('#sms-button').show();
+		$.ajax({
+		  type: 'POST',
+		  url: "http://shorttext.com/default.aspx",
+		  data: {txtMaal: encodeURIComponent(message)},
+		  success: function(data){
+			shorttext = data
+		},
+			async: false
+		});
+		console.log(shorttext);
+		$('#sms-button').attr(
+			
+			"href", "sms:?body=" +body+;
+	}
 
 	</script>
 </head>
@@ -230,6 +251,7 @@
 		<a href="" data-icon="home" id='home-button' onclick='showBaseMenu();'>Home</a>
 		<a href="" id='bookmarks-button' onclick='showBookmarks();'>Bookmarks</a>
 		<a href="" data-icon="arrow-r" id='email-button'>Email</a>
+		<a href="" data-icon="arrow-r" id='sms-button'>Text This</a>
 	</div>
  
 </div><!-- /page -->
@@ -242,6 +264,7 @@ $(document).ready(function() {
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
 	$('#email-button').hide();
+	$('#sms-button').hide();
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
