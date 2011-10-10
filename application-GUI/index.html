@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 		<script>
 	$(function() {
@@ -186,6 +187,15 @@
 		$('#email-button').show();
 		$('#email-button').attr("href", "mailto:?subject="+encodeURIComponent(document.title)+"&body=" + encodeURIComponent(data));
 	}
+	function search() {
+	var searchValue=$('#search').val();
+	var availableTags = returnTitles();
+	 $.each(availableTags, function() {
+				if(searchValue==this.data||searchValue==this.title){
+               			 alert(this.data);
+				}
+            });
+	}
 
 	</script>
 </head>
@@ -198,8 +208,8 @@
 	</div>
 
 	<div data-role="content">
-		<div data-role="fieldcontain">
-		<input type="search" name="password" id="tags" value="" />
+		<div data-inline="true">
+       	        <input type="search" name="search" id="search"> <input type="submit" value="Search" onclick="search();">
 		</div>
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
