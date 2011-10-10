@@ -2,6 +2,7 @@ function loadFile(filename){
 	window.jsondata=[];
 	data = [];
 	window.titles=[];
+	window.data=[];
 	
 	$.ajax({
 		url: filename,
@@ -19,15 +20,16 @@ function loadFile(filename){
 
 	for(var i=0;i<data.length;i++){
 		window.jsondata[data[i].pk]=data[i]; 
+		if(data[i].type=="ENDPAGE"){
 		window.titles[i]=data[i].title;
+		}
 	}
-	console.log(window.titles);
 }
 function returnTitles(){
 if(typeof window.titles==='undefined'){
 loadFile('data.json');
 }
-return window.titles;
+return window.jsondata;
 }
 
 function getEntryFromFile(primarykey, filename) {
