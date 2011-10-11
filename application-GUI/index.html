@@ -16,7 +16,6 @@
 		<script>
 	$(function() {
 		var availableTags = returnTitles();
-		console.log(availableTags);
 		$( "#tags" ).autocomplete({
 			source: availableTags
 		});
@@ -135,15 +134,12 @@
 	}
 
 	function makeMenu(items, from, useSelfAsNext) {
-		console.log("yay");
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
-			console.log(next);
 			var next = itemdata['next'];
 			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
-				console.log(useSelfAsNext[i]);
 				var position=useSelfAsNext[i]+10;
 				title=itemdata['title']+"<br>"+itemdata['data'].substring(0,position)+"...";
 			}
@@ -221,7 +217,6 @@
 				var type=v.type;
 				if(type=="ENDPAGE"){
 				if(title.indexOf(searchValue)>=0||data.indexOf(searchValue)>=0){
-               			 console.log(pk);
 						 pks.push(pk);
 						 if(data.indexOf(searchValue)>=0){
 						 indexes.push(data.indexOf(searchValue));
@@ -233,7 +228,6 @@
 				}
             });
 			 if(pks.length==1){
-							console.log(pks[0])
 							var res = getEntryFromFile(pks[0]);
 							hideMenu();
 							setTitle(res['title']);
