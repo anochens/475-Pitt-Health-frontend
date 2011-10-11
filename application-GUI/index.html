@@ -196,15 +196,15 @@
 		$('#sms-button').show();
 		$.ajax({
 		  type: 'POST',
-		  url: "http://shorttext.com/default.aspx",
-		  data: {txtMaal: encodeURIComponent(message)},
+		  url: "http://textsnip.com/create.php",
+		  data: {url:encodeURIComponent(message)},
 		  success: function(data){
-			shorttext = data
+			shorttext = data;
 		},
 			async: false
 		});
 		console.log(shorttext);
-		$('#sms-button').attr("href", "sms:?body=" +body);
+		$('#sms-button').attr("href", "sms:?body=" +data);
 	}
 			
 	function search() {
