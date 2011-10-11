@@ -26,7 +26,6 @@
 	function setBack(pk) {
 		window.back.push(pk);
 		$('#back-button').show();
-		$('#home-button').show();
 		$('#back-button').unbind('click').click(function (){
 			goBack();
 		});
@@ -38,7 +37,6 @@
 		//if we are on the root page, hide the back button
 		if(back.length == 0) {
 			$('#back-button').hide();
-			$('#home-button').hide();
 		}
 
 		if(last == 0) {
@@ -134,7 +132,6 @@
 		transitionTo(1);
 		window.back = [];
 		$('#back-button').hide();
-		$('#home-button').hide();
 	}
 
 	function makeMenu(items, from, useSelfAsNext) {
@@ -208,8 +205,8 @@
 		},
 			async: false
 		});
-		console.log(shorttext);
-		$('#sms-button').attr("href", "sms:?body=" +body);
+		//console.log(shorttext);
+		//$('#sms-button').attr("href", "sms:?body=" +body);
 	}
 			
 	function search() {
@@ -301,7 +298,6 @@
 
 $(document).ready(function() {
 	$('#back-button').hide();
-	$('#home-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
 	$('#email-button').hide();
