@@ -11,12 +11,11 @@
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 		<script>
 	$(function() {
 		var availableTags = returnTitles();
-		console.log(availableTags);
 		$( "#tags" ).autocomplete({
 			source: availableTags
 		});
@@ -26,7 +25,6 @@
 	function setBack(pk) {
 		window.back.push(pk);
 		$('#back-button').show();
-		$('#home-button').show();
 		$('#back-button').unbind('click').click(function (){
 			goBack();
 		});
@@ -38,7 +36,6 @@
 		//if we are on the root page, hide the back button
 		if(back.length == 0) {
 			$('#back-button').hide();
-			$('#home-button').hide();
 		}
 
 		if(last == 0) {
@@ -52,11 +49,11 @@
 	
 	function transitionTo(pk, from) {
 		$('#bookmarks-button').show();
-		$('#email-button').hide();
-		$('#sms-button').hide();
+
 		var res = getEntryFromFile(pk);
 		window.currentPK = pk;
 		setTitle(res['title']);
+
 		if(res['type'] == 'MENU') {
 			showMenu();
 			makeMenu(res['items'], res['pk']);
@@ -106,12 +103,16 @@
 	function hideMenu() {
 		emptyMenu();
 		$('#main-menu-wrapper').hide();
+		$('#search-stuff').hide();
 	}
 
 	function showMenu() {
 		emptyMenu();
 		emptyData();
 		$('#main-menu-wrapper').show();
+		$('#search-stuff').show();
+		$('#email-button').hide();
+		$('#sms-button').hide();
 	}
 
 	function showData(data) {
@@ -134,19 +135,20 @@
 		transitionTo(1);
 		window.back = [];
 		$('#back-button').hide();
-		$('#home-button').hide();
 	}
 
 	function makeMenu(items, from, useSelfAsNext) {
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
-
 			var next = itemdata['next'];
+			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
+				var position=useSelfAsNext[i]+10;
+				title=itemdata['title']+"<br>"+itemdata['data'].substring(0,position)+"...";
 			}
 
-			createMenuItem($('#base-item'), itemdata['title'], next, from);
+			createMenuItem($('#base-item'), title, next, from);
 		}
 	}
 	
@@ -203,18 +205,44 @@
 		},
 			async: false
 		});
-		console.log(shorttext);
-		$('#sms-button').attr("href", "sms:?body=" +data);
+
+
+		//console.log(shorttext);
+		//$('#sms-button').attr("href", "sms:?body=" +body);
 	}
 			
-	function search() {
-	var searchValue=$('#search').val();
-	var availableTags = returnTitles();
-	 $.each(availableTags, function() {
-				if(searchValue==this.data||searchValue==this.title){
-               			 alert(this.data);
+	function doSearch() {
+		var searchValue=$('#search').val();
+		var availableTags = returnTitles();
+		var pks=[];
+		var indexes=[];
+		$.each(availableTags, function(i,v) {
+				var title=v.title;
+				var pk=v.pk;
+				var data=v.data;
+				var type=v.type;
+
+				if(type=="ENDPAGE") {
+					if(title.indexOf(searchValue) != -1 ||
+						data.indexOf(searchValue) != -1) {
+
+						pks.push(pk);
+						if(data.indexOf(searchValue) != -1) {
+							indexes.push(data.indexOf(searchValue));
+						}
+						else {
+							indexes.push(10);
+						}
+					}
 				}
-            });
+			});
+		if(pks.length == 1){
+			transitionTo(pks[0],window.currentPK);
+		}
+		if(pks.length > 1){
+			showMenu();
+			makeMenu(pks, 1, indexes);
+		}
 	}
 
 	</script>
@@ -228,8 +256,10 @@
 	</div>
 
 	<div data-role="content">
-		<div data-inline="true">
-       	        <input type="search" name="search" id="search"> <input type="submit" value="Search" onclick="search();">
+		<div style="padding-bottom:20px;" id='search-stuff'>
+       	        <input type="search" name="search" onkeyup='doSearch();' id="search">
+<a href='#' data-role='button' data-inline='true' onclick="doSearch();">Search</a>
+ 
 		</div>
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
@@ -269,7 +299,6 @@
 
 $(document).ready(function() {
 	$('#back-button').hide();
-	$('#home-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
 	$('#email-button').hide();
