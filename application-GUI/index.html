@@ -235,11 +235,7 @@
 				}
 			});
 		if(pks.length == 1){
-			var res = getEntryFromFile(pks[0]);
-			hideMenu();
-			setTitle(res['title']);
-			showData(res['data']);
-			showToggleButton();
+			transitionTo(pks[0],window.currentPK);
 		}
 		if(pks.length > 1){
 			showMenu();
