@@ -146,9 +146,9 @@
 			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
-				console.log(next);
 				console.log(useSelfAsNext[i]);
-				title=itemdata['title']+"<br>"+itemdata['data'].substring(0, useSelfAsNext[i]);
+				var position=useSelfAsNext[i]+10;
+				title=itemdata['title']+"<br>"+itemdata['data'].substring(0,position)+"...";
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
@@ -226,6 +226,12 @@
 				if(title.indexOf(searchValue)>=0||data.indexOf(searchValue)>=0){
                			 console.log(pk);
 						 pks.push(pk);
+						 if(data.indexOf(searchValue)>=0){
+						 indexes.push(data.indexOf(searchValue));
+						 }
+						 else{
+						 indexes.push(10);
+						 }
 						 }
 				}
             });
@@ -233,6 +239,7 @@
 							console.log(pks[0])
 							var res = getEntryFromFile(pks[0]);
 							hideMenu();
+							setTitle(res['title']);
 							showData(res['data']);
 							showToggleButton();
 			}
