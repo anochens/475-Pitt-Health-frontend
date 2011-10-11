@@ -145,7 +145,7 @@
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
 				var position=50;
-				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;'>"+itemdata['data'].substring(0,position)+"...</div>";
+				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;font-style:italic;'>"+itemdata['data'].substring(0,position)+"...</div>";
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
