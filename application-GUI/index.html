@@ -49,11 +49,11 @@
 	
 	function transitionTo(pk, from) {
 		$('#bookmarks-button').show();
-		$('#email-button').hide();
-		$('#sms-button').hide();
+
 		var res = getEntryFromFile(pk);
 		window.currentPK = pk;
 		setTitle(res['title']);
+
 		if(res['type'] == 'MENU') {
 			showMenu();
 			makeMenu(res['items'], res['pk']);
@@ -103,12 +103,16 @@
 	function hideMenu() {
 		emptyMenu();
 		$('#main-menu-wrapper').hide();
+		$('#search-stuff').hide();
 	}
 
 	function showMenu() {
 		emptyMenu();
 		emptyData();
 		$('#main-menu-wrapper').show();
+		$('#search-stuff').show();
+		$('#email-button').hide();
+		$('#sms-button').hide();
 	}
 
 	function showData(data) {
@@ -251,7 +255,7 @@
 	</div>
 
 	<div data-role="content">
-		<div style="padding-bottom:20px;">
+		<div style="padding-bottom:20px;" id='search-stuff'>
        	        <input type="search" name="search" id="search">
 <a href='#' data-role='button' data-inline='true' onclick="search();">Search</a>
  
