@@ -221,11 +221,11 @@
 				var type=v.type;
 
 				if(type=="ENDPAGE") {
-					if(title.indexOf(searchValue)>=0||
-						data.indexOf(searchValue)>=0) {
+					if(title.indexOf(searchValue) != -1 ||
+						data.indexOf(searchValue) != -1) {
 
 						pks.push(pk);
-						if(data.indexOf(searchValue)>=0) {
+						if(data.indexOf(searchValue) != -1) {
 							indexes.push(data.indexOf(searchValue));
 						}
 						else {
@@ -234,14 +234,14 @@
 					}
 				}
 			});
-		if(pks.length==1){
+		if(pks.length == 1){
 			var res = getEntryFromFile(pks[0]);
 			hideMenu();
 			setTitle(res['title']);
 			showData(res['data']);
 			showToggleButton();
 		}
-		if(pks.length>1){
+		if(pks.length > 1){
 			showMenu();
 			makeMenu(pks, 1, indexes);
 		}
