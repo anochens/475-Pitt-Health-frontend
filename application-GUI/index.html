@@ -144,8 +144,8 @@
 			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
-				var position=useSelfAsNext[i]+10;
-				title=itemdata['title']+"<br>"+itemdata['data'].substring(0,position)+"...";
+				var position=50;
+				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;'>"+itemdata['data'].substring(0,position)+"...</div>";
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
@@ -212,7 +212,7 @@
 	}
 			
 	function doSearch() {
-		var searchValue=$('#search').val();
+		var searchValue=$('#search').val().toLowerCase();
 		var availableTags = returnTitles();
 		var pks=[];
 		var indexes=[];
@@ -224,7 +224,7 @@
 
 				if(type=="ENDPAGE") {
 					if(title.indexOf(searchValue) != -1 ||
-						data.indexOf(searchValue) != -1) {
+						data.toLowerCase().indexOf(searchValue) != -1) {
 
 						pks.push(pk);
 						if(data.indexOf(searchValue) != -1) {
@@ -236,6 +236,12 @@
 					}
 				}
 			});
+		if(pks.length == 0){
+			hideMenu();
+			var data="Sorry Bro";
+			$('#main-data').html(data);
+			setBack(1);
+		}
 		if(pks.length == 1){
 			transitionTo(pks[0],window.currentPK);
 		}
@@ -257,9 +263,8 @@
 
 	<div data-role="content">
 		<div style="padding-bottom:20px;" id='search-stuff'>
-       	        <input type="search" name="search" onkeyup='doSearch();' id="search">
-<a href='#' data-role='button' data-inline='true' onclick="doSearch();">Search</a>
- 
+       	        <input type="search" name="search" id="search">
+				<a href="#" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a>
 		</div>
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
