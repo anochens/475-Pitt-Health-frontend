@@ -138,15 +138,20 @@
 	}
 
 	function makeMenu(items, from, useSelfAsNext) {
+		console.log("yay");
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
-
+			console.log(next);
 			var next = itemdata['next'];
+			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
+				console.log(next);
+				console.log(useSelfAsNext[i]);
+				title=itemdata['title']+"<br>"+itemdata['data'].substring(0, useSelfAsNext[i]);
 			}
 
-			createMenuItem($('#base-item'), itemdata['title'], next, from);
+			createMenuItem($('#base-item'), title, next, from);
 		}
 	}
 	
@@ -211,14 +216,30 @@
 	var searchValue=$('#search').val();
 	var availableTags = returnTitles();
 	var pks=[];
-	 $.each(availableTags, function() {
-				var title=this.title;
-				if(title.indexOf(searchValue)>0{
-               			 alert(this.pk);
-						 pks.push(this.pk)
+	var indexes=[];
+	 $.each(availableTags, function(i,v) {
+				var title=v.title;
+				var pk=v.pk;
+				var data=v.data;
+				var type=v.type;
+				if(type=="ENDPAGE"){
+				if(title.indexOf(searchValue)>=0||data.indexOf(searchValue)>=0){
+               			 console.log(pk);
+						 pks.push(pk);
+						 }
 				}
             });
-	console.log(pks);
+			 if(pks.length==1){
+							console.log(pks[0])
+							var res = getEntryFromFile(pks[0]);
+							hideMenu();
+							showData(res['data']);
+							showToggleButton();
+			}
+			if(pks.length>1){
+					showMenu();
+					makeMenu(pks, 1, indexes);
+			}
 	}
 
 	</script>
@@ -232,7 +253,7 @@
 	</div>
 
 	<div data-role="content">
-		<div data-inline="true">
+		<div style="padding-bottom:20px;">
        	        <input type="search" name="search" id="search"> <input type="submit" value="Search" onclick="search();">
 		</div>
 		<div id='main-menu-wrapper'>

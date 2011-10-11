@@ -29,7 +29,7 @@ function returnTitles(){
 if(typeof window.titles==='undefined'){
 loadFile('data.json');
 }
-return window.jsondata;
+return data;
 }
 
 function getEntryFromFile(primarykey, filename) {
