@@ -4,6 +4,7 @@ index.html
 data.json
 scripts/loadjson.js
 scripts/bookmarksFunctions.js
+lib/phonegap.js
 lib/ui.theme.css
 lib/cookieFunctions.js
 lib/jquery-ui.min.js
