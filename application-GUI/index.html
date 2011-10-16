@@ -302,7 +302,7 @@
 
 <script>
 
-$(document).ready(function() {
+function setup(where) {
 	$('#back-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
@@ -311,6 +311,17 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
+	alert('Ready '+where); 
+}
+
+function onDeviceReady() {
+	setup('device');
+}
+
+
+$(document).ready(function() {
+	setup('doc');
+	document.addEventListener("deviceready", onDeviceReady, false);
 });
 
 </script>
