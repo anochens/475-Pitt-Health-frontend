@@ -315,9 +315,18 @@ function setup(where) {
 }
 
 function onDeviceReady() {
-	setup('device');
+	alert('Woohoo');
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	document.addEventListener("menubutton", onMenuKeyDown, false);
+}
+function onBackKeyDown() {
+	alert('back pressed!');
+}
+function onMenuKeyDown() {
+	alert('menu pressed!');
 }
 
+    
 
 $(document).ready(function() {
 	setup('doc');
