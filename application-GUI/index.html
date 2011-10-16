@@ -68,7 +68,7 @@
 			makeMenu(res['items'], res['pk']);
 		}
 		$('#add-bookmark-button').hide();
-
+		$('#remove-bookmark-button').hide();
 		if(res['type'] == 'ENDPAGE') {
 			hideMenu();
 			showData(res['data']);
@@ -285,8 +285,9 @@
 <body>
 <div data-role="page" data-theme="b">
 	<div data-role="header" data-theme="b">
-		<a href="" data-icon="back" id='back-button'>Back</a>
-			<a href="" id='add-bookmark-button' onclick='toggleBookmark();'>Toggle bookmark</a>
+		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
+			<a href="" style="float:right; right:5px; top:5px" data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
+			<a href="" style="float:right; right:5px; top:5px"  data-icon="minus" data-iconpos="notext" id='remove-bookmark-button' onclick='toggleBookmark();'></a>
 		<h1 id='header-line'>Health Resources</h1>
 	</div>
 
@@ -335,6 +336,7 @@ function setup() {
 	$('#back-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
+	$('#remove-bookmark-button').hide();
 	$('#email-button').hide();
 	$('#sms-button').hide();
 	makeBaseMenu();
