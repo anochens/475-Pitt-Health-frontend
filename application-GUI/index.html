@@ -53,7 +53,11 @@
 		var res = getEntryFromFile(pk);
 		window.currentPK = pk;
 		setTitle(res['title']);
-
+		
+		if(typeof from !== 'undefined') {
+			setBack(from);
+		}
+		
 		if(res['type'] == 'MENU') {
 			showMenu();
 			makeMenu(res['items'], res['pk']);
@@ -65,9 +69,7 @@
 			showData(res['data']);
 			showToggleButton();
 		}
-		if(typeof from !== 'undefined') {
-			setBack(from);
-		}
+
 
 	}
 
@@ -182,7 +184,6 @@
 				}
 			}
 			}
-			
 		$('#main-data').html(data);
 	}
 
@@ -193,23 +194,46 @@
 	}
 	
 	function showSMSButton(){
+		var data = $("#main-data").html();
+		var phone = data.match(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g);
+		$('#sms-button').show();
+		if (phone!= null){
+			$('#sms-button').attr("href", "sms:?body="+encodeURIComponent(document.title)+  encodeURIComponent(phone));
+		}
+	
+	}
+	
+	/*function showSMSButton(){
 		var message = $("#main-data").html();
 		var shorttext;
+		var link = document.location + "?page="+window.currentPK+"&history="+window.back;
+		var body = "Please see "+link+" for more information.";
+		body = encodeURIComponent(body);
 		$('#sms-button').show();
-		$.ajax({
-		  type: 'POST',
-		  url: "http://textsnip.com/create.php",
-		  data: {url:encodeURIComponent(message)},
-		  success: function(data){
-			shorttext = data;
-		},
-			async: false
-		});
-
-
 		//console.log(shorttext);
-		//$('#sms-button').attr("href", "sms:?body=" +body);
-	}
+		$('#sms-button').attr("href", "sms:?body=" +body);
+		
+	}*/
+		//from http://stackoverflow.com/questions/439463/how-to-get-get-and-post-variables-with-jquery
+		/*function getQueryParams(qs) {
+		    qs = qs.split("+").join(" ");
+		    var params = {},
+		        tokens,
+		        re = /[?&]?([^=]+)=([^&]*)/g;
+
+		    while (tokens = re.exec(qs)) {
+		        params[decodeURIComponent(tokens[1])]
+		            = decodeURIComponent(tokens[2]);
+		    }
+
+		    return params;
+		}*/
+		
+		function parseArguments(){
+			
+			var $_GET = getQueryParams(document.location.search);
+			console.log($_GET);
+		}
 			
 	function doSearch() {
 		var searchValue=$('#search').val();
@@ -306,6 +330,7 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
+	parseArguments();
 });
 
 </script>
