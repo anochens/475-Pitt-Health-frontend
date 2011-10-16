@@ -4,7 +4,11 @@
 	<title>Health Resources</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	<style>
+	.ui-page {
+        background: transparent url('http://www.upmc.com/HospitalsFacilities/PublishingImages/hospitals_main.jpg') !important;
+    }
+</style>
 	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
 	<script type="text/javascript" src="phonegap.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.6.3.min.js"></script>
@@ -214,6 +218,9 @@
 			
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
+		if (searchValue.length==0){
+			return;
+		}
 		var availableTags = returnTitles();
 		var pks=[];
 		var indexes=[];
@@ -239,14 +246,11 @@
 			});
 		if(pks.length == 0){
 			hideMenu();
-			var data="Sorry Bro";
+			var data="No results were found";
 			$('#main-data').html(data);
 			setBack(1);
 		}
-		if(pks.length == 1){
-			transitionTo(pks[0],window.currentPK);
-		}
-		if(pks.length > 1){
+		if(pks.length >= 1){
 			showMenu();
 			makeMenu(pks, 1, indexes);
 		}
