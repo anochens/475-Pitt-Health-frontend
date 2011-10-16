@@ -320,6 +320,7 @@ function onDeviceReady() {
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 }
+
 function onBackKeyDown() {
 	alert('back pressed!');
 }
@@ -332,13 +333,6 @@ function onMenuKeyDown() {
 $(document).ready(function() {
 	setup('doc');
 	document.addEventListener("deviceready", onDeviceReady, false);
-	var intervalID = window.setInterval(
-		function() {
-			if (PhoneGap.available) {
-				window.clearInterval(intervalID);
-				onDeviceReady();
-			}
-		},500);
 });
 
 </script>
