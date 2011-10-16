@@ -303,7 +303,7 @@
 
 <script>
 
-function setup(where) {
+function setup() {
 	$('#back-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
@@ -312,17 +312,17 @@ function setup(where) {
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
-	alert('Ready '+where); 
 }
 
 function onDeviceReady() {
-	alert('Woohoo');
 	document.addEventListener("backbutton", onBackKeyDown, false);
 	document.addEventListener("menubutton", onMenuKeyDown, false);
 }
 
 function onBackKeyDown() {
-	alert('back pressed!');
+	if(window.back.length > 0) {
+		goBack();
+	}
 }
 function onMenuKeyDown() {
 	alert('menu pressed!');
@@ -331,7 +331,7 @@ function onMenuKeyDown() {
     
 
 $(document).ready(function() {
-	setup('doc');
+	setup();
 	document.addEventListener("deviceready", onDeviceReady, false);
 });
 
