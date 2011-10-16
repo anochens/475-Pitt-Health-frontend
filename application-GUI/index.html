@@ -4,8 +4,13 @@
 	<title>Health Resources</title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	<style>
+	.ui-page {
+        background: transparent url('http://www.upmc.com/HospitalsFacilities/PublishingImages/hospitals_main.jpg') !important;
+    }
+</style>
 	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
+	<script type="text/javascript" src="phonegap.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.6.3.min.js"></script>
 	<script type="text/javascript" src="lib/jquery.mobile-1.0b3.min.js"></script>
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
@@ -146,8 +151,8 @@
 			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
-				var position=useSelfAsNext[i]+10;
-				title=itemdata['title']+"<br>"+itemdata['data'].substring(0,position)+"...";
+				var position=50;
+				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;font-style:italic;'>"+itemdata['data'].substring(0,position)+"...</div>";
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
@@ -236,7 +241,10 @@
 		}
 			
 	function doSearch() {
-		var searchValue=$('#search').val();
+		var searchValue=$('#search').val().toLowerCase();
+		if (searchValue.length==0){
+			return;
+		}
 		var availableTags = returnTitles();
 		var pks=[];
 		var indexes=[];
@@ -248,7 +256,7 @@
 
 				if(type=="ENDPAGE") {
 					if(title.indexOf(searchValue) != -1 ||
-						data.indexOf(searchValue) != -1) {
+						data.toLowerCase().indexOf(searchValue) != -1) {
 
 						pks.push(pk);
 						if(data.indexOf(searchValue) != -1) {
@@ -260,10 +268,13 @@
 					}
 				}
 			});
-		if(pks.length == 1){
-			transitionTo(pks[0],window.currentPK);
+		if(pks.length == 0){
+			hideMenu();
+			var data="No results were found";
+			$('#main-data').html(data);
+			setBack(1);
 		}
-		if(pks.length > 1){
+		if(pks.length >= 1){
 			showMenu();
 			makeMenu(pks, 1, indexes);
 		}
@@ -279,11 +290,10 @@
 		<h1 id='header-line'>Health Resources</h1>
 	</div>
 
-	<div data-role="content">
+	<div data-role="content" style="overflow:auto">
 		<div style="padding-bottom:20px;" id='search-stuff'>
-       	        <input type="search" name="search" onkeyup='doSearch();' id="search">
-<a href='#' data-role='button' data-inline='true' onclick="doSearch();">Search</a>
- 
+       	        <input type="search" name="search" id="search">
+				<a href="#" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a>
 		</div>
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
@@ -321,7 +331,7 @@
 
 <script>
 
-$(document).ready(function() {
+function setup() {
 	$('#back-button').hide();
 	$('#base-item').hide();
 	$('#add-bookmark-button').hide();
@@ -330,7 +340,25 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
-	parseArguments();
+}
+
+function onDeviceReady() {
+	document.addEventListener("backbutton", onBackKeyDown, false);
+	document.addEventListener("menubutton", onMenuKeyDown, false);
+}
+
+function onBackKeyDown() {
+	if(window.back.length > 0) {
+		goBack();
+	}
+}
+function onMenuKeyDown() {
+	alert('menu pressed!');
+}
+
+$(document).ready(function() {
+	setup();
+	document.addEventListener("deviceready", onDeviceReady, false);
 });
 
 </script>
