@@ -292,9 +292,13 @@
 	</div>
 
 	<div data-role="content" style="overflow:auto">
-		<div style="padding-bottom:20px;" id='search-stuff'>
-       	        <input style="display:inline" type="search" name="search" id="search">
-				<a href="#" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a>
+		
+		<div style="padding-bottom:20px" id='search-stuff'>
+       	     <table width="100%">
+				<tr><td width="90%">   
+				<input type="search" name="search" id="search"></input></td>
+				<td width="10%">
+				<a href="#" width="10%" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a></td></tr></table>
 		</div>
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
@@ -326,7 +330,7 @@
 		<a href="" data-role="button" id='home-button' onclick='showBaseMenu();'>Home</a>
 		<a href="" data-role="button" id='bookmarks-button' onclick='showBookmarks();'>Bookmarks</a>
 		<a href="" data-role="button" id='email-button'>Email</a>
-		<a href="" data-role="button" id='sms-button'>Text This</a>
+		<a href="" data-role="button" id='sms-button'>Text</a>
 		</div>
 	</div>
  
