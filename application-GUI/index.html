@@ -86,7 +86,6 @@
 	function createMenuItem(elem, text, next, from) {
 		var cloned = $(elem).clone();
 		var ul = $('#main-menu');
-
 		cloned.find(':only-child:last').html(text);
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
@@ -151,7 +150,7 @@
 			var title=itemdata['title'];
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
-				var position=50;
+				var position=35;
 				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;font-style:italic;'>"+itemdata['data'].substring(0,position)+"...</div>";
 			}
 
