@@ -334,6 +334,28 @@
 
 <script>
 
+function showAlerts() {
+	now = new Date();
+
+	for(id in window.jsondata) {
+   	if(window.jsondata[id].type == 'ALERT') {
+			elem = window.jsondata[id];
+			cookie = readCookie("alert_"+elem.pk);
+
+			if(cookie != "Never") {
+				start = new Date(elem.start);
+				end = new Date(elem.end);
+
+				if(start < now && now < end){ 
+					alertText = elem.title+"\n"+elem.subtitle;
+					alert(alertText);
+					createCookie("alert_"+elem.pk, "Never", 100);
+				}
+			}
+		}
+	}
+}
+
 function setup() {
 	$('#back-button').hide();
 	$('#base-item').hide();
@@ -344,6 +366,7 @@ function setup() {
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
+	showAlerts();
 }
 
 function onDeviceReady() {
