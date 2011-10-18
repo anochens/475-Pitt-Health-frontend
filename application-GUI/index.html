@@ -211,37 +211,6 @@
 	
 	}
 	
-	/*function showSMSButton(){
-		var message = $("#main-data").html();
-		var shorttext;
-		var link = document.location + "?page="+window.currentPK+"&history="+window.back;
-		var body = "Please see "+link+" for more information.";
-		body = encodeURIComponent(body);
-		$('#sms-button').show();
-		//console.log(shorttext);
-		$('#sms-button').attr("href", "sms:?body=" +body);
-		
-	}*/
-		//from http://stackoverflow.com/questions/439463/how-to-get-get-and-post-variables-with-jquery
-		/*function getQueryParams(qs) {
-		    qs = qs.split("+").join(" ");
-		    var params = {},
-		        tokens,
-		        re = /[?&]?([^=]+)=([^&]*)/g;
-
-		    while (tokens = re.exec(qs)) {
-		        params[decodeURIComponent(tokens[1])]
-		            = decodeURIComponent(tokens[2]);
-		    }
-
-		    return params;
-		}
-		function parseArguments(){
-			
-			var $_GET = getQueryParams(document.location.search);
-			console.log($_GET);
-		}*/
-			
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
 		if (searchValue.length==0){
