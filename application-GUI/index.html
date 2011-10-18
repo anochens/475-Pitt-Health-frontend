@@ -13,7 +13,16 @@
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
-		<script>
+	<style>
+	.wrapper{
+	margin: 0 auto;
+	text-align: center;
+	}
+	.center{
+	margin: 0 auto;
+	}
+	</style>
+	<script>
 	$(function() {
 		var availableTags = returnTitles();
 		$( "#tags" ).autocomplete({
@@ -299,7 +308,7 @@
 		<ul data-role="listview" data-theme="c"  id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
-		<img src='lib/images/hospitals.jpg' style="padding-left:0px;"></img>
+		<div class="wrapper"><img src='lib/images/hospitals.jpg' style="padding-left:0px;" class="center"></img></div>
 		</div>
 		<style>
 			pre {
