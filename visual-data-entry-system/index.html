@@ -89,6 +89,8 @@
 		var classname = $(".child");
 		for(var i = idPanel+1;i<classname.length;i++){
 			$("[id='main-data']:eq("+i+")").empty();
+			$("[id='firstColumn']:eq("+i+")").hide();
+			
 		}
 		//$("[id='main-data']:eq("+idPanel+")").empty();
 	}
@@ -96,13 +98,14 @@
 	function hideMenu(idPanel) {
 		emptyMenu(idPanel);
 		//$('#main-menu-wrapper').hide();
-		$('.child').eq(idPanel).hide();
+		$("[id='firstColumn']:eq("+idPanel+")").hide();
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").hide();
 		
 	}
 
 	function showMenu(idPanel) {
 		idPanel += 1;
+		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
 		
@@ -112,8 +115,7 @@
 
 	function showData(data, idPanel) {
 		idPanel += 1;		
-		//$('.child:eq("+idPanel+")').show();
-				
+		$("[id='firstColumn']:eq("+idPanel+")").show();
 		$("[id='main-data']:eq("+idPanel+")").html(data);
 		//$('#main-data').html(data);
 		addLinks(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g, true, 7);
@@ -158,16 +160,13 @@
 			// $('#thirdColumn').hide();
 			// $('#fourthColumn').hide();
 
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent());
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			
 		}
 		else{
-			idPanel += 1;
-			// var column = $("[id='main-menu']:eq("+0+")").empty();
-			
-			emptyMenu(idPanel);
+			idPanel += 1;			
 		}
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
@@ -233,6 +232,7 @@
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
+			
 		</ul>
 		</div>
 		<style>
@@ -251,7 +251,7 @@
 	
 		<pre style="font-family:arial;
 				font-size:12pt;padding-right:20%">
-				<div id='main-data'>
+				<div id='main-data' contentEditable="true">
 					
 				</div></pre>
 	</div>	
