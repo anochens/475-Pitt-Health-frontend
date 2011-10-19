@@ -14,12 +14,35 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<style>
-	.wrapper{
-	margin: 0 auto;
-	text-align: center;
+	.logo_wrapper {
+		margin: 0 auto;
+		text-align: center;
 	}
-	.center{
-	margin: 0 auto;
+	.center {
+		margin: 0 auto;
+	}
+	.menu_item {
+		font-size:10pt;
+		padding-top:10px;
+		font-style:italic;
+	}
+	.toggle_bookmark_button {
+		float:right;
+		right:5px;
+		top:5px 
+	}
+	#search_wrapper {
+		padding-bottom:20px
+	}
+	pre {
+		white-space: pre-wrap; /* css-3 */
+		white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+		white-space: -pre-wrap; /* Opera 4-6 */
+		white-space: -o-pre-wrap; /* Opera 7 */
+		word-wrap: break-word; /* Internet Explorer 5.5+ */
+		font-family:arial;
+		font-size:12pt;
+		padding-right:20%;
 	}
 	</style>
 	<script>
@@ -113,14 +136,14 @@
 	function hideMenu() {
 		emptyMenu();
 		$('#main-menu-wrapper').hide();
-		$('#search-stuff').hide();
+		$('#search_wrapper').hide();
 	}
 
 	function showMenu() {
 		emptyMenu();
 		emptyData();
 		$('#main-menu-wrapper').show();
-		$('#search-stuff').show();
+		$('#search_wrapper').show();
 		$('#email-button').hide();
 		$('#sms-button').hide();
 	}
@@ -155,7 +178,7 @@
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
 				var position=35;
-				title=itemdata['title']+"<br>"+"<div style='padding-top:10px;font-size:10pt;font-style:italic;'>"+itemdata['data'].substring(0,position)+"...</div>";
+				title=itemdata['title']+"<br>"+"<div class='menu_item'"+itemdata['data'].substring(0,position)+"...</div>";
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
@@ -257,45 +280,34 @@
 <div data-role="page" data-theme="b">
 	<div data-role="header" data-theme="b">
 		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
-			<a href="" style="float:right; right:5px; top:5px" data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
-			<a href="" style="float:right; right:5px; top:5px"  data-icon="minus" data-iconpos="notext" id='remove-bookmark-button' onclick='toggleBookmark();'></a>
+			<a href="" class='toggle_bookmark_button' data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
+			<a href="" class='toggle_bookmark_button' data-icon="minus" data-iconpos="notext" id='remove-bookmark-button' onclick='toggleBookmark();'></a>
 		<h1 id='header-line'>Health Resources</h1>
 	</div>
 
 	<div data-role="content" style="overflow:auto">
 
 	
-		<div style="padding-bottom:20px" id='search-stuff'>
-       	     <table width="100%">
-				<tr><td width="90%">   
+		<div id='search_wrapper'>
+				<table width="100%">
+				<tr><td width="90%">
 				<input type="search" name="search" id="search"></input></td>
 				<td width="10%">
 				<a href="#" width="10%" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a></td></tr></table>
 
 		</div>
 		<div id='main-menu-wrapper'>
-		<ul data-role="listview" data-theme="c"  id='main-menu'>
+		<ul data-role="listview" data-theme="c" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
-		<div class="wrapper"><img src='lib/images/hospitals.jpg' style="padding-left:0px;" class="center"></img></div>
+		<div class="logo_wrapper"><img src='lib/images/hospitals.jpg' style="padding-left:0px;" class="center"></img></div>
 		</div>
-		<style>
-			pre {
-				white-space: pre-wrap; /* css-3 */
-				white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-				white-space: -pre-wrap; /* Opera 4-6 */
-				white-space: -o-pre-wrap; /* Opera 7 */
-				word-wrap: break-word; /* Internet Explorer 5.5+ */
-				
-			}		
-		</style>
 		
-		
-		<pre style="font-family:arial;
-				font-size:12pt;padding-right:20%;">
+		<pre>
 				<div id='main-data' data-scroll='true'>
 					
-				</div></pre>
+				</div>
+		</pre>
 				
 	</div><!-- /content -->
 
@@ -316,7 +328,7 @@ function showAlerts() {
 	now = new Date();
 
 	for(id in window.jsondata) {
-   	if(window.jsondata[id].type == 'ALERT') {
+		if(window.jsondata[id].type == 'ALERT') {
 			elem = window.jsondata[id];
 			cookie = readCookie("alert_"+elem.pk);
 
