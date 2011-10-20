@@ -11,6 +11,7 @@
 	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
+	<script type="text/javascript" src="scripts/sendToUser.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
@@ -187,21 +188,7 @@
 		$('#main-data').html(data);
 	}
 
-	function showMailerButton(){
-		var data = $("#main-data").html();
-		$('#email-button').show();
-		$('#email-button').attr("href", "mailto:?subject="+encodeURIComponent(document.title)+"&body=" + encodeURIComponent(data));
-	}
-	
-	function showSMSButton(){
-		var data = $("#main-data").html();
-		var phone = data.match(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g);
-		$('#sms-button').show();
-		if (phone!= null){
-			$('#sms-button').attr("href", "sms:?body="+encodeURIComponent(document.title)+  encodeURIComponent(phone));
-		}
-	
-	}
+
 	
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
