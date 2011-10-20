@@ -17,14 +17,6 @@
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
 	<script>
-	$(function() {
-		var availableTags = returnTitles();
-		$( "#tags" ).autocomplete({
-			source: availableTags
-		});
-	});
-	</script>
-	<script>
 	function setBack(pk) {
 		window.back.push(pk);
 		$('#back-button').show();
@@ -154,10 +146,6 @@
 		}
 	}
 	
-
-
-
-	
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
 		if (searchValue.length==0){
@@ -197,7 +185,6 @@
 			makeMenu(pks, 1, indexes);
 		}
 	}
-
 	</script>
 </head>
 <body>
