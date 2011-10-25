@@ -1,6 +1,6 @@
 function loadBookmarks() {
 	var bookmarkData = readCookie('bookmarkData');
-	
+
 	if(!bookmarkData) {
 		window.bookmarks = [];
 	}
@@ -58,10 +58,13 @@ function showToggleButton() {
 	if(typeof window.bookmarks == 'undefined') {
 		loadBookmarks();
 	}
-	$('#add-bookmark-button').show();
-	$('#add-bookmark-button').find(':only-child:last').html('+ Bookmark');
-
 	if(window.bookmarks.indexOf(window.currentPK) != -1) {
-		$('#add-bookmark-button').find(':only-child:last').html('- Bookmark');
+		$('#remove-bookmark-button').show();
+		$('#add-bookmark-button').hide();
+	}
+	else{
+		$('#add-bookmark-button').show();
+		$('#remove-bookmark-button').hide();
 	}
 }
+
