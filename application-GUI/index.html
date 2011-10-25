@@ -76,7 +76,9 @@
 	function createMenuItem(elem, text, next, from) {
 		var cloned = $(elem).clone();
 		var ul = $('#main-menu');
+		console.log(text);
 		cloned.find(':only-child:last').html(text);
+		console.log(text);
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
 		cloned.click(function() {
@@ -139,7 +141,8 @@
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
 				var position=35;
-				title=itemdata['title']+"<br>"+"<div class='menu_item'"+itemdata['data'].substring(0,position)+"...</div>";
+				title=itemdata['title']+"<br>"+"<div class='menu_item'>"+itemdata['data'].substring(0,position)+"...</div>";
+				setBack(1);
 			}
 
 			createMenuItem($('#base-item'), title, next, from);
@@ -211,7 +214,7 @@
 		<ul data-role="listview" data-theme="c" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
-		<div class="logo_wrapper"><img src='lib/images/hospitals.jpg' style="padding-left:0px;" class="center"></img></div>
+		<div class="logo_wrapper"><img src='lib/images/hospitals.png' style="padding-left:0px;" class="center"></img></div>
 		</div>
 		
 		<pre>
