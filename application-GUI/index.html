@@ -76,9 +76,7 @@
 	function createMenuItem(elem, text, next, from) {
 		var cloned = $(elem).clone();
 		var ul = $('#main-menu');
-		console.log(text);
 		cloned.find(':only-child:last').html(text);
-		console.log(text);
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
 		cloned.click(function() {
