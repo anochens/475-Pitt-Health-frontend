@@ -116,7 +116,7 @@
 	function saveData(idPanel){
 		alert("saved!");
 		$('#saveButton').remove();
-		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick=editData("+idPanel+") id='editButton'>Edit</button>");
+		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='editData("+idPanel+"') id='editButton'>Edit</button>");
 		//$("[id='main-data']:eq("+idPanel+")");
 	}
 	
@@ -124,7 +124,7 @@
 		console.log(data);
 		//$("[id='main-data']:eq("+idPanel+")").removeAttr('readOnly');
 		$("#editButton").remove();
-		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick=saveData("+idPanel+") id='saveButton'>Save</button>");
+		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+"') id='saveButton'>Save</button>");
 	}
 
 	function showData(data, idPanel) {
@@ -134,9 +134,9 @@
 		// var testvariable = idPanel + "," + data;
 		var testvariable = idPanel + "," + idPanel;
 		var editTest = "editData("+testvariable+")";
-		var test = "<button onclick="+editTest+" id='editButton'>Edit</button>";
+		var test = "<button onclick='"+editTest+"' id='editButton'>Edit</button>";
 		console.log(test);
-		// $("[id='main-menu']:eq("+idPanel+")").append("<button onclick=editData("+idPanel+','+data+") id='editButton'>Edit</button>");
+		// $("[id='main-menu']:eq("+idPanel+")").append("<button onclick='editData("+idPanel+","+data+")' id='editButton'>Edit</button>");
 		$("[id='main-menu']:eq("+idPanel+")").append(test);
 		$("[id='main-data']:eq("+idPanel+")").show();
 		$("[id='main-data']:eq("+idPanel+")").html(data);
@@ -148,7 +148,7 @@
 	
 
 	//assume elem with pk 1 is the base menu
-	function makeBaseMenu() {
+	function makeBaseMenu() {        
 		var baseMenuPK = 1;
 		var res = getEntryFromFile(baseMenuPK);
 		makeMenu(res['items'], baseMenuPK);
