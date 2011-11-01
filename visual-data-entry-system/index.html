@@ -143,6 +143,7 @@
 	}
 	
 	function editData(idPanel, data){
+		data = unescape(data);
 		//$("[id='main-data']:eq("+idPanel+")").removeAttr('readOnly');
 		$("#editButton").remove();
 		$("[id='main-data']:eq("+idPanel+")").empty();
@@ -155,7 +156,7 @@
 		emptyMenu(idPanel);
 		$("[id='survey']:eq("+idPanel+")").hide();
 		$("[id='firstColumn']:eq("+idPanel+")").show();
-		var editVariables = "editData("+idPanel+",\""+data+"\")";
+		var editVariables = "editData("+idPanel+",\""+escape(data)+"\")";
 		var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
 		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
 		$("[id='main-data']:eq("+idPanel+")").show();
