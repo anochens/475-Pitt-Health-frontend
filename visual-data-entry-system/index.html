@@ -41,7 +41,7 @@
 
 		if(res['type'] == 'ENDPAGE') {
 			//hideMenu(idPanel);
-			showData(res['data'], idPanel);
+			showData(res['data'], idPanel, pk);
 			showToggleButton();
 		}
 
@@ -134,29 +134,31 @@
 		$("[id='survey']:eq("+idPanel+")").hide();
 	}
 	
-	function saveData(idPanel, data){
-		alert("saved!");
+	function saveData(idPanel, data, primarykey){
+		data = unescape(data);
 		$('#saveButton').remove();
-		console.log(data);
-		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='editData("+idPanel+"') id='editButton'>Edit</button>");
-		//$("[id='main-data']:eq("+idPanel+")");
+		var editVariables = "editData("+idPanel+",\""+escape(data)+"\","+primarykey+")";
+		var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
+		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
+		$("[id='main-data']:eq("+idPanel+")").empty();
+		$("[id='main-data']:eq("+idPanel+")").html(data);
 	}
 	
-	function editData(idPanel, data){
+	function editData(idPanel, data, primarykey){
 		data = unescape(data);
 		//$("[id='main-data']:eq("+idPanel+")").removeAttr('readOnly');
 		$("#editButton").remove();
 		$("[id='main-data']:eq("+idPanel+")").empty();
 		$("[id='main-data']:eq("+idPanel+")").append("<textarea rows='20' cols='35'>"+data+"</textarea>");
-		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+data+"\")' id='saveButton'>Save</button>");
+		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
 	}
 
-	function showData(data, idPanel) {
+	function showData(data, idPanel, primarykey) {
 		idPanel += 1;
 		emptyMenu(idPanel);
 		$("[id='survey']:eq("+idPanel+")").hide();
 		$("[id='firstColumn']:eq("+idPanel+")").show();
-		var editVariables = "editData("+idPanel+",\""+escape(data)+"\")";
+		var editVariables = "editData("+idPanel+",\""+escape(data)+"\","+primarykey+")";
 		var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
 		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
 		$("[id='main-data']:eq("+idPanel+")").show();
