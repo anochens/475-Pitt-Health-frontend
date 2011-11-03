@@ -142,6 +142,7 @@
 		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
 		$("[id='main-data']:eq("+idPanel+")").empty();
 		$("[id='main-data']:eq("+idPanel+")").html(data);
+		
 	}
 	
 	function editData(idPanel, data, primarykey){
@@ -149,8 +150,11 @@
 		//$("[id='main-data']:eq("+idPanel+")").removeAttr('readOnly');
 		$("#editButton").remove();
 		$("[id='main-data']:eq("+idPanel+")").empty();
-		$("[id='main-data']:eq("+idPanel+")").append("<textarea rows='20' cols='35'>"+data+"</textarea>");
-		$("[id='main-menu']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
+		var dataEntry = getEntryFromFile(primarykey);
+		console.log(dataEntry.data);
+		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
+		$("[id='main-data']:eq("+idPanel+")").append("<form><input type='submit' value='Save' /><textarea rows='20' cols='35'>"+dataEntry.data+"</textarea></form>");
+
 	}
 
 	function showData(data, idPanel, primarykey) {
