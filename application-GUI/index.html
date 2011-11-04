@@ -21,10 +21,8 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
-	<style>
-	[data-role=page]{height: 100% !important; position:relative !important;}
-    [data-role=footer]{bottom:0; position:absolute !important; top: auto !important; width:100%;} 
-	</style>
+	 <script src="http://cubiq.org/dropbox/iscroll/iscroll.js?v3.7.1"></script>
+    <script src="scripts/jquery.mobile.iscroll.js"></script>
 	<script>
 	function setBack(pk) {
 		window.back.push(pk);
@@ -198,7 +196,7 @@
 	</script>
 </head>
 <body>
-<div data-role="page" data-theme="b">
+<div data-role="page" data-theme="b" data-iscroll="enable">
 	<div data-role="header" data-theme="b">
 		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
 			<a href="" class='toggle_bookmark_button' data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
@@ -207,7 +205,7 @@
 	</div>
 
 	<div data-role="content" style="overflow:auto">
-
+		<div data-iscroll="scroller">
 	
 		<div id='search_wrapper'>
 				<table width="100%">
@@ -229,7 +227,7 @@
 					
 				</div>
 		</pre>
-				
+		</div>		
 	</div><!-- /content -->
 
 	<div data-role="footer" data-theme="b" id='footer'>&nbsp;
