@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<html>
 	<head>
 	<title>Health Resources</title>
 
@@ -13,7 +13,6 @@
 	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
-	
 	
 	
 
@@ -133,28 +132,53 @@
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
 		$("[id='survey']:eq("+idPanel+")").hide();
 	}
-	
+	function phpTestFunction(pk, editData){
+		var url = 'editData.php';
+		var data = { primarykey:pk, testingTextArea:editData };
+		var request = $.ajax({
+		  	async: false,
+		  type: 'POST',
+		  url: url,
+		  data: data,
+		  success: function(){
+			alert("success");
+			},
+		  error: function(){
+			alert("error");
+			},
+		  complete: function(){
+			alert('completed');
+		    },
+		});
+	}
 	function saveData(idPanel, data, primarykey){
-		data = unescape(data);
-		$('#saveButton').remove();
-		var editVariables = "editData("+idPanel+",\""+escape(data)+"\","+primarykey+")";
-		var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
-		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
-		$("[id='main-data']:eq("+idPanel+")").empty();
-		$("[id='main-data']:eq("+idPanel+")").html(data);
-		
+		var text = $('#testingTextArea').val();
+		console.log(text);
+		data = unescape(text);
+		phpTestFunction(primarykey, data);
+		// $('#saveButton').remove();
+		// var editVariables = "editData("+idPanel+",\""+escape(text)+"\","+primarykey+")";
+		// var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
+		// $("[id='main-menu']:eq("+idPanel+")").append(editFunction);
+		// $("[id='main-data']:eq("+idPanel+")").empty();
+		// $("[id='main-data']:eq("+idPanel+")").html(data);
+		loadFile('data.json');
+		emptyData(idPanel);
+		showData(data, idPanel-1, primarykey);
+	}
+	
+	function testing(){
+		console.log("help");
 	}
 	
 	function editData(idPanel, data, primarykey){
 		data = unescape(data);
-		//$("[id='main-data']:eq("+idPanel+")").removeAttr('readOnly');
 		$("#editButton").remove();
 		$("[id='main-data']:eq("+idPanel+")").empty();
 		var dataEntry = getEntryFromFile(primarykey);
-		console.log(dataEntry.data);
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
-		$("[id='main-data']:eq("+idPanel+")").append("<form><input type='submit' value='Save' /><textarea rows='20' cols='35'>"+dataEntry.data+"</textarea></form>");
-
+		$("[id='main-data']:eq("+idPanel+")").append("<form><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
+		// $("[id='main-data']:eq("+idPanel+")").append("<form action='editdata.php' method='post'> <input type='submit' value='Save'/><input type='hidden' name='primarykey' value='"+primarykey+"' /><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
 	}
 
 	function showData(data, idPanel, primarykey) {
@@ -257,8 +281,10 @@
 	}
 
 	</script>
+	
 </head>
 <body>
+	
 <div data-role="page" data-theme="b">
 	<div class='child' id="firstColumn">
 	<div data-role="header" data-theme="b">
