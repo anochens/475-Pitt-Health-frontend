@@ -21,8 +21,7 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
-	 <script src="http://cubiq.org/dropbox/iscroll/iscroll.js?v3.7.1"></script>
-    <script src="scripts/jquery.mobile.iscroll.js"></script>
+	<script src="http://cubiq.org/dropbox/iscroll/iscroll.js?v3.7.1"></script>
 	<script>
 	function setBack(pk) {
 		window.back.push(pk);
@@ -154,6 +153,7 @@
 		}
 	}
 	
+
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
 		if (searchValue.length==0){
@@ -196,7 +196,7 @@
 	</script>
 </head>
 <body>
-<div data-role="page" data-theme="b" data-iscroll="enable">
+<div data-role="page" data-theme="b" data-scroll="true">
 	<div data-role="header" data-theme="b">
 		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
 			<a href="" class='toggle_bookmark_button' data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
@@ -204,7 +204,7 @@
 		<h1 id='header-line'>Health Resources</h1>
 	</div>
 
-	<div data-role="content" style="overflow:auto">
+	<div data-role="content" style="overflow:auto" id="content">
 		<div data-iscroll="scroller">
 	
 		<div id='search_wrapper'>
@@ -219,7 +219,6 @@
 		<ul data-role="listview" data-theme="c" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
 		</ul>
-		<div class="logo_wrapper"><img src='lib/images/hospitals.png' style="padding-left:0px;" class="center"></img></div>
 		</div>
 		
 		<pre>
@@ -295,6 +294,11 @@ function onMenuKeyDown() {
 $(document).ready(function() {
 	setup();
 	document.addEventListener("deviceready", onDeviceReady, false);
+	$('#search').keydown(function(e) {
+	if(e.keyCode == "13") {
+		doSearch();
+    }
+});
 });
 
 </script>
