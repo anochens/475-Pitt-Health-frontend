@@ -51,7 +51,7 @@ function showBookmarks() {
 	makeMenu(window.bookmarks, 0, true);
 
 	setBack(window.currentPK);
-	setTitle('Your bookmarks');
+	setTitle('Bookmarks');
 }
 
 function showToggleButton() {
