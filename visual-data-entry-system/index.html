@@ -34,7 +34,7 @@
 		window.currentPK = pk;
 
 		if(res['type'] == 'MENU') {
-			showMenu(idPanel);
+			showMenu(idPanel, pk);
 			makeMenu(res['items'], res['pk'], idPanel);
 		}
 
@@ -105,15 +105,43 @@
 		
 	}
 	
-	function dialogBox(idPanel){
+	function phpAddNewItem(pk){
+		var url = 'addnewitem.php';
+		var data = { primarykey:window.currentPK, radio_next_item:"Menu", title:"New Item"};
+		var request = $.ajax({
+		  	async: false,
+			type: 'POST',
+		  	url: url,
+		  	data: data,
+		  	success: function(){
+				alert("success");
+			},
+		  	error: function(){
+				alert("error");
+			},
+		  	complete: function(){
+				alert('completed');
+		    },
+		});
+	}
+	
+	function saveMenu(idPanel, primarykey){
+		phpAddNewItem(primarykey);
+		loadFile('data.json');
+		//emptyMenu(idPanel);
+		transitionTo(window.currentPK, window.currentPK, idPanel-1) 
+	}
+	
+	function dialogBox(idPanel, primarykey){
 		$('#survey').dialog({
-		autoOpen: true,
+		autoOpen:true,
 		modal: true,
-		width: 550,
-		resizable: true,
+		width:700,
+		resizable:true,
 		buttons: {
              "Submit Form": function() {
                  // document.testconfirmJQ.submit();
+				saveMenu(idPanel, primarykey);
 				$(this).dialog("close");
              },
              "Cancel": function() {
@@ -123,39 +151,41 @@
 		});
 	}
 
-	function showMenu(idPanel) {
+	function showMenu(idPanel, primarykey) {
 		idPanel += 1;
 		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
-		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+")' id='popupButton'>Add New Item</button>")
+		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item</button>")
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
 		$("[id='survey']:eq("+idPanel+")").hide();
 	}
-	function phpTestFunction(pk, editData){
+	
+	function phpEditFunction(pk, editData){
 		var url = 'editData.php';
 		var data = { primarykey:pk, testingTextArea:editData };
 		var request = $.ajax({
 		  	async: false,
-		  type: 'POST',
-		  url: url,
-		  data: data,
-		  success: function(){
-			alert("success");
+			type: 'POST',
+		  	url: url,
+		  	data: data,
+		  	success: function(){
+				alert("success");
 			},
-		  error: function(){
-			alert("error");
+		  	error: function(){
+				alert("error");
 			},
-		  complete: function(){
-			alert('completed');
+		  	complete: function(){
+				alert('completed');
 		    },
 		});
 	}
+	
 	function saveData(idPanel, data, primarykey){
 		var text = $('#testingTextArea').val();
 		console.log(text);
 		data = unescape(text);
-		phpTestFunction(primarykey, data);
+		phpEditFunction(primarykey, data);
 		// $('#saveButton').remove();
 		// var editVariables = "editData("+idPanel+",\""+escape(text)+"\","+primarykey+")";
 		// var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
@@ -165,10 +195,6 @@
 		loadFile('data.json');
 		emptyData(idPanel);
 		showData(data, idPanel-1, primarykey);
-	}
-	
-	function testing(){
-		console.log("help");
 	}
 	
 	function editData(idPanel, data, primarykey){
