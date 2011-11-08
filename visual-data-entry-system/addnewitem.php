@@ -37,7 +37,7 @@ if(strtoupper($_POST["radio_next_item"]) == "MENU"){
 }
  else{
 	$newNextArray['pk'] = $nextPK;
-	$newNextArray['data'] = "";
+	$newNextArray['data'] = "Please enter information after clicking on the edit button";
 	$newNextArray['title'] = $_POST["title"];
 	$newNextArray['type'] = strtoupper($_POST["radio_next_item"]);
 }
