@@ -135,7 +135,8 @@
 				 "Cancel": function() {
 					  $(this).dialog("close");
              }
-         }
+         },
+		open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
 		});
 
 		$('[role="dialog"]').css('background','grey');
