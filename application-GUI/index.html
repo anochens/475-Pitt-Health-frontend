@@ -22,6 +22,7 @@
 	<script type="text/javascript" src="scripts/javascript_cookies.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
+	
 	<script type="text/javascript">
 	// remember, these are the possible parameters for Set_Cookie:
 	// name, value, expires, path, domain, secure
@@ -32,13 +33,6 @@
 	if ( Get_Cookie( 'test' ) )
 	{
 		alert('cookies are currently enabled.');
-		//document.write( 'cookies are currently enabled.' );
-		/*
-		this is an example of a set cookie variable, if
-		you want to use this on the page or on another script
-		instead of writing to the page you would just check that value
-		for true or false and then do what you need to do.
-		*/
 		cookie_set = true;
 		// and these are the parameters for Delete_Cookie:
 		// name, path, domain
@@ -49,8 +43,7 @@
 	//are not enabled for this session.
 	else
 	{
-		alert('cookies are not currently enabled');
-		//document.write( 'cookies are not currently enabled.' );
+		alert('cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
 		cookie_set = false;
 	}
 }
