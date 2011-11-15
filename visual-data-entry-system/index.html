@@ -180,12 +180,12 @@
 
 		$("[id='header-line']:eq("+idPanel+")").html(formData);
 		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {saveTitle(idPanel,primarykey)});
-		//$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {saveTitle(idPanel,primarykey)});
 	}
 
 	function makeTitleStatic(idPanel, primarykey, title) {
 		var title = $("[id='newTitle']:eq(0)").val();
 		$("[id='header-line']:eq("+idPanel+")").html(title);
+		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 		loadFile('data.json');
 	}
 	
@@ -413,6 +413,7 @@ $(document).ready(function() {
 	window.currentPK = 1;
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item</button>");
 	$("[id='survey']:eq("+0+")").hide();
+	makeTitleStatic(0,0);
 	
 });
 
