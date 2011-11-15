@@ -21,7 +21,33 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
+	
+	<script type="text/javascript">
+	// remember, these are the possible parameters for Set_Cookie:
+	// name, value, expires, path, domain, secure
+	function checkCookie(){
+		createCookie( 'test', 'none', '');
+	// if Get_Cookie succeeds, cookies are enabled, since
+	//the cookie was successfully created.
+	if ( readCookie( 'test' ) )
+	{
+		cookie_set = true;
+		// and these are the parameters for Delete_Cookie:
+		// name, path, domain
+		// make sure you use the same parameters in Set and Delete Cookie.
+		eraseCookie('test');
+	}
+	// if the Get_Cookie test fails, cookies
+	//are not enabled for this session.
+	else
+	{
+		alert('cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
+		cookie_set = false;
+	}
+}
+	</script>
 	<script>
+	
 	function setBack(pk) {
 		window.back.push(pk);
 		$('#back-button').show();
@@ -43,7 +69,9 @@
 			showBookmarks();
 		}
 		else {
+			
 			transitionTo(last);
+			//transitionTo(last);
 		}
 	}
 	
@@ -274,6 +302,7 @@ function setup() {
 	window.back = [];
 	window.currentPK = 1;
 	showAlerts();
+	checkCookie();
 }
 
 function onDeviceReady() {
