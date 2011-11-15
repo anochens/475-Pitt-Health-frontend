@@ -45,7 +45,6 @@
 	}
 
 	function setTitle(title, idPanel) {	
-		idPanel += 1;
 		$("[id='header-line']:eq("+idPanel+")").html(title);
 		document.title = title;
 	}
@@ -60,7 +59,7 @@
 		cloned.click(function() {
 			ul.find('li').css('background','white');	
 			$(cloned).css('background','yellow');	
-			transitionTo(next, idPanel);
+			transitionTo(next, idPanel+1);
 			
 		});
 
@@ -116,7 +115,7 @@
 		}
 		phpAddNewItem(idPanel, primarykey, title, radio);
 		loadFile('data.json');
-		transitionTo(primarykey, idPanel-1) 
+		transitionTo(primarykey, idPanel); 
 	}
 	
 	function dialogBox(idPanel, primarykey){
@@ -146,7 +145,6 @@
 	}
 
 	function showMenu(idPanel, primarykey) {
-		idPanel += 1;
 		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
@@ -215,7 +213,7 @@
 		phpEditFunction(primarykey, data);
 		loadFile('data.json');
 		emptyData(idPanel);
-		showData(data, idPanel-1, primarykey);
+		showData(data, idPanel, primarykey);
 	}
 	
 	function editData(idPanel, data, primarykey){
@@ -228,7 +226,6 @@
 	}
 
 	function showData(data, idPanel, primarykey) {
-		idPanel += 1;
 		emptyMenu(idPanel);
 		$("[id='survey']:eq("+idPanel+")").hide();
 		$("[id='firstColumn']:eq("+idPanel+")").show();
@@ -264,9 +261,6 @@
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			
-		}
-		else{
-			idPanel += 1;			
 		}
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
