@@ -39,31 +39,22 @@
 		}
 
 		if(res['type'] == 'ENDPAGE') {
-			//hideMenu(idPanel);
 			showData(res['data'], idPanel, pk);
 			showToggleButton();
 		}
 
 		setTitle(res['title'], idPanel);
-
-		if(typeof from !== 'undefined') {
-			//setBack(from);
-		}
-
 	}
 
 	function setTitle(title, idPanel) {	
 		idPanel += 1;
 		$("[id='header-line']:eq("+idPanel+")").html(title);
-		
-		//$('#header-line').html(title);
 		document.title = title;
 	}
 
 	function createMenuItem(elem, text, next, from, idPanel) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
-		//var ul = $('#main-menu');
 
 		cloned.find(':only-child:last').html(text);
 		cloned.find(':only-child:last').attr('next',next);
@@ -81,25 +72,20 @@
 	}
 
 	function emptyMenu(idPanel) {
-		//$("[id^='to_']:eq("+idPanel+")").remove();
-		//$('[id^="to_"]').remove()
 		$("[id='main-menu']:eq("+idPanel+")").empty();
 		$("[id='main-data']:eq("+idPanel+")").empty();
 	}
 
 	function emptyData(idPanel) {
-		//$('#main-data').empty();
 		var classname = $(".child");
 		for(var i = idPanel+1;i<classname.length;i++){
 			$("[id='main-data']:eq("+i+")").empty();
 			$("[id='firstColumn']:eq("+i+")").hide();			
 		}
-		//$("[id='main-data']:eq("+idPanel+")").empty();
 	}
 
 	function hideMenu(idPanel) {
 		emptyMenu(idPanel);
-		//$('#main-menu-wrapper').hide();
 		$("[id='firstColumn']:eq("+idPanel+")").hide();
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").hide();
 		
@@ -229,12 +215,6 @@
 		console.log(text);
 		data = unescape(text);
 		phpEditFunction(primarykey, data);
-		// $('#saveButton').remove();
-		// var editVariables = "editData("+idPanel+",\""+escape(text)+"\","+primarykey+")";
-		// var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
-		// $("[id='main-menu']:eq("+idPanel+")").append(editFunction);
-		// $("[id='main-data']:eq("+idPanel+")").empty();
-		// $("[id='main-data']:eq("+idPanel+")").html(data);
 		loadFile('data.json');
 		emptyData(idPanel);
 		showData(data, idPanel-1, primarykey);
@@ -247,7 +227,6 @@
 		var dataEntry = getEntryFromFile(primarykey);
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
 		$("[id='main-data']:eq("+idPanel+")").append("<form><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
-		// $("[id='main-data']:eq("+idPanel+")").append("<form action='editdata.php' method='post'> <input type='submit' value='Save'/><input type='hidden' name='primarykey' value='"+primarykey+"' /><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
 	}
 
 	function showData(data, idPanel, primarykey) {
@@ -260,7 +239,6 @@
 		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
 		$("[id='main-data']:eq("+idPanel+")").show();
 		$("[id='main-data']:eq("+idPanel+")").html(data);
-		//$('#main-data').html(data);
 		addLinks(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g, true, 7);
 		addLinks(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi, false, true);
 		addLinks(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
@@ -283,13 +261,6 @@
 		var id;
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
-			//CHANGE TO GENERIC FORM!!!	
-			
-			//$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-
-			// $('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			// 			$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			// 
 
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
@@ -308,7 +279,6 @@
 			}
 			// clone first column into second column
 			// $("[id='base-item']:eq(0)"); first base item
-			//createMenuItem($('#base-item'), itemdata['title'], next, from, id);
 			var test = $("[id='base-item']:eq("+idPanel+")");
 			createMenuItem(test, itemdata['title'], next, from, idPanel);
 			
