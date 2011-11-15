@@ -169,15 +169,17 @@
 	}
 
 	function updateTitleButton(idPanel, primarykey) {
-		$("[id='editTitleButton']:eq("+idPanel+")").click(function() {makeTitleEditable(idPanel,primarykey)});
+		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 	}
 
 	function makeTitleEditable(idPanel, primarykey) {
 		var title = $("[id='header-line']:eq("+idPanel+")").html();
+		alert('current title is"'+title+'"');
 
 		var formData = "<form data-ajax='false' onsubmit='return saveTitle("+idPanel+","+primarykey+");'><input id='newTitle' type='text' value='"+title+"' /></form>";
 
 		$("[id='header-line']:eq("+idPanel+")").html(formData);
+		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {saveTitle(idPanel,primarykey)});
 		//$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {saveTitle(idPanel,primarykey)});
 	}
 
