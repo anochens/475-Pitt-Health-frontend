@@ -29,7 +29,7 @@
 	function transitionTo(pk, idPanel) {
 
 		var res = getEntryFromFile(pk);
-		window.currentPK = pk;
+		console.log('transitioning to '+pk);
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
@@ -154,8 +154,20 @@
 		updateTitleButton(idPanel, primarykey);
 	}
 
+	function getTitleButton(idPanel, primarykey) {
+		var titleparent=$("[id='header-line']:eq("+idPanel+")").parent();
+		var titlebtn = titleparent.children().filter("[id='editTitleButton']");
+
+      console.log(titlebtn);
+
+		return titlebtn;
+	}
+
 	function updateTitleButton(idPanel, primarykey) {
-		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
+		var titlebtn = getTitleButton(idPanel, primarykey);
+
+
+		titlebtn.unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 	}
 
 	function makeTitleEditable(idPanel, primarykey) {
@@ -165,14 +177,16 @@
 		var formData = "<form data-ajax='false' onsubmit='return saveTitle("+idPanel+","+primarykey+");'><input id='newTitle' type='text' value='"+title+"' /></form>";
 
 		$("[id='header-line']:eq("+idPanel+")").html(formData);
-		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {saveTitle(idPanel,primarykey)});
+		getTitleButton(idPanel, primarykey).unbind('click').click(function() {saveTitle(idPanel,primarykey)});
 	}
 
 	function makeTitleStatic(idPanel, primarykey, title) {
 		var title = $("[id='newTitle']:eq(0)").val();
 		$("[id='header-line']:eq("+idPanel+")").html(title);
-		$("[id='editTitleButton']:eq("+idPanel+")").unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
+		getTitleButton(idPanel, primarykey).unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 		loadFile('data.json');
+		if(window.jsondata[primarykey])
+			window.jsondata[primarykey]['title'] = title;
 	}
 	
 	function phpEditFunction(pk, editData, type){
@@ -198,6 +212,7 @@
 	}
 
 	function saveTitle(idPanel, primarykey) {
+		console.log('saving title for'+primarykey+' in '+idPanel);
       var newTitle = $("[id='newTitle']:eq(0)").val();
 
 		phpEditFunction(primarykey, newTitle, 'title');
@@ -236,6 +251,7 @@
 		addLinks(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g, true, 7);
 		addLinks(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi, false, true);
 		addLinks(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
+		updateTitleButton(idPanel, primarykey);
 	}
 	
 
@@ -376,7 +392,6 @@ $(document).ready(function() {
 	$('#base-item').hide();
 	makeBaseMenu();
 	window.back = [];
-	window.currentPK = 1;
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item</button>");
 	$("[id='survey']:eq("+0+")").hide();
 	makeTitleStatic(0,0);
