@@ -19,7 +19,6 @@
 	<script type="text/javascript" src="scripts/sendToUser.js"></script>
 	<script type="text/javascript" src="scripts/addLinks.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="scripts/javascript_cookies.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
 	
@@ -27,17 +26,17 @@
 	// remember, these are the possible parameters for Set_Cookie:
 	// name, value, expires, path, domain, secure
 	function checkCookie(){
-		Set_Cookie( 'test', 'none', '', '/', '', '' );
+		createCookie( 'test', 'none', '');
 	// if Get_Cookie succeeds, cookies are enabled, since
 	//the cookie was successfully created.
-	if ( Get_Cookie( 'test' ) )
+	if ( readCookie( 'test' ) )
 	{
 		alert('cookies are currently enabled.');
 		cookie_set = true;
 		// and these are the parameters for Delete_Cookie:
 		// name, path, domain
 		// make sure you use the same parameters in Set and Delete Cookie.
-		Delete_Cookie('test', '/', '');
+		eraseCookie('test');
 	}
 	// if the Get_Cookie test fails, cookies
 	//are not enabled for this session.
