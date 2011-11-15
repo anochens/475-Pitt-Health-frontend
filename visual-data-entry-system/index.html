@@ -138,22 +138,27 @@
 	function dialogBox(idPanel, primarykey){
 		$('#survey').dialog({
 		autoOpen:true,
-		modal: true,
-		width:700,
-		resizable:true,
+		//modal: true,
+		maxWidth:250,
+		maxHeight:200,
+		resizable:false,
+		draggable:false,
+		title: "alan - Add new item",
 		buttons: {
              "Submit Form": function() {
-                 // document.testconfirmJQ.submit();
-				var title = $('#title').val();
-				var radio = $('input[name=radio_next_item]:checked').val();
-				saveMenu(idPanel, primarykey, title, radio);
-				$(this).dialog("close");
-             },
-             "Cancel": function() {
-                 $(this).dialog("close");
+							var title = $('#title').val();
+							var radio = $('input[name=radio_next_item]:checked').val();
+							saveMenu(idPanel, primarykey, title, radio);
+							$(this).dialog("close");
+						 },
+				 "Cancel": function() {
+					  $(this).dialog("close");
              }
          }
 		});
+
+		$('[role="dialog"]').css('background','grey');
+		$('[role="dialog"]').css('padding','5px');
 	}
 
 	function showMenu(idPanel, primarykey) {
@@ -394,13 +399,13 @@
 
  
 </div><!-- /page -->
-<div id="survey" title="Add New Item">
+<div id="survey">
 	<form id="add_new_item" name="add_new_item" method="post">
-    <p><strong>Title: </strong>
-	<input id="title" type="text" name="title" value=""  /></p>
-    <p><strong>Next Item?</strong>
+   <br/><strong>Title: </strong>
+	<input id="title" type="text" name="title" value=""  />
+   <br/><br/><strong>Next Item?</strong>
 	<input id="menu" type="radio" name="radio_next_item" value="Menu"  />Menu
-    <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage</p>
+    <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage
     </form>	
 </div>
 
