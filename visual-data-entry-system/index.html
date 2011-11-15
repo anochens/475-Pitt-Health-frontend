@@ -122,7 +122,6 @@
 		autoOpen:true,
 		//modal: true,
 		maxWidth:250,
-		maxHeight:200,
 		resizable:false,
 		draggable:false,
 		title: "alan - Add new item",
@@ -141,6 +140,7 @@
 
 		$('[role="dialog"]').css('background','grey');
 		$('[role="dialog"]').css('padding','5px');
+		$('[role="dialog"]').css('min-height', '50px');
 	}
 
 	function showMenu(idPanel, primarykey) {
