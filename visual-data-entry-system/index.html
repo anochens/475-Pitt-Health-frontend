@@ -274,9 +274,12 @@
 			idPanel = 0;
 
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			
+		}
+		else{
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			// $('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 		}
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
