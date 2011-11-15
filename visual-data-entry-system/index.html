@@ -209,7 +209,7 @@
 		var text = $('#testingTextArea').val();
 		console.log(text);
 		data = unescape(text);
-		phpEditFunction(primarykey, data);
+		phpEditFunction(primarykey, data, 'data');
 		loadFile('data.json');
 		emptyData(idPanel);
 		showData(data, idPanel, primarykey);
