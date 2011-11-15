@@ -26,14 +26,14 @@
 	<script>
 
 	
-	function transitionTo(pk, from, idPanel) {
+	function transitionTo(pk, idPanel) {
 
 		var res = getEntryFromFile(pk);
 		window.currentPK = pk;
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
-			makeMenu(res['items'], res['pk'], idPanel);
+			makeMenu(res['items'], idPanel);
 		}
 
 		if(res['type'] == 'ENDPAGE') {
@@ -50,7 +50,7 @@
 		document.title = title;
 	}
 
-	function createMenuItem(elem, text, next, from, idPanel) {
+	function createMenuItem(elem, text, next, idPanel) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
 
@@ -60,7 +60,7 @@
 		cloned.click(function() {
 			ul.find('li').css('background','white');	
 			$(cloned).css('background','yellow');	
-			transitionTo(next, from, idPanel);
+			transitionTo(next, idPanel);
 			
 		});
 
@@ -116,7 +116,7 @@
 		}
 		phpAddNewItem(idPanel, primarykey, title, radio);
 		loadFile('data.json');
-		transitionTo(primarykey, primarykey, idPanel-1) 
+		transitionTo(primarykey, idPanel-1) 
 	}
 	
 	function dialogBox(idPanel, primarykey){
@@ -247,7 +247,7 @@
 	function makeBaseMenu() {        
 		var baseMenuPK = 1;
 		var res = getEntryFromFile(baseMenuPK);
-		makeMenu(res['items'], baseMenuPK);
+		makeMenu(res['items']);
 	}
 
 	function showBaseMenu() {
@@ -255,7 +255,7 @@
 		window.back = [];
 	}
 
-	function makeMenu(items, from, idPanel, useSelfAsNext) {		
+	function makeMenu(items, idPanel, useSelfAsNext) {		
 		var id;
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
@@ -278,7 +278,7 @@
 			// clone first column into second column
 			// $("[id='base-item']:eq(0)"); first base item
 			var test = $("[id='base-item']:eq("+idPanel+")");
-			createMenuItem(test, itemdata['title'], next, from, idPanel);
+			createMenuItem(test, itemdata['title'], next, idPanel);
 			
 		}
 	}
