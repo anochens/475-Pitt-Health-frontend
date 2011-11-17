@@ -21,6 +21,11 @@
 	   width: 345px;
 	   margin-left:2px;
 	}
+	#editItemButton{
+		position: absolute;
+		right: 30px;
+		top: 5px;
+	}
 	</style>
 	
 	<script>
@@ -29,7 +34,6 @@
 	function transitionTo(pk, idPanel) {
 
 		var res = getEntryFromFile(pk);
-		console.log('transitioning to '+pk);
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
@@ -42,17 +46,69 @@
 
 		setTitle(res['title'], idPanel);
 	}
+	
+	
 
 	function setTitle(title, idPanel) {	
 		$("[id='header-line']:eq("+idPanel+")").html(title);
 		document.title = title;
 	}
 
-	function createMenuItem(elem, text, next, idPanel) {
+	function makeItemStatic(primarykey, elemId, newData) {
+		var menuItem = $("#"+elemId);		
+		var editButton = menuItem.find('#editItemButton');
+		
+		menuItem = editButton.parent();
+		menuItem.html(newData);
+		menuItem.append(editButton);
+		
+		editButton.unbind('click').click(function(e){
+			makeItemEditable(e, primarykey, elemId);
+		});
+	}
+	
+	function saveItem(primarykey, elemId) {
+		var newData = $("#"+elemId).find('#newItem').val();
+
+		phpEditFunction(primarykey, newData, 'title');
+		makeItemStatic(primarykey, elemId, newData);
+		return false;
+	}	
+	
+	function makeItemEditable(e, primarykey, elemId) {
+		e.preventDefault();
+		e.stopPropagation(); //make sure the item doesn't get clicked
+		
+		alert('editing pk '+primarykey);
+		
+ 		var formData = "<form data-ajax='false' onsubmit='return saveItem("+primarykey+",\""+elemId+"\");'><input id='newItem' type='text' value='"+window.jsondata[primarykey]['title']+"' /></form>";
+
+		var editButton = $("#"+elemId).find('#editItemButton');
+		editButton.unbind('click').click(function(e){makeItemStatic(elemId);});
+		
+		var menuItem = editButton.parent();
+		
+		menuItem.html(formData);
+		
+		$('[id="newItem"]').click(function(e) {e.preventDefault();e.stopPropagation();});
+		$('[id="newItem"]').keypress(function(e) {if(e.keyCode==13){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId)}});
+
+		
+		menuItem.append(editButton);
+	}
+	
+	function createMenuItem(elem, text, next, idPanel, primarykey) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
+		var editButton = '';
+		
+		if(typeof primarykey != 'undefined') {
+			editButton = "<img id='editItemButton' src='./lib/images/pencil.PNG'/>";
+		}
 
-		cloned.find(':only-child:last').html(text);
+		cloned.find(':only-child:last').html(text+editButton);
+		
+		cloned.find(':only-child:last').filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "to_"+next)});
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
 		cloned.click(function() {
@@ -88,7 +144,6 @@
 	}
 	
 	function phpAddNewItem(idPanel, pk, newTitle, radio){
-		console.log(newTitle);
 		var url = 'addnewitem.php';
 		var data = { primarykey:pk, radio_next_item:radio, title:newTitle};
 		var request = $.ajax({
@@ -159,8 +214,6 @@
 		var titleparent=$("[id='header-line']:eq("+idPanel+")").parent();
 		var titlebtn = titleparent.children().filter("[id='editTitleButton']");
 
-      console.log(titlebtn);
-
 		return titlebtn;
 	}
 
@@ -186,8 +239,6 @@
 		$("[id='header-line']:eq("+idPanel+")").html(title);
 		getTitleButton(idPanel, primarykey).unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 		loadFile('data.json');
-		if(window.jsondata[primarykey])
-			window.jsondata[primarykey]['title'] = title;
 	}
 	
 	function phpEditFunction(pk, editData, type){
@@ -200,6 +251,9 @@
 		  	data: data,
 		  	success: function(){
 				alert("success");
+				if(window.jsondata[pk]) {
+					window.jsondata[pk][type] = editData;
+				}	
 			},
 		  	error: function(){
 				alert("error");
@@ -213,8 +267,7 @@
 	}
 
 	function saveTitle(idPanel, primarykey) {
-		console.log('saving title for'+primarykey+' in '+idPanel);
-      var newTitle = $("[id='newTitle']:eq(0)").val();
+		var newTitle = $("[id='newTitle']:eq(0)").val();
 
 		phpEditFunction(primarykey, newTitle, 'title');
 		makeTitleStatic(idPanel, primarykey, newTitle);
@@ -223,10 +276,8 @@
 
 	function saveData(idPanel, data, primarykey){
 		var text = $('#testingTextArea').val();
-		console.log(text);
 		data = unescape(text);
 		phpEditFunction(primarykey, data, 'data');
-		loadFile('data.json');
 		emptyData(idPanel);
 		showData(data, idPanel, primarykey);
 	}
@@ -291,7 +342,7 @@
 			// clone first column into second column
 			// $("[id='base-item']:eq(0)"); first base item
 			var test = $("[id='base-item']:eq("+idPanel+")");
-			createMenuItem(test, itemdata['title'], next, idPanel);
+			createMenuItem(test, itemdata['title'], next, idPanel, itemdata['pk']);
 			
 		}
 	}
