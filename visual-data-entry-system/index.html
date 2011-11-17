@@ -79,8 +79,6 @@
 		e.preventDefault();
 		e.stopPropagation(); //make sure the item doesn't get clicked
 		
-		alert('editing pk '+primarykey);
-		
  		var formData = "<form data-ajax='false' onsubmit='return saveItem("+primarykey+",\""+elemId+"\");'><input id='newItem' type='text' value='"+window.jsondata[primarykey]['title']+"' /></form>";
 
 		var editButton = $("#"+elemId).find('#editItemButton');
@@ -224,7 +222,6 @@
 
 	function makeTitleEditable(idPanel, primarykey) {
 		var title = $("[id='header-line']:eq("+idPanel+")").html();
-		alert('current title is"'+title+'"');
 
 		var formData = "<form data-ajax='false' onsubmit='return saveTitle("+idPanel+","+primarykey+");'><input id='newTitle' type='text' value='"+title+"' /></form>";
 
