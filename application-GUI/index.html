@@ -24,26 +24,15 @@
 	<script type="text/javascript">
 	// remember, these are the possible parameters for Set_Cookie:
 	// name, value, expires, path, domain, secure
-	function checkCookie(){
-		createCookie( 'test', 'none', '');
-	// if Get_Cookie succeeds, cookies are enabled, since
-	//the cookie was successfully created.
-	if ( readCookie( 'test' ) )
-	{
-		cookie_set = true;
-		// and these are the parameters for Delete_Cookie:
-		// name, path, domain
-		// make sure you use the same parameters in Set and Delete Cookie.
-		eraseCookie('test');
+	function checkCookie() {
+		createCookie( 'MEEMS', 'none', '');
+		if ( readCookie( 'MEEMS' ) ) {
+			eraseCookie('MEEMS');
+		}
+		else {
+			alert('Cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
+		}
 	}
-	// if the Get_Cookie test fails, cookies
-	//are not enabled for this session.
-	else
-	{
-		alert('cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
-		cookie_set = false;
-	}
-}
 	</script>
 	<script>
 	
@@ -96,8 +85,6 @@
 			showData(res['data']);
 			showToggleButton();
 		}
-
-
 	}
 
 	function setTitle(title) {
@@ -179,7 +166,6 @@
 			createMenuItem($('#base-item'), title, next, from);
 		}
 	}
-	
 
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
@@ -190,25 +176,25 @@
 		var pks=[];
 		var indexes=[];
 		$.each(availableTags, function(i,v) {
-				var title=v.title;
-				var pk=v.pk;
-				var data=v.data;
-				var type=v.type;
+			var title=v.title;
+			var pk=v.pk;
+			var data=v.data;
+			var type=v.type;
 
-				if(type=="ENDPAGE") {
-					if(title.indexOf(searchValue) != -1 ||
-						data.toLowerCase().indexOf(searchValue) != -1) {
+			if(type=="ENDPAGE") {
+				if(title.indexOf(searchValue) != -1 ||
+					data.toLowerCase().indexOf(searchValue) != -1) {
 
-						pks.push(pk);
-						if(data.indexOf(searchValue) != -1) {
-							indexes.push(data.indexOf(searchValue));
-						}
-						else {
-							indexes.push(10);
-						}
+					pks.push(pk);
+					if(data.indexOf(searchValue) != -1) {
+						indexes.push(data.indexOf(searchValue));
+					}
+					else {
+						indexes.push(10);
 					}
 				}
-			});
+			}
+		});
 		if(pks.length == 0){
 			hideMenu();
 			var data="No results were found";
