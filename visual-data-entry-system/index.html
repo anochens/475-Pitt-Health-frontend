@@ -8,9 +8,7 @@
 	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
 	<script type="text/javascript" src="lib/jquery-1.6.3.min.js"></script>
 	<script type="text/javascript" src="lib/jquery.mobile-1.0b3.min.js"></script>
-	<script type="text/javascript" src="lib/cookieFunctions.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
-	<script type="text/javascript" src="scripts/bookmarkFunctions.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	
@@ -23,55 +21,99 @@
 	   width: 345px;
 	   margin-left:2px;
 	}
+	#editItemButton{
+		position: absolute;
+		right: 30px;
+		top: 5px;
+	}
 	</style>
 	
 	<script>
 
 	
-	function transitionTo(pk, from, idPanel) {
+	function transitionTo(pk, idPanel) {
 
 		var res = getEntryFromFile(pk);
-		window.currentPK = pk;
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
-			makeMenu(res['items'], res['pk'], idPanel);
+			makeMenu(res['items'], idPanel);
 		}
 
 		if(res['type'] == 'ENDPAGE') {
-			//hideMenu(idPanel);
 			showData(res['data'], idPanel, pk);
-			showToggleButton();
 		}
 
 		setTitle(res['title'], idPanel);
-
-		if(typeof from !== 'undefined') {
-			//setBack(from);
-		}
-
 	}
+	
+	
 
 	function setTitle(title, idPanel) {	
-		idPanel += 1;
 		$("[id='header-line']:eq("+idPanel+")").html(title);
-		
-		//$('#header-line').html(title);
 		document.title = title;
 	}
 
-	function createMenuItem(elem, text, next, from, idPanel) {
+	function makeItemStatic(primarykey, elemId, newData) {
+		var menuItem = $("#"+elemId);		
+		var editButton = menuItem.find('#editItemButton');
+		
+		menuItem = editButton.parent();
+		menuItem.html(newData);
+		menuItem.append(editButton);
+		
+		editButton.unbind('click').click(function(e){
+			makeItemEditable(e, primarykey, elemId);
+		});
+	}
+	
+	function saveItem(primarykey, elemId) {
+		var newData = $("#"+elemId).find('#newItem').val();
+
+		phpEditFunction(primarykey, newData, 'title');
+		makeItemStatic(primarykey, elemId, newData);
+		return false;
+	}	
+	
+	function makeItemEditable(e, primarykey, elemId) {
+		e.preventDefault();
+		e.stopPropagation(); //make sure the item doesn't get clicked
+		
+		alert('editing pk '+primarykey);
+		
+ 		var formData = "<form data-ajax='false' onsubmit='return saveItem("+primarykey+",\""+elemId+"\");'><input id='newItem' type='text' value='"+window.jsondata[primarykey]['title']+"' /></form>";
+
+		var editButton = $("#"+elemId).find('#editItemButton');
+		editButton.unbind('click').click(function(e){makeItemStatic(elemId);});
+		
+		var menuItem = editButton.parent();
+		
+		menuItem.html(formData);
+		
+		$('[id="newItem"]').click(function(e) {e.preventDefault();e.stopPropagation();});
+		$('[id="newItem"]').keypress(function(e) {if(e.keyCode==13){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId)}});
+
+		menuItem.append(editButton);
+	}
+	
+	function createMenuItem(elem, text, next, idPanel, primarykey) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
-		//var ul = $('#main-menu');
+		var editButton = '';
+		
+		if(typeof primarykey != 'undefined') {
+			editButton = "<img id='editItemButton' src='./lib/images/pencil.PNG'/>";
+		}
 
-		cloned.find(':only-child:last').html(text);
+		cloned.find(':only-child:last').html(text+editButton);
+		
+		cloned.find(':only-child:last').filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "to_"+next)});
 		cloned.find(':only-child:last').attr('next',next);
 		cloned.attr('id', 'to_'+next);
 		cloned.click(function() {
 			ul.find('li').css('background','white');	
 			$(cloned).css('background','yellow');	
-			transitionTo(next, from, idPanel);
+			transitionTo(next, idPanel+1);
 			
 		});
 
@@ -81,34 +123,28 @@
 	}
 
 	function emptyMenu(idPanel) {
-		//$("[id^='to_']:eq("+idPanel+")").remove();
-		//$('[id^="to_"]').remove()
 		$("[id='main-menu']:eq("+idPanel+")").empty();
 		$("[id='main-data']:eq("+idPanel+")").empty();
 	}
 
 	function emptyData(idPanel) {
-		//$('#main-data').empty();
 		var classname = $(".child");
 		for(var i = idPanel+1;i<classname.length;i++){
 			$("[id='main-data']:eq("+i+")").empty();
 			$("[id='firstColumn']:eq("+i+")").hide();			
 		}
-		//$("[id='main-data']:eq("+idPanel+")").empty();
 	}
 
 	function hideMenu(idPanel) {
 		emptyMenu(idPanel);
-		//$('#main-menu-wrapper').hide();
 		$("[id='firstColumn']:eq("+idPanel+")").hide();
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").hide();
 		
 	}
 	
-	function phpAddNewItem(idPanel, pk, newtitle, radio){
-		console.log(newtitle);
+	function phpAddNewItem(idPanel, pk, newTitle, radio){
 		var url = 'addnewitem.php';
-		var data = { primarykey:pk, radio_next_item:radio, title:newtitle};
+		var data = { primarykey:pk, radio_next_item:radio, title:newTitle};
 		var request = $.ajax({
 		  	async: false,
 			type: 'POST',
@@ -132,43 +168,80 @@
 		}
 		phpAddNewItem(idPanel, primarykey, title, radio);
 		loadFile('data.json');
-		transitionTo(primarykey, primarykey, idPanel-1) 
+		transitionTo(primarykey, idPanel); 
 	}
 	
 	function dialogBox(idPanel, primarykey){
 		$('#survey').dialog({
 		autoOpen:true,
-		modal: true,
-		width:700,
-		resizable:true,
+		//modal: true,
+		maxWidth:250,
+		resizable:false,
+		draggable:false,
+		title: "alan - Add new item",
 		buttons: {
              "Submit Form": function() {
-                 // document.testconfirmJQ.submit();
-				var title = $('#title').val();
-				var radio = $('input[name=radio_next_item]:checked').val();
-				saveMenu(idPanel, primarykey, title, radio);
-				$(this).dialog("close");
-             },
-             "Cancel": function() {
-                 $(this).dialog("close");
+							var title = $('#title').val();
+							var radio = $('input[name=radio_next_item]:checked').val();
+							saveMenu(idPanel, primarykey, title, radio);
+							$(this).dialog("close");
+						 },
+				 "Cancel": function() {
+					  $(this).dialog("close");
              }
-         }
+         },
+		open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
 		});
+
+		$('[role="dialog"]').css('background','grey');
+		$('[role="dialog"]').css('padding','5px');
+		$('[role="dialog"]').css('min-height', '50px');
 	}
 
 	function showMenu(idPanel, primarykey) {
-		idPanel += 1;
 		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item</button>")
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
 		$("[id='survey']:eq("+idPanel+")").hide();
+
+		updateTitleButton(idPanel, primarykey);
+	}
+
+	function getTitleButton(idPanel, primarykey) {
+		var titleparent=$("[id='header-line']:eq("+idPanel+")").parent();
+		var titlebtn = titleparent.children().filter("[id='editTitleButton']");
+
+		return titlebtn;
+	}
+
+	function updateTitleButton(idPanel, primarykey) {
+		var titlebtn = getTitleButton(idPanel, primarykey);
+
+		titlebtn.unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
+	}
+
+	function makeTitleEditable(idPanel, primarykey) {
+		var title = $("[id='header-line']:eq("+idPanel+")").html();
+		alert('current title is"'+title+'"');
+
+		var formData = "<form data-ajax='false' onsubmit='return saveTitle("+idPanel+","+primarykey+");'><input id='newTitle' type='text' value='"+title+"' /></form>";
+
+		$("[id='header-line']:eq("+idPanel+")").html(formData);
+		getTitleButton(idPanel, primarykey).unbind('click').click(function() {saveTitle(idPanel,primarykey)});
+	}
+
+	function makeTitleStatic(idPanel, primarykey, title) {
+		var title = $("[id='newTitle']:eq(0)").val();
+		$("[id='header-line']:eq("+idPanel+")").html(title);
+		getTitleButton(idPanel, primarykey).unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
+		loadFile('data.json');
 	}
 	
-	function phpEditFunction(pk, editData){
+	function phpEditFunction(pk, editData, type){
 		var url = 'editData.php';
-		var data = { primarykey:pk, testingTextArea:editData };
+		var data = { primarykey:pk, editData:editData, type: type };
 		var request = $.ajax({
 		  	async: false,
 			type: 'POST',
@@ -176,30 +249,34 @@
 		  	data: data,
 		  	success: function(){
 				alert("success");
+				if(window.jsondata[pk]) {
+					window.jsondata[pk][type] = editData;
+				}	
 			},
 		  	error: function(){
 				alert("error");
 			},
-		  	complete: function(){
+		  	complete: function(a, b){
 				alert('completed');
+				console.log(a);
 		    },
 		});
 	}
-	
+
+	function saveTitle(idPanel, primarykey) {
+		var newTitle = $("[id='newTitle']:eq(0)").val();
+
+		phpEditFunction(primarykey, newTitle, 'title');
+		makeTitleStatic(idPanel, primarykey, newTitle);
+		return false;
+	}
+
 	function saveData(idPanel, data, primarykey){
 		var text = $('#testingTextArea').val();
-		console.log(text);
 		data = unescape(text);
-		phpEditFunction(primarykey, data);
-		// $('#saveButton').remove();
-		// var editVariables = "editData("+idPanel+",\""+escape(text)+"\","+primarykey+")";
-		// var editFunction = "<button onclick='"+editVariables+"' id='editButton'>Edit</button>";
-		// $("[id='main-menu']:eq("+idPanel+")").append(editFunction);
-		// $("[id='main-data']:eq("+idPanel+")").empty();
-		// $("[id='main-data']:eq("+idPanel+")").html(data);
-		loadFile('data.json');
+		phpEditFunction(primarykey, data, 'data');
 		emptyData(idPanel);
-		showData(data, idPanel-1, primarykey);
+		showData(data, idPanel, primarykey);
 	}
 	
 	function editData(idPanel, data, primarykey){
@@ -209,11 +286,9 @@
 		var dataEntry = getEntryFromFile(primarykey);
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
 		$("[id='main-data']:eq("+idPanel+")").append("<form><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
-		// $("[id='main-data']:eq("+idPanel+")").append("<form action='editdata.php' method='post'> <input type='submit' value='Save'/><input type='hidden' name='primarykey' value='"+primarykey+"' /><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
 	}
 
 	function showData(data, idPanel, primarykey) {
-		idPanel += 1;
 		emptyMenu(idPanel);
 		$("[id='survey']:eq("+idPanel+")").hide();
 		$("[id='firstColumn']:eq("+idPanel+")").show();
@@ -222,10 +297,10 @@
 		$("[id='main-menu']:eq("+idPanel+")").append(editFunction);
 		$("[id='main-data']:eq("+idPanel+")").show();
 		$("[id='main-data']:eq("+idPanel+")").html(data);
-		//$('#main-data').html(data);
 		addLinks(/[01]?[- .]?\(?[2-9]\d{2}\)?[- .]?\d{3}[- .]?\d{4}/g, true, 7);
 		addLinks(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,6}/gi, false, true);
 		addLinks(/(\bhttps?:\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi);
+		updateTitleButton(idPanel, primarykey);
 	}
 	
 
@@ -233,7 +308,7 @@
 	function makeBaseMenu() {        
 		var baseMenuPK = 1;
 		var res = getEntryFromFile(baseMenuPK);
-		makeMenu(res['items'], baseMenuPK);
+		makeMenu(res['items']);
 	}
 
 	function showBaseMenu() {
@@ -241,25 +316,15 @@
 		window.back = [];
 	}
 
-	function makeMenu(items, from, idPanel, useSelfAsNext) {		
+	function makeMenu(items, idPanel, useSelfAsNext) {		
 		var id;
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
-			//CHANGE TO GENERIC FORM!!!	
-			
-			//$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-
-			// $('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			// 			$('#firstColumn').clone().appendTo($('#firstColumn').parent());
-			// 
-
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			
 		}
 		else{
-			idPanel += 1;			
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 		}
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
@@ -270,9 +335,8 @@
 			}
 			// clone first column into second column
 			// $("[id='base-item']:eq(0)"); first base item
-			//createMenuItem($('#base-item'), itemdata['title'], next, from, id);
 			var test = $("[id='base-item']:eq("+idPanel+")");
-			createMenuItem(test, itemdata['title'], next, from, idPanel);
+			createMenuItem(test, itemdata['title'], next, idPanel, itemdata['pk']);
 			
 		}
 	}
@@ -283,30 +347,30 @@
 		if (text == null){
 			return;
 		}
-			for (var i=0; i<text.length; i++){
-				if (text[i] == null){
-					continue;
+		for (var i=0; i<text.length; i++){
+			if (text[i] == null){
+				continue;
+			}
+			if (isEmail == true){
+				var emaillink = "<a href=\"mailto:"+text[i]+"\">"+text[i]+"</a>";	
+				data = data.replace(text[i], emaillink);
+			}	
+			else if (doLengthFiltering == true){
+				if (text[i].length >= 7){
+					var tellink = "<a href=\"tel:"+text[i]+"\">"+text[i]+"</a>";	
+					data = data.replace(new RegExp(text[i], 'g'), tellink);
 				}
-				if (isEmail == true){
-					var emaillink = "<a href=\"mailto:"+text[i]+"\">"+text[i]+"</a>";	
-					data = data.replace(text[i], emaillink);
-				}	
-				else if (doLengthFiltering == true){
-					if (text[i].length >= 7){
-						var tellink = "<a href=\"tel:"+text[i]+"\">"+text[i]+"</a>";	
-						data = data.replace(new RegExp(text[i], 'g'), tellink);
-					}
-				}
-				else {
-					var link = "<a href=\""+text[i]+"\" target=\"_blank\">"+text[i]+"</a>";	
-					data = data.replace(text[i], link);
-				}
+			}
+			else {
+				var link = "<a href=\""+text[i]+"\" target=\"_blank\">"+text[i]+"</a>";	
+				data = data.replace(text[i], link);
+			}
 			for (var j=i+1; j<text.length; j++){
 				if (text[j] == text[i]){
 					text[j] = null;
 				}
 			}
-			}
+		}
 			
 		$('#main-data').html(data);
 	}
@@ -320,15 +384,15 @@
 	<div class='child' id="firstColumn">
 	<div data-role="header" data-theme="b">
 		<!-- <a href="" data-icon="back" id='back-button'>Back</a> -->
-		<h1 id='header-line'>Health Resources</h1>
+		<h1 id='header-line'>Health Resources</h1> 	
+		<img id='editTitleButton' src='./lib/images/pencil.PNG'/>
 	</div>
 
 	<div data-role="content">
 		<div id='main-menu-wrapper'>
-		<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
-			<li id='base-item' ><a href=""></a></li>
-			
-		</ul>
+			<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
+				<li id='base-item' ><a href=""></a></li>
+			</ul>
 		</div>
 		<style>
 			pre {
@@ -356,13 +420,13 @@
 
  
 </div><!-- /page -->
-<div id="survey" title="Add New Item">
+<div id="survey">
 	<form id="add_new_item" name="add_new_item" method="post">
-    <p><strong>Title: </strong>
-	<input id="title" type="text" name="title" value=""  /></p>
-    <p><strong>Next Item?</strong>
+   <br/><strong>Title: </strong>
+	<input id="title" type="text" name="title" value=""  />
+   <br/><br/><strong>Next Item?</strong>
 	<input id="menu" type="radio" name="radio_next_item" value="Menu"  />Menu
-    <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage</p>
+    <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage
     </form>	
 </div>
 
@@ -372,9 +436,9 @@ $(document).ready(function() {
 	$('#base-item').hide();
 	makeBaseMenu();
 	window.back = [];
-	window.currentPK = 1;
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item</button>");
 	$("[id='survey']:eq("+0+")").hide();
+	makeTitleStatic(0,0);
 	
 });
 
