@@ -26,6 +26,11 @@
 		right: 30px;
 		top: 5px;
 	}
+	#deleteItemButton{
+		position: absolute;
+		right: 65px;
+		top: 5px;
+	}	
 	#editTitleButton{
 		position: absolute;
 		right: 30px;
@@ -62,14 +67,20 @@
 	function makeItemStatic(primarykey, elemId, newData) {
 		var menuItem = $("#"+elemId);		
 		var editButton = menuItem.find('#editItemButton');
-		
+		var deleteButton = menuItem.find('#deleteItemButton');
+
 		menuItem = editButton.parent();
 		menuItem.html(newData);
 		menuItem.append(editButton);
+		menuItem.append(deleteButton);
 		
 		editButton.unbind('click').click(function(e){
 			makeItemEditable(e, primarykey, elemId);
 		});
+		
+		deleteButton.unbind('click').click(function(e){
+			deleteItem(e, primarykey, elemId);
+		});		
 		
 		editButton.attr('src','./lib/images/pencil.PNG');
 
@@ -90,6 +101,7 @@
  		var formData = "<form data-ajax='false' onsubmit='return saveItem("+primarykey+",\""+elemId+"\");'><input id='newItem' type='text' value='"+window.jsondata[primarykey]['title']+"' /></form>";
 
 		var editButton = $("#"+elemId).find('#editItemButton');
+		var deleteButton = $("#"+elemId).find('#deleteItemButton');
 		
 		var menuItem = editButton.parent();
 		
@@ -99,24 +111,64 @@
 		$('[id="newItem"]').keypress(function(e) {if(e.keyCode==13){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId)}});
 
 		menuItem.append(editButton);
+		menuItem.append(deleteButton);
 		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
+		deleteButton.unbind('click').click(function(e) {deleteItem(e, primarykey, elemId)});
 		editButton.attr('src','./lib/images/save-icon.JPG');
-
+	}
+	
+	function deleteItem(e, primarykey, elemId) {
+		e.preventDefault();
+		e.stopPropagation(); //make sure the item doesn't get clicked
+		
+		var editButton = $("#"+elemId).find('#editItemButton');		
+		var menuItem = editButton.parent();
+		
+		var doDelete = confirm("Are you sure you want to delete this item?\n("+window.jsondata[primarykey]['title']+")");
+		
+		if(doDelete) {
+			phpDeleteFunction(primarykey);
+			$("#"+elemId).hide();
+		}
+	}
+	
+	function phpDeleteFunction(pk){
+		var url = 'deleteData.php';
+		var data = { primarykey:pk };
+		var request = $.ajax({
+		  	async: false,
+			type: 'POST',
+		  	url: url,
+		  	data: data,
+		  	success: function(){
+				alert("success");
+				loadFile('data.json');
+			},
+		  	error: function(){
+				alert("error");
+			}
+		});
 	}
 	
 	function createMenuItem(elem, text, next, idPanel, primarykey) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
 		var editButton = '';
+		var deleteButton = '';
 		
 		if(typeof primarykey != 'undefined') {
 			editButton = "<img id='editItemButton' src='./lib/images/pencil.PNG'/>";
+			deleteButton = "<img id='deleteItemButton' src='./lib/images/trash.PNG'/>";
 		}
-
-		cloned.find(':only-child:last').html(text+editButton);
 		
-		cloned.find(':only-child:last').filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "to_"+next)});
-		cloned.find(':only-child:last').attr('next',next);
+		var innerItem = cloned.find(':only-child:last');
+		
+		
+		innerItem.html(text+editButton+deleteButton);
+		innerItem.children().filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "to_"+next)});
+		innerItem.children().filter('#deleteItemButton').click(function(e) {deleteItem(e, primarykey, "to_"+next)});
+
+		innerItem.attr('next',next);
 		cloned.attr('id', 'to_'+next);
 		cloned.click(function() {
 			ul.find('li').css('background','white');	
