@@ -82,7 +82,6 @@
  		var formData = "<form data-ajax='false' onsubmit='return saveItem("+primarykey+",\""+elemId+"\");'><input id='newItem' type='text' value='"+window.jsondata[primarykey]['title']+"' /></form>";
 
 		var editButton = $("#"+elemId).find('#editItemButton');
-		editButton.unbind('click').click(function(e){makeItemStatic(elemId);});
 		
 		var menuItem = editButton.parent();
 		
@@ -92,6 +91,8 @@
 		$('[id="newItem"]').keypress(function(e) {if(e.keyCode==13){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId)}});
 
 		menuItem.append(editButton);
+		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
+
 	}
 	
 	function createMenuItem(elem, text, next, idPanel, primarykey) {
