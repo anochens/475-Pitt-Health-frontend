@@ -7,9 +7,7 @@
 	<link rel="shortcut icon" href="lib/images/icon.png">
 	<link rel="apple-touch-icon" href="lib/images/icon.png">
 	<link rel="apple-touch-icon-precomposed" href="lib/images/icon.png">
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script type="text/javascript" src="phonegap.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.6.3.min.js"></script>
 	<script type="text/javascript" src="lib/jquery.mobile-1.0b3.min.js"></script>
@@ -21,6 +19,7 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
 	
 	<script type="text/javascript">
 	// remember, these are the possible parameters for Set_Cookie:
@@ -138,6 +137,7 @@
 	function showMenu() {
 		emptyMenu();
 		emptyData();
+		$('#content').addClass("selected");
 		$('#main-menu-wrapper').show();
 		$('#search_wrapper').show();
 		$('#email-button').hide();
@@ -223,16 +223,15 @@
 	</script>
 </head>
 <body>
-<div data-role="page" data-theme="b" data-scroll="true">
+<div data-role="page" data-theme="b" >
 	<div data-role="header" data-theme="b">
-		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
+		<a href="#" data-icon="back" id='back-button' data-iconpos="notext" data-transition="slide"></a>
 			<a href="" class='toggle_bookmark_button' data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
 			<a href="" class='toggle_bookmark_button' data-icon="minus" data-iconpos="notext" id='remove-bookmark-button' onclick='toggleBookmark();'></a>
 		<h1 id='header-line'>MEEMS</h1>
 	</div>
 
 	<div data-role="content" style="overflow:auto" id="content">
-		<div data-iscroll="scroller">
 	
 		<div id='search_wrapper'>
 				<table width="100%">
@@ -242,6 +241,7 @@
 				<a href="#" width="10%" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a></td></tr></table>
 
 		</div>
+			
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
