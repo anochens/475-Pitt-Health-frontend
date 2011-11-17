@@ -65,6 +65,9 @@
 		editButton.unbind('click').click(function(e){
 			makeItemEditable(e, primarykey, elemId);
 		});
+		
+		editButton.attr('src','./lib/images/pencil.PNG');
+
 	}
 	
 	function saveItem(primarykey, elemId) {
@@ -92,6 +95,7 @@
 
 		menuItem.append(editButton);
 		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
+		editButton.attr('src','./lib/images/save-icon.JPG');
 
 	}
 	
