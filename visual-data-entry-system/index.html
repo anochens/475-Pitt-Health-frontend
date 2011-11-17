@@ -231,7 +231,11 @@
 		var formData = "<form data-ajax='false' onsubmit='return saveTitle("+idPanel+","+primarykey+");'><input id='newTitle' type='text' value='"+title+"' /></form>";
 
 		$("[id='header-line']:eq("+idPanel+")").html(formData);
-		getTitleButton(idPanel, primarykey).unbind('click').click(function() {saveTitle(idPanel,primarykey)});
+		
+		var titlebtn = getTitleButton(idPanel, primarykey)
+		titlebtn.unbind('click').click(function() {saveTitle(idPanel,primarykey)});
+		titlebtn.attr('src','./lib/images/save-icon.JPG');
+
 	}
 
 	function makeTitleStatic(idPanel, primarykey, title) {
@@ -245,8 +249,10 @@
 		}
 		
 		$("[id='header-line']:eq("+idPanel+")").html(title);
-		getTitleButton(idPanel, primarykey).unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
-		loadFile('data.json');
+		
+		var titlebtn = getTitleButton(idPanel, primarykey);
+		titlebtn.unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
+		titlebtn.attr('src','./lib/images/pencil.PNG');
 	}
 	
 	function phpEditFunction(pk, editData, type){
@@ -265,17 +271,12 @@
 			},
 		  	error: function(){
 				alert("error");
-			},
-		  	complete: function(a, b){
-				alert('completed');
-				console.log(a);
-		    },
+			}
 		});
 	}
 
 	function saveTitle(idPanel, primarykey) {
 		var newTitle = $("[id='newTitle']:eq(0)").val();
-		alert('setting '+primarykey+' to '+newTitle);
 		phpEditFunction(primarykey, newTitle, 'title');
 		makeTitleStatic(idPanel, primarykey, newTitle);
 		return false;
