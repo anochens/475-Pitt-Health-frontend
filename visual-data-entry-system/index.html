@@ -235,7 +235,15 @@
 	}
 
 	function makeTitleStatic(idPanel, primarykey, title) {
-		var title = $("[id='newTitle']:eq(0)").val();
+		var title;
+		
+		if(typeof title == 'undefined') {
+			title = window.jsondata[primarykey]['title'];
+		}
+		else {
+			title = $("[id='newTitle']:eq(0)").val();
+		}
+		
 		$("[id='header-line']:eq("+idPanel+")").html(title);
 		getTitleButton(idPanel, primarykey).unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
 		loadFile('data.json');
@@ -267,7 +275,7 @@
 
 	function saveTitle(idPanel, primarykey) {
 		var newTitle = $("[id='newTitle']:eq(0)").val();
-
+		alert('setting '+primarykey+' to '+newTitle);
 		phpEditFunction(primarykey, newTitle, 'title');
 		makeTitleStatic(idPanel, primarykey, newTitle);
 		return false;
@@ -440,7 +448,7 @@ $(document).ready(function() {
 	window.back = [];
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item</button>");
 	$("[id='survey']:eq("+0+")").hide();
-	makeTitleStatic(0,0);
+	makeTitleStatic(0,1);
 	
 });
 
