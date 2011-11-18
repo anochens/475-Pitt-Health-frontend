@@ -50,6 +50,7 @@ function getEntry(primarykey){
 }
 
 function getItems(type){
+	loadFile('data.json');
 	items = [];
 	for(var i in window.jsondata){
 		if(window.jsondata[i].type == type){

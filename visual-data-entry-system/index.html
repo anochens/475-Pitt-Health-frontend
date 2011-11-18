@@ -231,15 +231,12 @@
 			var existing;
 			var txt = "";
 			if(typeof(document.add_new_item.existing_menu.length)==='undefined'){
-				boxes = document.add_new_item.existing_endpage.length;
-				existing = document.add_new_item.existing_endpage;
+				var selectedItem = $('[name="existing_endpage"] option:selected').val();
+				console.log(selectedItem);
 			}
 			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
-				boxes = document.add_new_item.existing_menu.length;
-				existing = document.add_new_item.existing_menu;
-			}
-			else{
-				phpAddNewItem(idPanel, primarykey, title, radio);
+				var selectedItem = $('[name="existing_menu"] option:selected').val();
+				console.log(selectedItem);
 			}
 			for (i = 0; i < boxes; i++) {
 				if (existing[i].checked) {
@@ -258,18 +255,24 @@
 	function showExistingMenu(){
 		$('#existingItem').empty();
 		var menuItems = getItems("MENU");
+		var content = "<select name='existing_menu'>";
 		for(var i in menuItems){
-			$('#existingItem').append("<input type='checkbox' name='existing_menu' value="+menuItems[i].pk+" />"+menuItems[i].title+"<br/>");
-		$('#existingItem').show();
+			content = content + "<option value="+menuItems[i].pk+">"+menuItems[i].title+"</option>";
 		}
+		content = content + "</select>";
+		$('#existingItem').append(content);
+		$('#existingItem').show();
 	}
 	
 	function showExistingEndpage(){
 		$('#existingItem').empty();
 		var endpageItems = getItems("ENDPAGE");
+		var content = "<select name='existing_endpage'>";
 		for(var i in endpageItems){
-			$('#existingItem').append("<input type='checkbox' name='existing_endpage' value="+endpageItems[i].pk+" />"+endpageItems[i].title+"<br/>");
+			content = content + "<option value="+endpageItems[i].pk+">"+endpageItems[i].title+"</option>";
 		}
+		content = content + "</select>";
+		$('#existingItem').append(content);
 		$('#existingItem').show();
 	}
 	
