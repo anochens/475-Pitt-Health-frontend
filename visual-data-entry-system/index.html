@@ -231,7 +231,29 @@
 		transitionTo(primarykey, idPanel); 
 	}
 	
+	function showExistingMenu(){
+		$('#existingItem').empty();
+		var menuItems = getItems("MENU");
+		for(var i in menuItems){
+			$('#existingItem').append("<input type='checkbox' name='existing_menu' value="+menuItems[i].pk+" />"+menuItems[i].title+"<br/>");
+		$('#existingItem').show();
+		}
+	}
+	
+	function showExistingEndpage(){
+		$('#existingItem').empty();
+		var endpageItems = getItems("ENDPAGE");
+		for(var i in endpageItems){
+			$('#existingItem').append("<input type='checkbox' name='existing_endpage' value="+endpageItems[i].pk+" />"+endpageItems[i].title+"<br/>");
+		}
+		$('#existingItem').show();
+	}
+	
 	function dialogBox(idPanel, primarykey){
+		$('#existingItem').hide();
+		$('[id="existing_menu"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingMenu();});
+		$('[id="existing_endpage"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingEndpage();});
+		
 		$('#survey').dialog({
 		autoOpen:true,
 		//modal: true,
@@ -495,10 +517,11 @@
    <br/><br/><strong>Next Item?</strong>
 	<input id="menu" type="radio" name="radio_next_item" value="Menu"  />Menu
     <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage
-	<button id="existing" onclick="showExistingPages()" value="Existing Pages"> Existing Pages</button>
+	<button id="existing_menu" value="Existing Pages"> Connect to Existing Menu</button><br/>
+	<button id="existing_endpage" value="Existing Pages"> Connect to Existing Endpage</button>
+	
 	<br/><br/>
 	<div id="existingItem">
-		<input id="test" type="radio" name"radio_test" value="Test" />Test
 	</div>
     </form>	
 </div>

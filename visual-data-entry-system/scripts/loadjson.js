@@ -48,3 +48,13 @@ function getEntry(primarykey){
 
 	return window.jsondata[primarykey];
 }
+
+function getItems(type){
+	items = [];
+	for(var i in window.jsondata){
+		if(window.jsondata[i].type == type){
+			items[window.jsondata[i].pk]=window.jsondata[i];
+		}
+	}
+	return items;
+}
