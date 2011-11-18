@@ -7,9 +7,7 @@
 	<link rel="shortcut icon" href="lib/images/icon.png">
 	<link rel="apple-touch-icon" href="lib/images/icon.png">
 	<link rel="apple-touch-icon-precomposed" href="lib/images/icon.png">
-
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<script type="text/javascript" src="phonegap.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.6.3.min.js"></script>
 	<script type="text/javascript" src="lib/jquery.mobile-1.0b3.min.js"></script>
@@ -21,30 +19,20 @@
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="styles/main.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="lib/jquery.mobile-1.0b3.min.css" />
 	
 	<script type="text/javascript">
 	// remember, these are the possible parameters for Set_Cookie:
 	// name, value, expires, path, domain, secure
-	function checkCookie(){
-		createCookie( 'test', 'none', '');
-	// if Get_Cookie succeeds, cookies are enabled, since
-	//the cookie was successfully created.
-	if ( readCookie( 'test' ) )
-	{
-		cookie_set = true;
-		// and these are the parameters for Delete_Cookie:
-		// name, path, domain
-		// make sure you use the same parameters in Set and Delete Cookie.
-		eraseCookie('test');
+	function checkCookie() {
+		createCookie( 'MEEMS', 'none', '');
+		if ( readCookie( 'MEEMS' ) ) {
+			eraseCookie('MEEMS');
+		}
+		else {
+			alert('Cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
+		}
 	}
-	// if the Get_Cookie test fails, cookies
-	//are not enabled for this session.
-	else
-	{
-		alert('cookies are not currently enabled. Please enable your cookies for your bookmarks to work correctly.');
-		cookie_set = false;
-	}
-}
 	</script>
 	<script>
 	
@@ -97,8 +85,6 @@
 			showData(res['data']);
 			showToggleButton();
 		}
-
-
 	}
 
 	function setTitle(title) {
@@ -138,6 +124,7 @@
 	function showMenu() {
 		emptyMenu();
 		emptyData();
+		$('#content').addClass("selected");
 		$('#main-menu-wrapper').show();
 		$('#search_wrapper').show();
 		$('#email-button').hide();
@@ -179,7 +166,6 @@
 			createMenuItem($('#base-item'), title, next, from);
 		}
 	}
-	
 
 	function doSearch() {
 		var searchValue=$('#search').val().toLowerCase();
@@ -190,25 +176,25 @@
 		var pks=[];
 		var indexes=[];
 		$.each(availableTags, function(i,v) {
-				var title=v.title;
-				var pk=v.pk;
-				var data=v.data;
-				var type=v.type;
+			var title=v.title;
+			var pk=v.pk;
+			var data=v.data;
+			var type=v.type;
 
-				if(type=="ENDPAGE") {
-					if(title.indexOf(searchValue) != -1 ||
-						data.toLowerCase().indexOf(searchValue) != -1) {
+			if(type=="ENDPAGE") {
+				if(title.indexOf(searchValue) != -1 ||
+					data.toLowerCase().indexOf(searchValue) != -1) {
 
-						pks.push(pk);
-						if(data.indexOf(searchValue) != -1) {
-							indexes.push(data.indexOf(searchValue));
-						}
-						else {
-							indexes.push(10);
-						}
+					pks.push(pk);
+					if(data.indexOf(searchValue) != -1) {
+						indexes.push(data.indexOf(searchValue));
+					}
+					else {
+						indexes.push(10);
 					}
 				}
-			});
+			}
+		});
 		if(pks.length == 0){
 			hideMenu();
 			var data="No results were found";
@@ -223,16 +209,15 @@
 	</script>
 </head>
 <body>
-<div data-role="page" data-theme="b" data-scroll="true">
+<div data-role="page" data-theme="b" >
 	<div data-role="header" data-theme="b">
-		<a href="" data-icon="back" id='back-button' data-iconpos="notext"></a>
+		<a href="#" data-icon="back" id='back-button' data-iconpos="notext" data-transition="slide"></a>
 			<a href="" class='toggle_bookmark_button' data-icon="plus" data-iconpos="notext" id='add-bookmark-button' onclick='toggleBookmark();'></a>
 			<a href="" class='toggle_bookmark_button' data-icon="minus" data-iconpos="notext" id='remove-bookmark-button' onclick='toggleBookmark();'></a>
 		<h1 id='header-line'>MEEMS</h1>
 	</div>
 
 	<div data-role="content" style="overflow:auto" id="content">
-		<div data-iscroll="scroller">
 	
 		<div id='search_wrapper'>
 				<table width="100%">
@@ -242,6 +227,7 @@
 				<a href="#" width="10%" data-role="button" data-icon="search" data-iconpos="notext" onclick="doSearch();">Search</a></td></tr></table>
 
 		</div>
+			
 		<div id='main-menu-wrapper'>
 		<ul data-role="listview" data-theme="c" id='main-menu'>
 			<li id='base-item' ><a href=""></a></li>
@@ -253,7 +239,7 @@
 					
 				</div>
 		</pre>
-		</div>		
+	
 	</div><!-- /content -->
 
 	<div data-role="footer" data-theme="b" id='footer'>&nbsp;
