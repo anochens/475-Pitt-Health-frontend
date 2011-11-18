@@ -427,6 +427,11 @@
    <br/><br/><strong>Next Item?</strong>
 	<input id="menu" type="radio" name="radio_next_item" value="Menu"  />Menu
     <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage
+	<button id="existing" onclick="showExistingPages()" value="Existing Pages"> Existing Pages</button>
+	<br/><br/>
+	<div id="existingItem">
+		<input id="test" type="radio" name"radio_test" value="Test" />Test
+	</div>
     </form>	
 </div>
 
@@ -437,7 +442,7 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item</button>");
-	$("[id='survey']:eq("+0+")").hide();
+	//$("[id='survey']:eq("+0+")").hide();
 	makeTitleStatic(0,0);
 	
 });
