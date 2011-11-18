@@ -226,7 +226,31 @@
 		if(typeof(primarykey) === 'undefined'){
 			primarykey = 1;
 		}
-		phpAddNewItem(idPanel, primarykey, title, radio);
+		if(typeof(radio) === 'undefined'){
+			var boxes;
+			var existing;
+			var txt = "";
+			if(typeof(document.add_new_item.existing_menu.length)==='undefined'){
+				boxes = document.add_new_item.existing_endpage.length;
+				existing = document.add_new_item.existing_endpage;
+			}
+			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
+				boxes = document.add_new_item.existing_menu.length;
+				existing = document.add_new_item.existing_menu;
+			}
+			else{
+				phpAddNewItem(idPanel, primarykey, title, radio);
+			}
+			for (i = 0; i < boxes; i++) {
+				if (existing[i].checked) {
+					txt = txt + existing[i].value + " ";
+				}
+			}
+			console.log(txt);		
+		}
+		else{
+			phpAddNewItem(idPanel, primarykey, title, radio);
+		}
 		loadFile('data.json');
 		transitionTo(primarykey, idPanel); 
 	}
