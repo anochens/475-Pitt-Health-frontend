@@ -222,28 +222,43 @@
 		});
 	}
 	
+	function phpAddExisting(idPanel, pk, newTitle, nextPk){
+		console.log(nextPk);
+		var url = 'addexisting.php';
+		var data = { primarykey:pk, nextPK:nextPk, title:newTitle};
+		var request = $.ajax({
+		  	async: false,
+			type: 'POST',
+		  	url: url,
+		  	data: data,
+		  	success: function(){
+				alert("success");
+			},
+		  	error: function(){
+				alert("error");
+			},
+		  	complete: function(){
+				alert('completed');
+		    },
+		});
+	}
+	
 	function saveMenu(idPanel, primarykey, title, radio){
 		if(typeof(primarykey) === 'undefined'){
 			primarykey = 1;
 		}
+		console.log(typeof(radio));
 		if(typeof(radio) === 'undefined'){
-			var boxes;
-			var existing;
+			var selectedItem;
 			var txt = "";
 			if(typeof(document.add_new_item.existing_menu.length)==='undefined'){
-				var selectedItem = $('[name="existing_endpage"] option:selected').val();
-				console.log(selectedItem);
+				selectedItem = $('[name="existing_endpage"] option:selected').val();
 			}
 			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
-				var selectedItem = $('[name="existing_menu"] option:selected').val();
-				console.log(selectedItem);
+				selectedItem = $('[name="existing_menu"] option:selected').val();
 			}
-			for (i = 0; i < boxes; i++) {
-				if (existing[i].checked) {
-					txt = txt + existing[i].value + " ";
-				}
-			}
-			console.log(txt);		
+			console.log(selectedItem);
+			phpAddExisting(idPanel, primarykey, title, selectedItem);
 		}
 		else{
 			phpAddNewItem(idPanel, primarykey, title, radio);
@@ -277,6 +292,7 @@
 	}
 	
 	function dialogBox(idPanel, primarykey){
+		document.add_new_item.reset();
 		$('#existingItem').hide();
 		$('[id="existing_menu"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingMenu();});
 		$('[id="existing_endpage"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingEndpage();});
@@ -541,7 +557,7 @@
 	<form id="add_new_item" name="add_new_item" method="post">
    <br/><strong>Title: </strong>
 	<input id="title" type="text" name="title" value=""  />
-   <br/><br/><strong>Next Item?</strong>
+   <br/><br/><strong>New Item</strong>
 	<input id="menu" type="radio" name="radio_next_item" value="Menu"  />Menu
     <input id="endpage" type="radio" name="radio_next_item" value="Endpage"  />Endpage
 	<button id="existing_menu" value="Existing Pages"> Connect to Existing Menu</button><br/>
