@@ -13,6 +13,9 @@
 	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
 	
 	
+	<script type="text/javascript" src="lib//jquery.validate.js"></script>
+	
+	
 
 	<style>
 	.child {
@@ -293,7 +296,7 @@
 	
 	function showAddNewMenuEndpage(){
 		$('#existingItem').empty();
-		var content = "<input id='menu' type='radio' name='radio_next_item' value='Menu'  />Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
+		var content = "<input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
 		$('#existingItem').append(content);
 		$('#existingItem').show();
 	}
@@ -564,7 +567,8 @@
 <div id="survey">
 	<form id="add_new_item" name="add_new_item" method="post">
    <br/><strong>Title: </strong>
-	<input id="title" type="text" name="title" value=""  />
+	<input id="title" type="text" name="title" value="New Title" onfocus="if (this.value == 'New Title') {this.value=''}" onblur="if(this.value == '') { this.value='New Title'}" />
+	
    <br/><br/><strong>New Item</strong><br/>
 	<button id="add_new_button" value="add_new"> Add Blank Menu/Endpage</button><br/>
 	<button id="existing_menu" value="Existing Pages"> Connect to Existing Menu</button><br/>
