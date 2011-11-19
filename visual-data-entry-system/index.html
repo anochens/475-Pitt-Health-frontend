@@ -10,11 +10,7 @@
 	<script type="text/javascript" src="lib/jquery.mobile-1.0b3.min.js"></script>
 	<script type="text/javascript" src="scripts/loadjson.js"></script>
 	<script type="text/javascript" src="lib/jquery-ui.min.js"></script>
-	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />
-	
-	
-	<script type="text/javascript" src="lib//jquery.validate.js"></script>
-	
+	<link rel="stylesheet" href="lib/ui.theme.css" type="text/css" media="all" />	
 	
 
 	<style>
@@ -273,7 +269,7 @@
 	function showExistingMenu(){
 		$('#existingItem').empty();
 		var menuItems = getItems("MENU");
-		var content = "<select name='existing_menu'>";
+		var content = "Add Existing Menu<br/><select name='existing_menu'>";
 		for(var i in menuItems){
 			content = content + "<option value="+menuItems[i].pk+">"+menuItems[i].title+"</option>";
 		}
@@ -285,7 +281,7 @@
 	function showExistingEndpage(){
 		$('#existingItem').empty();
 		var endpageItems = getItems("ENDPAGE");
-		var content = "<select name='existing_endpage'>";
+		var content = "Add Existing Endpage<br/><select name='existing_endpage'>";
 		for(var i in endpageItems){
 			content = content + "<option value="+endpageItems[i].pk+">"+endpageItems[i].title+"</option>";
 		}
@@ -296,14 +292,14 @@
 	
 	function showAddNewMenuEndpage(){
 		$('#existingItem').empty();
-		var content = "<input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
+		var content = "Add Blank Menu/Endpage<br/><input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
 		$('#existingItem').append(content);
 		$('#existingItem').show();
 	}
 	
 	function dialogBox(idPanel, primarykey){
 		document.add_new_item.reset();
-		$('#existingItem').hide();
+		showAddNewMenuEndpage()
 		$('[id="add_new_button"]').click(function(e) {e.preventDefault();e.stopPropagation();showAddNewMenuEndpage();});
 		$('[id="existing_menu"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingMenu();});
 		$('[id="existing_endpage"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingEndpage();});
