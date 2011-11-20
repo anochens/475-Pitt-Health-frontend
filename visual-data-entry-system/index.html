@@ -267,6 +267,7 @@
 	}
 	
 	function showExistingMenu(){
+		$('#existing_menu').prop('checked', true);
 		$('#existingItem').empty();
 		var menuItems = getItems("MENU");
 		var content = "Add Existing Menu<br/><select name='existing_menu'>";
@@ -279,6 +280,7 @@
 	}
 	
 	function showExistingEndpage(){
+		$('#existing_endpage').prop('checked', true);
 		$('#existingItem').empty();
 		var endpageItems = getItems("ENDPAGE");
 		var content = "Add Existing Endpage<br/><select name='existing_endpage'>";
@@ -291,6 +293,8 @@
 	}
 	
 	function showAddNewMenuEndpage(){
+		$('input[name=radio_option]').prop('checked', false);
+		$('#add_new_button').prop('checked', true);
 		$('#existingItem').empty();
 		var content = "Add Blank Menu/Endpage<br/><input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
 		$('#existingItem').append(content);
@@ -300,9 +304,9 @@
 	function dialogBox(idPanel, primarykey){
 		document.add_new_item.reset();
 		showAddNewMenuEndpage()
-		$('[id="add_new_button"]').click(function(e) {e.preventDefault();e.stopPropagation();showAddNewMenuEndpage();});
-		$('[id="existing_menu"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingMenu();});
-		$('[id="existing_endpage"]').click(function(e) {e.preventDefault();e.stopPropagation();showExistingEndpage();});
+		$('[id="add_new_button"]').click(function(e) {e.stopPropagation();showAddNewMenuEndpage();});
+		$('[id="existing_menu"]').click(function(e) {e.stopPropagation();showExistingMenu();});
+		$('[id="existing_endpage"]').click(function(e) {e.stopPropagation();showExistingEndpage();});
 		
 		$('#survey').dialog({
 		autoOpen:true,
@@ -310,7 +314,7 @@
 		maxWidth:250,
 		resizable:false,
 		draggable:false,
-		title: "alan - Add new item",
+		title: "Add New Item",
 		buttons: {
              "Submit Form": function() {
 							var title = $('#title').val();
@@ -566,10 +570,14 @@
 	<input id="title" type="text" name="title" value="New Title" onfocus="if (this.value == 'New Title') {this.value=''}" onblur="if(this.value == '') { this.value='New Title'}" />
 	
    <br/><br/><strong>New Item</strong><br/>
-	<button id="add_new_button" value="add_new"> Add Blank Menu/Endpage</button><br/>
-	<button id="existing_menu" value="Existing Pages"> Connect to Existing Menu</button><br/>
-	<button id="existing_endpage" value="Existing Pages"> Connect to Existing Endpage</button>
-	
+	<!-- <button id="add_new_button" value="add_new"> Add Blank Menu/Endpage</button><br/>
+		<button id="existing_menu" value="Existing Menu"> Connect to Existing Menu</button><br/>
+		<button id="existing_endpage" value="Existing Pages"> Connect to Existing Endpage</button> -->
+	<input id='add_new_button' type='radio' name='radio_option' value='add_new'/>Add Blank Menu/Endpage
+	<br/>
+	<input id='existing_menu' type='radio' name='radio_option' value='Existing Menu'  />Connect to Existing Menu
+	<br/>
+	<input id='existing_endpage' type='radio' name='radio_option' value='Existing Pages'  />Connect to Existing Endpages
 	<br/><br/>
 	<div id="existingItem">
 	</div>
