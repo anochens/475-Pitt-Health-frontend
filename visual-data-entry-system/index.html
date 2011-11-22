@@ -17,7 +17,7 @@
 	.child {
 	   margin-right:5px;
 	   float:left;
-	   width: 345px;
+	   width: 300px;
 	   margin-left:2px;
 	}
 	#editItemButton{
@@ -429,7 +429,8 @@
 		$("[id='main-data']:eq("+idPanel+")").empty();
 		var dataEntry = getEntryFromFile(primarykey);
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='saveData("+idPanel+",\""+escape(data)+"\","+primarykey+")' id='saveButton'>Save</button>");
-		$("[id='main-data']:eq("+idPanel+")").append("<form><textarea rows='20' cols='35' id='testingTextArea' name='testingTextArea'>"+dataEntry.data+"</textarea></form>");
+		var onFocusBlur = "onfocus='if (this.value == \"Please enter information after clicking on the edit button\") {this.value=\"\"}' onblur='if(this.value == \"\") { this.value=\"Please enter information after clicking on the edit button\"}'";
+		$("[id='main-data']:eq("+idPanel+")").append("<form><textarea rows='20' cols='25' id='testingTextArea' name='testingTextArea'"+onFocusBlur+">"+dataEntry.data+"</textarea></form>");
 	}
 
 	function showData(data, idPanel, primarykey) {
