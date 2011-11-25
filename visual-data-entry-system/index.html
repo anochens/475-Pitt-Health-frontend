@@ -81,7 +81,7 @@
 			deleteItem(e, primarykey, elemId);
 		});		
 		
-		editButton.attr('src','./lib/images/pencil.PNG');
+		editButton.attr('src','./lib/images/pencil.png');
 
 	}
 	
@@ -156,8 +156,8 @@
 		var deleteButton = '';
 		
 		if(typeof primarykey != 'undefined') {
-			editButton = "<img id='editItemButton' src='./lib/images/pencil.PNG'/>";
-			deleteButton = "<img id='deleteItemButton' src='./lib/images/trash.PNG'/>";
+			editButton = "<img id='editItemButton' src='./lib/images/pencil.png'/>";
+			deleteButton = "<img id='deleteItemButton' src='./lib/images/trash.png'/>";
 		}
 		
 		var innerItem = cloned.find(':only-child:last');
@@ -387,7 +387,7 @@
 		
 		var titlebtn = getTitleButton(idPanel, primarykey);
 		titlebtn.unbind('click').click(function() {makeTitleEditable(idPanel,primarykey)});
-		titlebtn.attr('src','./lib/images/pencil.PNG');
+		titlebtn.attr('src','./lib/images/pencil.png');
 	}
 	
 	function phpEditFunction(pk, editData, type){
@@ -532,7 +532,7 @@
 	<div data-role="header" data-theme="b">
 		<!-- <a href="" data-icon="back" id='back-button'>Back</a> -->
 		<h1 id='header-line'>Health Resources</h1> 	
-		<img id='editTitleButton' src='./lib/images/pencil.PNG'/>
+		<img id='editTitleButton' src='./lib/images/pencil.png'/>
 	</div>
 
 	<div data-role="content">
