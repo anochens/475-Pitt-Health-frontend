@@ -134,7 +134,7 @@
 	function phpDeleteFunction(pk){
 		var url = 'deleteData.php';
 		var data = { primarykey:pk };
-		var request = $.ajax({
+		var request = $.ajax({g
 		  	async: false,
 			type: 'POST',
 		  	url: url,
@@ -210,6 +210,7 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
+				loadFile('data.json');
 				alert("success");
 			},
 		  	error: function(){
@@ -262,7 +263,7 @@
 		else{
 			phpAddNewItem(idPanel, primarykey, title, radio);
 		}
-		loadFile('data.json');
+		
 		transitionTo(primarykey, idPanel); 
 	}
 	
