@@ -123,11 +123,11 @@
 		var editButton = $("#"+elemId).find('#editItemButton');		
 		var menuItem = editButton.parent();
 		
-		var doDelete = confirm("Are you sure you want to delete this item?\n("+window.jsondata[primarykey]['title']+","+elemId+")");
+		var doDelete = confirm("Are you sure you want to delete this item?\n("+window.jsondata[primarykey]['title']+")");
 		
 		if(doDelete) {
 			phpDeleteFunction(primarykey);
-			$("#"+elemId).hide();
+			$("#"+elemId).remove();
 		}
 	}
 	
@@ -211,6 +211,7 @@
 		  	data: data,
 		  	success: function(){
 				loadFile('data.json');
+				transitionTo(pk, idPanel);
 				alert("success");
 			},
 		  	error: function(){
@@ -232,6 +233,8 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
+				loadFile('data.json');
+				transitionTo(pk, idPanel);
 				alert("success");
 			},
 		  	error: function(){
@@ -255,16 +258,14 @@
 				selectedItem = $('[name="existing_endpage"] option:selected').val();
 			}
 			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
-				selectedItem = $('[name="existing_menu"] option:selected').val();
+				g = $('[name="existing_menu"] option:selected').val();
 			}
 			console.log(selectedItem);
 			phpAddExisting(idPanel, primarykey, title, selectedItem);
 		}
 		else{
 			phpAddNewItem(idPanel, primarykey, title, radio);
-		}
-		
-		transitionTo(primarykey, idPanel); 
+		} 
 	}
 	
 	function showExistingMenu(){
