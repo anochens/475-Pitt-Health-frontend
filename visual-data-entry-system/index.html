@@ -247,6 +247,9 @@
 	}
 	
 	function saveMenu(idPanel, primarykey, title, radio){
+		if(primarykey == null) {
+			return;
+		}
 		if(typeof(primarykey) === 'undefined'){
 			primarykey = 1;
 		}
@@ -268,28 +271,21 @@
 		} 
 	}
 	
-	function showExistingMenu(){
+	function showExisting(displayType, type, primarykey) {
 		$('#existing_menu').prop('checked', true);
 		$('#existingItem').empty();
-		var menuItems = getItems("MENU");
-		var content = "Add Existing Menu<br/><select name='existing_menu'>";
-		for(var i in menuItems){
-			content = content + "<option value="+menuItems[i].pk+">"+menuItems[i].title+"</option>";
+		var menuItems = getItems(type, primarykey);
+		
+		if(menuItems.length > 0) {
+			var content = "Add Existing "+displayType+"<br/><select name='existing_menu'>";
+			for(var i in menuItems){
+				content = content + "<option value="+menuItems[i].pk+">"+menuItems[i].title+"</option>";
+			}
+			content = content + "</select>";
 		}
-		content = content + "</select>";
-		$('#existingItem').append(content);
-		$('#existingItem').show();
-	}
-	
-	function showExistingEndpage(){
-		$('#existing_endpage').prop('checked', true);
-		$('#existingItem').empty();
-		var endpageItems = getItems("ENDPAGE");
-		var content = "Add Existing Endpage<br/><select name='existing_endpage'>";
-		for(var i in endpageItems){
-			content = content + "<option value="+endpageItems[i].pk+">"+endpageItems[i].title+"</option>";
+		else {
+			var content = "Cannot Add Existing "+displayType;
 		}
-		content = content + "</select>";
 		$('#existingItem').append(content);
 		$('#existingItem').show();
 	}
@@ -307,8 +303,8 @@
 		document.add_new_item.reset();
 		showAddNewMenuEndpage()
 		$('[id="add_new_button"]').click(function(e) {e.stopPropagation();showAddNewMenuEndpage();});
-		$('[id="existing_menu"]').click(function(e) {e.stopPropagation();showExistingMenu();});
-		$('[id="existing_endpage"]').click(function(e) {e.stopPropagation();showExistingEndpage();});
+		$('[id="existing_menu"]').click(function(e) {e.stopPropagation();showExisting('Menu','MENU',primarykey);});
+		$('[id="existing_endpage"]').click(function(e) {e.stopPropagation();showExisting('Endpage', 'ENDPAGE',primarykey);});
 		
 		$('#survey').dialog({
 		autoOpen:true,
