@@ -247,23 +247,35 @@
 	}
 	
 	function saveMenu(idPanel, primarykey, title, radio){
-		if(primarykey == null) {
-			return;
-		}
+		
+		//if pk==undefined, that means it is the root menu, and should be zero
+		console.log('SAVING FROM MENU');
+		console.log("idPanel="+idPanel);
+		console.log("pk="+primarykey);
+		console.log("title="+title);
+		console.log(radio);
+		console.log('DONE SAVING');
+		
+		//if(primarykey === null) {
+		//	return;
+		//}
 		if(typeof(primarykey) === 'undefined'){
 			primarykey = 1;
 		}
-		console.log(typeof(radio));
+		
+		//meaning user has not selected add blank menu/endpage
 		if(typeof(radio) === 'undefined'){
 			var selectedItem;
 			var txt = "";
+			console.log('MEHH');
+			console.log(document.add_new_item);
+			
 			if(typeof(document.add_new_item.existing_menu.length)==='undefined'){
 				selectedItem = $('[name="existing_endpage"] option:selected').val();
 			}
 			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
-				g = $('[name="existing_menu"] option:selected').val();
+				selectedItem = $('[name="existing_menu"] option:selected').val();
 			}
-			console.log(selectedItem);
 			phpAddExisting(idPanel, primarykey, title, selectedItem);
 		}
 		else{
