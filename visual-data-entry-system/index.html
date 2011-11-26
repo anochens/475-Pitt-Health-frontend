@@ -140,7 +140,6 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				alert("success");
 				loadFile('data.json');
 			},
 		  	error: function(){
@@ -224,7 +223,6 @@
 	}
 	
 	function phpAddExisting(idPanel, pk, newTitle, nextPk){
-		console.log(nextPk);
 		var url = 'addexisting.php';
 		var data = { primarykey:pk, nextPK:nextPk, title:newTitle};
 		var request = $.ajax({
@@ -248,17 +246,7 @@
 	
 	function saveMenu(idPanel, primarykey, title, radio){
 		
-		//if pk==undefined, that means it is the root menu, and should be zero
-		console.log('SAVING FROM MENU');
-		console.log("idPanel="+idPanel);
-		console.log("pk="+primarykey);
-		console.log("title="+title);
-		console.log(radio);
-		console.log('DONE SAVING');
-		
-		//if(primarykey === null) {
-		//	return;
-		//}
+		//if pk is undefined, that means it is the root menu, and should be zero
 		if(typeof(primarykey) === 'undefined'){
 			primarykey = 1;
 		}
@@ -267,15 +255,21 @@
 		if(typeof(radio) === 'undefined'){
 			var selectedItem;
 			var txt = "";
-			console.log('MEHH');
-			console.log(document.add_new_item);
 			
-			if(typeof(document.add_new_item.existing_menu.length)==='undefined'){
+			var em_is_undef = typeof(document.add_new_item.existing_menu.length) == 'undefined';
+			var ee_is_undef = typeof(document.add_new_item.existing_endpage.length) == 'undefined';
+			
+			if(em_is_undef && ee_is_undef) {
+				return;
+			}
+			
+			if(em_is_undef) {
 				selectedItem = $('[name="existing_endpage"] option:selected').val();
 			}
-			else if(typeof(document.add_new_item.existing_endpage.length)==='undefined'){
+			if(ee_is_undef) {
 				selectedItem = $('[name="existing_menu"] option:selected').val();
 			}
+			
 			phpAddExisting(idPanel, primarykey, title, selectedItem);
 		}
 		else{
