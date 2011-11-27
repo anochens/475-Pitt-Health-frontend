@@ -30,6 +30,16 @@
 		right: 65px;
 		top: 5px;
 	}	
+	#moveUpItemButton{
+		position: absolute;
+		right: 125px;
+		top: 5px;
+	}
+	#moveDownItemButton{
+		position: absolute;
+		right: 95px;
+		top: 5px;
+	}
 	#editTitleButton{
 		position: absolute;
 		right: 30px;
@@ -46,7 +56,7 @@
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
-			makeMenu(res['items'], idPanel);
+			makeMenu(pk, res['items'], idPanel);
 		}
 
 		if(res['type'] == 'ENDPAGE') {
@@ -148,23 +158,60 @@
 		});
 	}
 	
-	function createMenuItem(elem, text, next, idPanel, primarykey) {
+	function phpChangeOrderFunction(pk, menuPK, direction){
+		var url = 'changeorder.php';
+		var data = { primarykey:pk, menuPK:menuPK, direction:direction};
+		var request = $.ajax({
+		  	async: false,
+			type: 'POST',
+		  	url: url,
+		  	data: data,
+		  	success: function(){
+				loadFile('data.json');
+			},
+		  	error: function(){
+				alert("error");
+			}
+		});
+	}
+	
+	function moveUpItem(e, primarykey, menuPK, idPanel){
+		e.preventDefault();
+		e.stopPropagation();
+		phpChangeOrderFunction(primarykey, menuPK, "up");
+		transitionTo(menuPK, idPanel);
+	}
+	
+	function moveDownItem(e, primarykey, menuPK, idPanel){
+		e.preventDefault();
+		e.stopPropagation();
+		phpChangeOrderFunction(primarykey, menuPK, "down");
+		transitionTo(menuPK, idPanel);
+	}
+	
+	function createMenuItem(elem, text, next, idPanel, primarykey, menuPK) {
 		var cloned = $(elem).clone();
 		var ul = $("[id='main-menu']:eq("+idPanel+")");
 		var editButton = '';
 		var deleteButton = '';
+		var upButton = '';
+		var downButton = '';
 		
 		if(typeof primarykey != 'undefined') {
 			editButton = "<img id='editItemButton' src='./lib/images/pencil.png'/>";
 			deleteButton = "<img id='deleteItemButton' src='./lib/images/trash.png'/>";
+			upButton = "<img id='moveUpItemButton' src='./lib/images/up.png'/>";
+			downButton = "<img id='moveDownItemButton' src='./lib/images/down.png'/>";
 		}
 		
 		var innerItem = cloned.find(':only-child:last');
 		
 		
-		innerItem.html(text+editButton+deleteButton);
+		innerItem.html(text+editButton+deleteButton+downButton+upButton);
 		innerItem.children().filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "item_"+primarykey)});
 		innerItem.children().filter('#deleteItemButton').click(function(e) {deleteItem(e, primarykey, "item_"+primarykey)});
+		innerItem.children().filter('#moveDownItemButton').click(function(e) {moveDownItem(e, primarykey, menuPK, idPanel)});
+		innerItem.children().filter('#moveUpItemButton').click(function(e) {moveUpItem(e, primarykey, menuPK, idPanel)});
 
 		innerItem.attr('next',next);
 		cloned.attr('id', 'item_'+primarykey);
@@ -342,11 +389,18 @@
 		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
-		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item</button>")
+		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item to this Menu</button>")
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
 		$("[id='survey']:eq("+idPanel+")").hide();
 
 		updateTitleButton(idPanel, primarykey);
+	}
+	
+	function showChangeOrderButton(idPanel, primarykey){
+		var titlebtn = $("[id='editItemButton']:eq("+idPanel+")");
+		titlebtn.attr('src','./lib/images/up.png');
+		
+		
 	}
 
 	function getTitleButton(idPanel, primarykey) {
@@ -457,7 +511,7 @@
 	function makeBaseMenu() {        
 		var baseMenuPK = 1;
 		var res = getEntryFromFile(baseMenuPK);
-		makeMenu(res['items']);
+		makeMenu(baseMenuPK, res['items']);
 	}
 
 	function showBaseMenu() {
@@ -465,7 +519,7 @@
 		window.back = [];
 	}
 
-	function makeMenu(items, idPanel, useSelfAsNext) {		
+	function makeMenu(currentPK, items, idPanel, useSelfAsNext) {		
 		var id;
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
@@ -485,7 +539,7 @@
 			// clone first column into second column
 			// $("[id='base-item']:eq(0)"); first base item
 			var test = $("[id='base-item']:eq("+idPanel+")");
-			createMenuItem(test, itemdata['title'], next, idPanel, itemdata['pk']);
+			createMenuItem(test, itemdata['title'], next, idPanel, itemdata['pk'], currentPK);
 			
 		}
 	}
@@ -596,6 +650,7 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item to this Menu</button>");
+	$("[id='main-data']:eq("+0+")").append("<button onclick='showChangeOrderButton("+0+","+1+")' id='changeOrderButton'>Change Order of Items in this Menu</button>");
 	$("[id='survey']:eq("+0+")").hide();
 	makeTitleStatic(0,1);
 		
