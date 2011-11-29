@@ -51,8 +51,9 @@
 
 	
 	function transitionTo(pk, idPanel) {
-
+		console.log(pk);
 		var res = getEntryFromFile(pk);
+		console.log(res);
 
 		if(res['type'] == 'MENU') {
 			showMenu(idPanel, pk);
@@ -137,6 +138,8 @@
 		menuItem.append(upButton);
 		menuItem.append(editButton);
 		menuItem.append(deleteButton);
+		
+		downButton.hide();
 		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
 		deleteButton.unbind('click').click(function(e) {deleteItem(e, primarykey, elemId)});
 		
@@ -192,8 +195,37 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				loadFile('data.json');
-				transitionTo(menuPK, idPanel);
+				//loadFile('data.json');
+				//setTimeout("transitionTo("+menuPK+","+ idPanel+")", 1500);
+				var itemList = $("[id='main-menu']:eq("+idPanel+")");
+				var elementToMove = itemList.find("#item_"+pk);
+				console.log(elementToMove);
+				// var indexOfElement = itemList.find('li').index(elementToMove);
+				// 				console.log(indexOfElement);
+				var indexOfElement = itemList.find('li:[id!="base-item"]').index(elementToMove);
+				console.log(indexOfElement);
+				if(direction == "up"){
+					if(indexOfElement > 0){
+						var elementAbove = itemList.find("li:[id!='base-item']:eq("+(indexOfElement-1)+")");
+						elementAbove.before(elementToMove);
+					}
+					else{
+						console.log("denied by boundary");
+					}
+				}
+				else{
+					var lastItem = itemList.find('li:last');
+					var lastIndex = itemList.find('li:[id!="base-item"]').index(lastItem);
+					if(indexOfElement < lastIndex){
+						var elementBelow = itemList.find("li:[id!='base-item']:eq("+(indexOfElement+1)+")");
+						elementBelow.after(elementToMove);
+					}
+					else{
+						console.log("denied by boundary");
+					}
+				}
+				
+				
 			},
 		  	error: function(){
 				alert("error");
@@ -410,13 +442,14 @@
 	}
 
 	function showMenu(idPanel, primarykey) {
+		console.log("showMenu " + idPanel + " " + primarykey);
 		$("[id='firstColumn']:eq("+idPanel+")").show();
 		emptyMenu(idPanel);
 		emptyData(idPanel);		
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item to this Menu</button>")
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
 		$("[id='survey']:eq("+idPanel+")").hide();
-
+		console.log("leaving showMenu");
 		updateTitleButton(idPanel, primarykey);
 	}
 
@@ -536,7 +569,8 @@
 		window.back = [];
 	}
 
-	function makeMenu(currentPK, items, idPanel, useSelfAsNext) {		
+	function makeMenu(currentPK, items, idPanel, useSelfAsNext) {	
+		console.log("makeMenu " + currentPK + " "+items);	
 		var id;
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
@@ -544,7 +578,7 @@
 		}
 		else{
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
+			//$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 		}
 		for(var i=0;i<items.length;i++) {
 			itemdata = getEntryFromFile(items[i]);
