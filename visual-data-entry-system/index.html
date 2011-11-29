@@ -73,23 +73,35 @@
 		document.title = title;
 	}
 
-	function makeItemStatic(primarykey, elemId, newData) {
+	function makeItemStatic(primarykey, elemId, newData, menuPK, idPanel) {
 		var menuItem = $("#"+elemId);		
 		var editButton = menuItem.find('#editItemButton');
 		var deleteButton = menuItem.find('#deleteItemButton');
+		var upButton = menuItem.find('#moveUpItemButton');
+		var downButton = menuItem.find('#moveDownItemButton');
 
 		menuItem = editButton.parent();
 		menuItem.html(newData);
+		menuItem.append(downButton);
+		menuItem.append(upButton);
 		menuItem.append(editButton);
 		menuItem.append(deleteButton);
 		
 		editButton.unbind('click').click(function(e){
-			makeItemEditable(e, primarykey, elemId);
+			makeItemEditable(e, primarykey, elemId, menuPK, idPanel);
 		});
 		
 		deleteButton.unbind('click').click(function(e){
 			deleteItem(e, primarykey, elemId);
-		});		
+		});
+		
+		upButton.unbind('click').click(function(e){
+			moveUpItem(e, primarykey, menuPK, idPanel);
+		});
+		
+		downButton.unbind('click').click(function(e){
+			moveDownItem(e, primarykey, menuPK, idPanel)
+		});
 		
 		editButton.attr('src','./lib/images/pencil.png');
 
@@ -103,7 +115,7 @@
 		return false;
 	}	
 	
-	function makeItemEditable(e, primarykey, elemId) {
+	function makeItemEditable(e, primarykey, elemId, menuPK, idPanel) {
 		e.preventDefault();
 		e.stopPropagation(); //make sure the item doesn't get clicked
 		
@@ -111,6 +123,8 @@
 
 		var editButton = $("#"+elemId).find('#editItemButton');
 		var deleteButton = $("#"+elemId).find('#deleteItemButton');
+		var upButton = $("#"+elemId).find('#moveUpItemButton');
+		var downButton = $("#"+elemId).find('#moveDownItemButton');
 		
 		var menuItem = editButton.parent();
 		
@@ -119,10 +133,21 @@
 		$('[id="newItem"]').click(function(e) {e.preventDefault();e.stopPropagation();});
 		$('[id="newItem"]').keypress(function(e) {if(e.keyCode==13){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId)}});
 
+		menuItem.append(downButton);
+		menuItem.append(upButton);
 		menuItem.append(editButton);
 		menuItem.append(deleteButton);
 		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
 		deleteButton.unbind('click').click(function(e) {deleteItem(e, primarykey, elemId)});
+		
+		upButton.unbind('click').click(function(e){
+			moveUpItem(e, primarykey, menuPK, idPanel);
+		});
+		
+		downButton.unbind('click').click(function(e){
+			moveDownItem(e, primarykey, menuPK, idPanel)
+		});
+		
 		editButton.attr('src','./lib/images/save-icon.JPG');
 	}
 	
@@ -158,7 +183,7 @@
 		});
 	}
 	
-	function phpChangeOrderFunction(pk, menuPK, direction){
+	function phpChangeOrderFunction(pk, menuPK, direction, idPanel){
 		var url = 'changeorder.php';
 		var data = { primarykey:pk, menuPK:menuPK, direction:direction};
 		var request = $.ajax({
@@ -168,6 +193,7 @@
 		  	data: data,
 		  	success: function(){
 				loadFile('data.json');
+				transitionTo(menuPK, idPanel);
 			},
 		  	error: function(){
 				alert("error");
@@ -178,15 +204,13 @@
 	function moveUpItem(e, primarykey, menuPK, idPanel){
 		e.preventDefault();
 		e.stopPropagation();
-		phpChangeOrderFunction(primarykey, menuPK, "up");
-		transitionTo(menuPK, idPanel);
+		phpChangeOrderFunction(primarykey, menuPK, "up", idPanel);
 	}
 	
 	function moveDownItem(e, primarykey, menuPK, idPanel){
 		e.preventDefault();
 		e.stopPropagation();
-		phpChangeOrderFunction(primarykey, menuPK, "down");
-		transitionTo(menuPK, idPanel);
+		phpChangeOrderFunction(primarykey, menuPK, "down", idPanel);
 	}
 	
 	function createMenuItem(elem, text, next, idPanel, primarykey, menuPK) {
@@ -208,7 +232,7 @@
 		
 		
 		innerItem.html(text+editButton+deleteButton+downButton+upButton);
-		innerItem.children().filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "item_"+primarykey)});
+		innerItem.children().filter('#editItemButton').click(function(e) {makeItemEditable(e, primarykey, "item_"+primarykey, menuPK, idPanel)});
 		innerItem.children().filter('#deleteItemButton').click(function(e) {deleteItem(e, primarykey, "item_"+primarykey)});
 		innerItem.children().filter('#moveDownItemButton').click(function(e) {moveDownItem(e, primarykey, menuPK, idPanel)});
 		innerItem.children().filter('#moveUpItemButton').click(function(e) {moveUpItem(e, primarykey, menuPK, idPanel)});
@@ -394,13 +418,6 @@
 		$("[id='survey']:eq("+idPanel+")").hide();
 
 		updateTitleButton(idPanel, primarykey);
-	}
-	
-	function showChangeOrderButton(idPanel, primarykey){
-		var titlebtn = $("[id='editItemButton']:eq("+idPanel+")");
-		titlebtn.attr('src','./lib/images/up.png');
-		
-		
 	}
 
 	function getTitleButton(idPanel, primarykey) {
@@ -629,9 +646,6 @@
 	<input id="title" type="text" name="title" value="New Title" onfocus="if (this.value == 'New Title') {this.value=''}" onblur="if(this.value == '') { this.value='New Title'}" />
 	
    <br/><br/><strong>New Item</strong><br/>
-	<!-- <button id="add_new_button" value="add_new"> Add Blank Menu/Endpage</button><br/>
-		<button id="existing_menu" value="Existing Menu"> Connect to Existing Menu</button><br/>
-		<button id="existing_endpage" value="Existing Pages"> Connect to Existing Endpage</button> -->
 	<input id='add_new_button' type='radio' name='radio_option' value='add_new'/>Add Blank Menu/Endpage
 	<br/>
 	<input id='existing_menu' type='radio' name='radio_option' value='Existing Menu'  />Connect to Existing Menu
@@ -650,7 +664,6 @@ $(document).ready(function() {
 	makeBaseMenu();
 	window.back = [];
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item to this Menu</button>");
-	$("[id='main-data']:eq("+0+")").append("<button onclick='showChangeOrderButton("+0+","+1+")' id='changeOrderButton'>Change Order of Items in this Menu</button>");
 	$("[id='survey']:eq("+0+")").hide();
 	makeTitleStatic(0,1);
 		
