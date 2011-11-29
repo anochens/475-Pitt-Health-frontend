@@ -80,6 +80,9 @@
 		var deleteButton = menuItem.find('#deleteItemButton');
 		var upButton = menuItem.find('#moveUpItemButton');
 		var downButton = menuItem.find('#moveDownItemButton');
+		
+		upButton.show();
+		downButton.show();
 
 		menuItem = editButton.parent();
 		menuItem.html(newData);
@@ -108,11 +111,11 @@
 
 	}
 	
-	function saveItem(primarykey, elemId) {
+	function saveItem(primarykey, elemId, menuPK, idPanel) {
 		var newData = $("#"+elemId).find('#newItem').val();
 
 		phpEditFunction(primarykey, newData, 'title');
-		makeItemStatic(primarykey, elemId, newData);
+		makeItemStatic(primarykey, elemId, newData, menuPK, idPanel);
 		return false;
 	}	
 	
@@ -140,7 +143,8 @@
 		menuItem.append(deleteButton);
 		
 		downButton.hide();
-		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
+		upButton.hide();
+		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId, menuPK, idPanel);});
 		deleteButton.unbind('click').click(function(e) {deleteItem(e, primarykey, elemId)});
 		
 		upButton.unbind('click').click(function(e){
