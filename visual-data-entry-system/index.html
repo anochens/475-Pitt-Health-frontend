@@ -49,9 +49,7 @@
 	
 	<script>
 
-	
 	function transitionTo(pk, idPanel) {
-
 		var res = getEntryFromFile(pk);
 
 		if(res['type'] == 'MENU') {
@@ -66,8 +64,6 @@
 		setTitle(res['title'], idPanel);
 	}
 	
-	
-
 	function setTitle(title, idPanel) {	
 		$("[id='header-line']:eq("+idPanel+")").html(title);
 		document.title = title;
@@ -79,6 +75,9 @@
 		var deleteButton = menuItem.find('#deleteItemButton');
 		var upButton = menuItem.find('#moveUpItemButton');
 		var downButton = menuItem.find('#moveDownItemButton');
+		
+		upButton.show();
+		downButton.show();
 
 		menuItem = editButton.parent();
 		menuItem.html(newData);
@@ -107,11 +106,11 @@
 
 	}
 	
-	function saveItem(primarykey, elemId) {
+	function saveItem(primarykey, elemId, menuPK, idPanel) {
 		var newData = $("#"+elemId).find('#newItem').val();
 
 		phpEditFunction(primarykey, newData, 'title');
-		makeItemStatic(primarykey, elemId, newData);
+		makeItemStatic(primarykey, elemId, newData, menuPK, idPanel);
 		return false;
 	}	
 	
@@ -137,7 +136,10 @@
 		menuItem.append(upButton);
 		menuItem.append(editButton);
 		menuItem.append(deleteButton);
-		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId);});
+		
+		downButton.hide();
+		upButton.hide();
+		editButton.unbind('click').click(function(e){e.preventDefault();e.stopPropagation();saveItem(primarykey,elemId, menuPK, idPanel);});
 		deleteButton.unbind('click').click(function(e) {deleteItem(e, primarykey, elemId)});
 		
 		upButton.unbind('click').click(function(e){
@@ -176,9 +178,11 @@
 		  	data: data,
 		  	success: function(){
 				loadFile('data.json');
+				console.log("Successfully deleted item with primary key: "+pk);
 			},
 		  	error: function(){
-				alert("error");
+				console.log("Error when deleting item");
+				console.log("Primary key to delete was: "+pk);
 			}
 		});
 	}
@@ -192,11 +196,37 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				loadFile('data.json');
-				transitionTo(menuPK, idPanel);
+				var itemList = $("[id='main-menu']:eq("+idPanel+")");
+				var elementToMove = itemList.find("#item_"+pk);
+				var indexOfElement = itemList.find('li:[id!="base-item"]').index(elementToMove);
+				if(direction == "up"){
+					if(indexOfElement > 0){
+						var elementAbove = itemList.find("li:[id!='base-item']:eq("+(indexOfElement-1)+")");
+						elementAbove.before(elementToMove);
+					}
+					else{
+						console.log("Denied by boundary");
+					}
+				}
+				else{
+					var lastItem = itemList.find('li:last');
+					var lastIndex = itemList.find('li:[id!="base-item"]').index(lastItem);
+					if(indexOfElement < lastIndex){
+						var elementBelow = itemList.find("li:[id!='base-item']:eq("+(indexOfElement+1)+")");
+						elementBelow.after(elementToMove);
+					}
+					else{
+						console.log("Denied by boundary");
+					}
+				}
+				console.log("Successfully changed the order of item "+pk+" in menu "+menuPK+".");
 			},
 		  	error: function(){
-				alert("error");
+				console.log("Error when changing the order of item.");
+				console.log("The menu's primary key is: "+menuPK);
+				console.log("The primary key of the element is: "+pk);
+				console.log("The direction to move the element is: "+direction);
+				console.log("The idPanel is: "+idPanel);
 			}
 		});
 	}
@@ -282,14 +312,15 @@
 		  	success: function(){
 				loadFile('data.json');
 				transitionTo(pk, idPanel);
-				alert("success");
+				console.log("Successfully added new item connecting to a new "+radio+" with Title: " + newTitle +".");
 			},
 		  	error: function(){
-				alert("error");
+				console.log("Error in adding a new item with blank menu/endpage.");
+				console.log("Title is: "+newTitle);
+				console.log("Next item is: "+radio);
+				console.log("idPanel is: "+idPanel);
+				console.log("Primary key: "+pk);
 			},
-		  	complete: function(){
-				alert('completed');
-		    },
 		});
 	}
 	
@@ -304,14 +335,15 @@
 		  	success: function(){
 				loadFile('data.json');
 				transitionTo(pk, idPanel);
-				alert("success");
+				console.log("Successfully added a new item connecting to an existing menu/endpage with primary key "+pk+" and the title of this new item is "+newTitle+".");
 			},
 		  	error: function(){
-				alert("error");
+				console.log("Error in adding a new item connecting to an existing menu/endpage.");
+				console.log("Title is: "+newTitle);
+				console.log("Next primary key is: "+nextPk);
+				console.log("idPanel is: "+idPanel);
+				console.log("Current primary key is: "+pk);
 			},
-		  	complete: function(){
-				alert('completed');
-		    },
 		});
 	}
 	
@@ -341,15 +373,15 @@
 				selectedItem = $('[name="existing_menu"] option:selected').val();
 			}
 			
-			phpAddExisting(idPanel, primarykey, title, selectedItem);
+			phpAddExisting(idPanel, primarykey, title, selectedItem);	//only used to add new item to connect to existing menu/endpage
 		}
 		else{
-			phpAddNewItem(idPanel, primarykey, title, radio);
+			phpAddNewItem(idPanel, primarykey, title, radio);	//only used to add new item to connect to blank menu/endpage
 		} 
 	}
 	
 	function showExisting(displayType, type, primarykey) {
-		$('#existing_menu').prop('checked', true);
+		$('#existing_menu').prop('checked', true);	//automatically check add
 		$('#existingItem').empty();
 		var menuItems = getItems(type, primarykey);
 		
@@ -377,15 +409,14 @@
 	}
 	
 	function dialogBox(idPanel, primarykey){
-		document.add_new_item.reset();
-		showAddNewMenuEndpage()
+		document.add_new_item.reset();	//clear dialog box from previous content
+		showAddNewMenuEndpage();	//automatically have "Add Blank Menu/Endpage" when opening dialog box
 		$('[id="add_new_button"]').click(function(e) {e.stopPropagation();showAddNewMenuEndpage();});
 		$('[id="existing_menu"]').click(function(e) {e.stopPropagation();showExisting('Menu','MENU',primarykey);});
 		$('[id="existing_endpage"]').click(function(e) {e.stopPropagation();showExisting('Endpage', 'ENDPAGE',primarykey);});
 		
 		$('#survey').dialog({
 		autoOpen:true,
-		//modal: true,
 		maxWidth:250,
 		resizable:false,
 		draggable:false,
@@ -401,7 +432,7 @@
 					  $(this).dialog("close");
              }
          },
-		open: function(event, ui) { $(".ui-dialog-titlebar-close").hide(); }
+		open: function(event, ui) { $(".ui-dialog-titlebar-close").hide();	//hide the close button on top right corner }
 		});
 
 		$('[role="dialog"]').css('background','grey');
@@ -415,8 +446,6 @@
 		emptyData(idPanel);		
 		$("[id='main-data']:eq("+idPanel+")").append("<button onclick='dialogBox("+idPanel+"," +primarykey + ")' id='popupButton'>Add New Item to this Menu</button>")
 		$("[id='main-menu-wrapper']:eq("+idPanel+")").show();
-		$("[id='survey']:eq("+idPanel+")").hide();
-
 		updateTitleButton(idPanel, primarykey);
 	}
 
@@ -533,17 +562,14 @@
 
 	function showBaseMenu() {
 		transitionTo(1);
-		window.back = [];
 	}
 
-	function makeMenu(currentPK, items, idPanel, useSelfAsNext) {		
-		var id;
+	function makeMenu(currentPK, items, idPanel, useSelfAsNext) {	
 		if(typeof idPanel==='undefined'){
 			idPanel = 0;
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 		}
 		else{
-			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 			$('#firstColumn').clone().appendTo($('#firstColumn').parent()).hide();
 		}
 		for(var i=0;i<items.length;i++) {
@@ -553,11 +579,8 @@
 			if(typeof useSelfAsNext !== 'undefined') {
 				next = itemdata['pk'];
 			}
-			// clone first column into second column
-			// $("[id='base-item']:eq(0)"); first base item
-			var test = $("[id='base-item']:eq("+idPanel+")");
-			createMenuItem(test, itemdata['title'], next, idPanel, itemdata['pk'], currentPK);
-			
+			var baseItem = $("[id='base-item']:eq("+idPanel+")");
+			createMenuItem(baseItem, itemdata['title'], next, idPanel, itemdata['pk'], currentPK);
 		}
 	}
 	
@@ -591,7 +614,6 @@
 				}
 			}
 		}
-			
 		$('#main-data').html(data);
 	}
 
@@ -626,8 +648,6 @@
 		</style>
 		<br/>
 		<br/>
-		
-
 
 		<pre style="font-family:arial;font-size:12pt;padding-right:20%">
 			<div id='main-data'>
@@ -636,11 +656,10 @@
 	</div>	
 	</div><!-- /content -->
 	<div data-role="footer" data-theme="b" style='position:fixed;left:0px;bottom:0px;padding-bottom:5px;padding-top:5px'>&nbsp;
-	</div>
-
- 
+	</div> 
 </div><!-- /page -->
-<div id="survey">
+
+<div id="survey"> <!-- For dialog box -->
 	<form id="add_new_item" name="add_new_item" method="post">
    <br/><strong>Title: </strong>
 	<input id="title" type="text" name="title" value="New Title" onfocus="if (this.value == 'New Title') {this.value=''}" onblur="if(this.value == '') { this.value='New Title'}" />
@@ -655,18 +674,15 @@
 	<div id="existingItem">
 	</div>
     </form>	
-</div>
+</div> <!-- /End of dialog box -->
 
 <script>
 
 $(document).ready(function() {
 	$('#base-item').hide();
 	makeBaseMenu();
-	window.back = [];
 	$("[id='main-data']:eq("+0+")").append("<button onclick='dialogBox("+0+")' id='popupButton'>Add New Item to this Menu</button>");
-	$("[id='survey']:eq("+0+")").hide();
 	makeTitleStatic(0,1);
-		
 });
 
 
