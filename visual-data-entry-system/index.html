@@ -381,6 +381,7 @@
 	}
 	
 	function showExisting(displayType, type, primarykey) {
+		$('input[name=radio_next_item]').prop('checked', false);
 		$('#existingItem').empty();
 		var menuItems = getItems(type, primarykey);
 		
@@ -400,11 +401,11 @@
 	
 	function showAddNewMenuEndpage(){
 		$('input[name=radio_option]').prop('checked', false);
-		$('#add_new_button').prop('checked', true);
+		//$('#add_new_button').prop('checked', true);
 		$('#existingItem').empty();
 		// var content = "Add New<br/><input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Menu<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Endpage";
-		$('#existingItem').append(content);
-		$('#existingItem').show();
+		//$('#existingItem').append(content);
+		//$('#existingItem').show();
 	}
 	
 	function dialogBox(idPanel, primarykey){
@@ -664,12 +665,12 @@
    <br/><strong>Title: </strong>
 	<input id="title" type="text" name="title" value="New Title" onfocus="if (this.value == 'New Title') {this.value=''}" onblur="if(this.value == '') { this.value='New Title'}" />
 	
-   <br/><br/><strong>New Item</strong><br/>
+   <br/><br/><strong>Add</strong><br/>
 	<!-- <input id='add_new_button' type='radio' name='radio_option' value='add_new'/>Add Blank Menu/Endpage
 	<br/> -->
-	<input id='menu' type='radio' name='radio_next_item' value='Menu'  checked/>Add New Menu Linked Item
+	<input id='menu' type='radio' name='radio_next_item' value='Menu' onclick='showAddNewMenuEndpage()' checked/>Add New Menu Linked Item
 	<br/>
-	<input id='menu' type='radio' name='radio_next_item' value='Endpage'  />Add New Endpage Linked Item
+	<input id='menu' type='radio' name='radio_next_item' value='Endpage' onclick='showAddNewMenuEndpage()' />Add New Endpage Linked Item
 	<br/>
 	<input id='existing_menu' type='radio' name='radio_option' value='Existing Menu'  />Use Existing Menu
 	<br/>
