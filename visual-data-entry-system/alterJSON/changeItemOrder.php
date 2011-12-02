@@ -4,7 +4,7 @@ $pk = $_POST['primarykey'];
 $pk = (int)$pk;
 $menuPK = $_POST['menuPK'];
 $direction = $_POST['direction'];
-$filename = 'data.json';
+$filename = '../data.json';
 
 $json = file_get_contents($filename);
 $json = json_decode($json,true);

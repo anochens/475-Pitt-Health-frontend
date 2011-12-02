@@ -189,6 +189,7 @@
 	
 	function phpChangeOrderFunction(pk, menuPK, direction, idPanel){
 		var url = 'alterJSON/changeItemOrder.php';
+
 		var data = { primarykey:pk, menuPK:menuPK, direction:direction};
 		var request = $.ajax({
 		  	async: false,
@@ -324,7 +325,7 @@
 		});
 	}
 	
-	function addItemLinkedToExisting(idPanel, pk, newTitle, nextPk){
+	function phpAddItemLinkedToExisting(idPanel, pk, newTitle, nextPk){
 		var url = 'alterJSON/addItemLinkedToExisting.php';
 		var data = { primarykey:pk, nextPK:nextPk, title:newTitle};
 		var request = $.ajax({
@@ -502,7 +503,6 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				alert("success");
 				if(window.jsondata[pk]) {
 					window.jsondata[pk][type] = editData;
 				}	
@@ -633,7 +633,7 @@
 
 	<div data-role="content">
 		<div id='main-menu-wrapper'>
-			<ul data-role="listview" data-theme="c" data-filter="true" id='main-menu'>
+			<ul data-role="listview" data-theme="c" id='main-menu'>
 				<li id='base-item' ><a href=""></a></li>
 			</ul>
 		</div>

@@ -1,6 +1,6 @@
 <?php
 
-$json = file_get_contents("data.json");
+$json = file_get_contents("../data.json");
 $jsonIterator = json_decode($json,true);
 
 $pkCounter = array();
@@ -28,7 +28,7 @@ $newItemArray['next'] = $nextPK;
 print_r($newItemArray);
 array_push($jsonIterator, $newItemArray);
 
-$filename = 'data.json';
+$filename = '../data.json';
 $fp = fopen($filename, 'w');
 fwrite($fp, json_encode($jsonIterator));
 fclose($fp);

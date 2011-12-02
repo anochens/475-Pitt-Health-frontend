@@ -3,7 +3,7 @@
 $type = $_POST['type'];
 $pk = $_POST['primarykey'];
 $newdata = $_POST["editData"];
-$filename = 'data.json';
+$filename = '../data.json';
 
 if(!$type) {
 	$type = 'data';
