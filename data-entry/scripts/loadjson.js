@@ -23,7 +23,7 @@ function loadFile(filename){
 
 function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {
-		filename = 'data.json';
+		filename = '../../data.json';
 	}
 
 	if(typeof window.jsondata === "undefined"){
@@ -50,7 +50,7 @@ function getEntry(primarykey){
 }
 
 function getItems(type){
-	loadFile('data.json');
+	loadFile('../../data.json');
 	items = [];
 	for(var i in window.jsondata){
 		if(window.jsondata[i].type == type){

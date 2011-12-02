@@ -27,14 +27,14 @@ function loadFile(filename){
 }
 function returnTitles(){
 if(typeof window.titles==='undefined'){
-loadFile('data.json');
+loadFile('../../data.json');
 }
 return data;
 }
 
 function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {
-		filename = 'data.json';
+		filename = '../../data.json';
 	}
 
 	if(typeof window.jsondata === "undefined"){

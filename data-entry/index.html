@@ -177,7 +177,7 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				loadFile('data.json');
+				loadFile('../data.json');
 				console.log("Successfully deleted item with primary key: "+pk);
 			},
 		  	error: function(){
@@ -311,7 +311,7 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				loadFile('data.json');
+				loadFile('../data.json');
 				transitionTo(pk, idPanel);
 				console.log("Successfully added new item connecting to a new "+radio+" with Title: " + newTitle +".");
 			},
@@ -334,7 +334,7 @@
 		  	url: url,
 		  	data: data,
 		  	success: function(){
-				loadFile('data.json');
+				loadFile('../data.json');
 				transitionTo(pk, idPanel);
 				console.log("Successfully added a new item connecting to an existing menu/endpage with primary key "+pk+" and the title of this new item is "+newTitle+".");
 			},

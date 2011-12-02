@@ -1,6 +1,6 @@
 <?php
 
-$json = file_get_contents("../data.json");
+$json = file_get_contents("../../data.json");
 $jsonIterator = json_decode($json,true);
 
 $pkCounter = array();
@@ -17,7 +17,7 @@ $newItemArray = array();
 echo "####";
 $newPK = max($pkCounter)+1;
 $nextPK = max($pkCounter)+2;
-
+                                
 print_r($jsonIterator[$menuPk]['items']);
 array_push($jsonIterator[$menuPk]['items'], $newPK);
 print_r($jsonIterator[$menuPk]['items']);
@@ -44,7 +44,7 @@ if(strtoupper($_POST["radio_next_item"]) == "MENU"){
 print_r($newNextArray);
 array_push($jsonIterator, $newNextArray);
 
-$filename = '../data.json';
+$filename = '../../data.json';
 $fp = fopen($filename, 'w');
 fwrite($fp, json_encode($jsonIterator));
 fclose($fp);
