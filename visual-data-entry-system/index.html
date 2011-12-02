@@ -109,7 +109,7 @@
 	function saveItem(primarykey, elemId, menuPK, idPanel) {
 		var newData = $("#"+elemId).find('#newItem').val();
 
-		phpEditFunction(primarykey, newData, 'title');
+		phpEditJSONItem(primarykey, newData, 'title');
 		makeItemStatic(primarykey, elemId, newData, menuPK, idPanel);
 		return false;
 	}	
@@ -169,7 +169,7 @@
 	}
 	
 	function phpDeleteFunction(pk){
-		var url = 'deleteData.php';
+		var url = 'alterJSON/deleteItem.php';
 		var data = { primarykey:pk };
 		var request = $.ajax({
 		  	async: false,
@@ -188,7 +188,7 @@
 	}
 	
 	function phpChangeOrderFunction(pk, menuPK, direction, idPanel){
-		var url = 'changeorder.php';
+		var url = 'alterJSON/changeItemOrder.php';
 		var data = { primarykey:pk, menuPK:menuPK, direction:direction};
 		var request = $.ajax({
 		  	async: false,
@@ -302,7 +302,7 @@
 	}
 	
 	function phpAddNewItem(idPanel, pk, newTitle, radio){
-		var url = 'addnewitem.php';
+		var url = 'alterJSON/addNewItem.php';
 		var data = { primarykey:pk, radio_next_item:radio, title:newTitle};
 		var request = $.ajax({
 		  	async: false,
@@ -324,8 +324,8 @@
 		});
 	}
 	
-	function phpAddExisting(idPanel, pk, newTitle, nextPk){
-		var url = 'addexisting.php';
+	function addItemLinkedToExisting(idPanel, pk, newTitle, nextPk){
+		var url = 'alterJSON/addItemLinkedToExisting.php';
 		var data = { primarykey:pk, nextPK:nextPk, title:newTitle};
 		var request = $.ajax({
 		  	async: false,
@@ -373,7 +373,7 @@
 				selectedItem = $('[name="existing_menu"] option:selected').val();
 			}
 			
-			phpAddExisting(idPanel, primarykey, title, selectedItem);	//only used to add new item to connect to existing menu/endpage
+			phpAddItemLinkedToExisting(idPanel, primarykey, title, selectedItem);	//only used to add new item to connect to existing menu/endpage
 		}
 		else{
 			phpAddNewItem(idPanel, primarykey, title, radio);	//only used to add new item to connect to blank menu/endpage
@@ -493,8 +493,8 @@
 		titlebtn.attr('src','./lib/images/pencil.png');
 	}
 	
-	function phpEditFunction(pk, editData, type){
-		var url = 'editData.php';
+	function phpEditJSONItem(pk, editData, type){
+		var url = 'alterJSON/editJSONItem.php';
 		var data = { primarykey:pk, editData:editData, type: type };
 		var request = $.ajax({
 		  	async: false,
@@ -515,7 +515,7 @@
 
 	function saveTitle(idPanel, primarykey) {
 		var newTitle = $("[id='newTitle']:eq(0)").val();
-		phpEditFunction(primarykey, newTitle, 'title');
+		phpEditJSONItem(primarykey, newTitle, 'title');
 		makeTitleStatic(idPanel, primarykey, newTitle);
 		return false;
 	}
@@ -523,7 +523,7 @@
 	function saveData(idPanel, data, primarykey){
 		var text = $('#testingTextArea').val();
 		data = unescape(text);
-		phpEditFunction(primarykey, data, 'data');
+		phpEditJSONItem(primarykey, data, 'data');
 		emptyData(idPanel);
 		showData(data, idPanel, primarykey);
 	}
