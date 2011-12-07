@@ -128,13 +128,11 @@
 		$('#main-menu-wrapper').show();
 		$('#search_wrapper').show();
 		$('#email-button').hide();
-		$('#sms-button').hide();
 	}
 
 	function showData(data) {
 		$('#main-data').html(data);
 		showMailerButton();
-		showSMSButton();
 		addAllLinks();
 	}
 
@@ -247,7 +245,6 @@
 		<a href="" data-role="button" id='home-button' onclick='showBaseMenu();'>Home</a>
 		<a href="" data-role="button" id='bookmarks-button' onclick='showBookmarks();'>Bookmarks</a>
 		<a href="" data-role="button" id='email-button'>Email</a>
-		<a href="" data-role="button" id='sms-button'>Text</a>
 		</div>
 	</div>
  
@@ -283,7 +280,6 @@ function setup() {
 	$('#add-bookmark-button').hide();
 	$('#remove-bookmark-button').hide();
 	$('#email-button').hide();
-	$('#sms-button').hide();
 	makeBaseMenu();
 	window.back = [];
 	window.currentPK = 1;
