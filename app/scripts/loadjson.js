@@ -1,40 +1,58 @@
+var getJsonUrl = 'http://www.alannochenson.com/475/getJSON.php';
+
 function loadFile(filename){
 	window.jsondata=[];
 	data = [];
 	window.titles=[];
 	window.data=[];
+	var loaded=false;
 	
 	$.ajax({
-		url: filename,
+		type:'GET',
 		async: false,
-		dataType: 'json',
-		success: function(d) { data = d; },
+		url:filename,
+		dataType:'jsonp',
+		jsonpCallback: "fname", 
+		success:function(data){
+			for(var i=0;i<data.length;i++){
+				window.jsondata[data[i].pk]=data[i]; 
+				if(data[i].type=="ENDPAGE"){
+				window.titles[i]=data[i].title;
+				}
+			}
+			loaded = true;
+		},
 		error: function (jq, text, ethrown) {
-			console.log(jq);
-			console.log(text);
-			console.log(ethrown);
-			throw 'Error: '+text;
-			return ;
+		console.log(jq);
+		console.log(text);
+		console.log(ethrown);
+		throw 'Error: '+text;
+		return ;
 		}
 	});
-
-	for(var i=0;i<data.length;i++){
-		window.jsondata[data[i].pk]=data[i]; 
-		if(data[i].type=="ENDPAGE"){
-		window.titles[i]=data[i].title;
-		}
+	
+	while(!loaded) {
+		$.ajax({
+			type:'GET',
+			async: false,
+			url:'http://google.com',
+			complete:function() {
+			}
+		});	
 	}
+	
+	return;
 }
-function returnTitles(){
-if(typeof window.titles==='undefined'){
-loadFile('../data.json');
-}
-return data;
+function returnTitles() {
+	if(typeof window.titles==='undefined'){
+		loadFile(getJsonUrl);
+	}
+	return data;
 }
 
 function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {
-		filename = '../data.json';
+		filename = getJsonUrl;
 	}
 
 	if(typeof window.jsondata === "undefined"){
