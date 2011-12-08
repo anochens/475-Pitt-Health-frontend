@@ -1,18 +1,10 @@
 var getJsonUrl = 'http://www.alannochenson.com/475/getJSON.php';
 
 function loadFile(filename){
-
- $.ajaxSetup({
-
-     timeout: 10000
-
-  });
-
 	window.jsondata=[];
 	data = [];
 	window.titles=[];
 	window.data=[];
-	var loaded=false;
 	
 	$.ajax({
 		type:'GET',
@@ -27,7 +19,7 @@ function loadFile(filename){
 				window.titles[i]=data[i].title;
 				}
 			}
-			loaded = true;
+			makeBaseMenu();
 		},
 		error: function (jq, text, ethrown) {
 		console.log(jq);
@@ -37,18 +29,6 @@ function loadFile(filename){
 		return ;
 		}
 	});
-	
-	while(!loaded) {
-		$.ajax({
-			type:'GET',
-			async: false,
-			url:'http://google.com',
-			complete:function() {
-			}
-		});	
-	}
-	
-	return;
 }
 function returnTitles() {
 	if(typeof window.titles==='undefined'){
@@ -76,10 +56,6 @@ function getEntry(primarykey){
 	if(!entry) {
 		throw "Can't find an entry with primary key "+primarykey;
 		return;
-	}
-
-	if(entry.type=="ENDPAGE"){
-		//do some bookmark stuff?
 	}
 
 	return window.jsondata[primarykey];
