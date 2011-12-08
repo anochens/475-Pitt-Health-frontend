@@ -1,6 +1,13 @@
 var getJsonUrl = 'http://www.alannochenson.com/475/getJSON.php';
 
 function loadFile(filename){
+
+ $.ajaxSetup({
+
+     timeout: 10000
+
+  });
+
 	window.jsondata=[];
 	data = [];
 	window.titles=[];
