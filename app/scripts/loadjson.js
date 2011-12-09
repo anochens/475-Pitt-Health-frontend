@@ -30,12 +30,6 @@ function loadFile(filename){
 		}
 	});
 }
-function returnTitles() {
-	if(typeof window.titles==='undefined'){
-		loadFile(getJsonUrl);
-	}
-	return data;
-}
 
 function getEntryFromFile(primarykey, filename) {
 	if(typeof filename === 'undefined') {

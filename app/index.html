@@ -170,10 +170,13 @@
 		if (searchValue.length==0){
 			return;
 		}
-		var availableTags = returnTitles();
+		var availableTags = window.jsondata;
 		var pks=[];
 		var indexes=[];
-		$.each(availableTags, function(i,v) {
+		
+		for(i in window.jsondata) {
+			v=window.jsondata[i];
+			
 			var title=v.title;
 			var pk=v.pk;
 			var data=v.data;
@@ -192,7 +195,7 @@
 					}
 				}
 			}
-		});
+		}
 		if(pks.length == 0){
 			hideMenu();
 			var data="No results were found";
