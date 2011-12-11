@@ -46,6 +46,9 @@
 
 	function goBack() {
 		var last = window.back.pop();
+		
+		$('#search').val("");
+		$('#search').parent().find('a').remove();
 
 		//if we are on the root page, hide the back button
 		if(back.length == 0) {
@@ -121,12 +124,22 @@
 		$('#search_wrapper').hide();
 	}
 
-	function showMenu() {
+	function showMenu(bookmarks) {
+		if(typeof bookmarks == 'undefined') {
+			bookmarks = false;
+		}
+	
 		emptyMenu();
 		emptyData();
 		$('#content').addClass("selected");
 		$('#main-menu-wrapper').show();
-		$('#search_wrapper').show();
+		
+		if(bookmarks) {
+			$('#search_wrapper').hide();
+		}
+		else {
+			$('#search_wrapper').show();
+		}
 		$('#email-button').hide();
 	}
 
@@ -147,6 +160,9 @@
 		transitionTo(1);
 		window.back = [];
 		$('#back-button').hide();
+		
+		$('#search').val("");
+		$('#search').parent().find('a').remove();
 	}
 
 	function makeMenu(items, from, useSelfAsNext) {
@@ -173,6 +189,8 @@
 		var availableTags = window.jsondata;
 		var pks=[];
 		var indexes=[];
+		
+		setTitle("Search Results");
 		
 		for(i in window.jsondata) {
 			v=window.jsondata[i];

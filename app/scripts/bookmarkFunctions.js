@@ -43,15 +43,23 @@ function showBookmarks() {
 	if(!window.bookmarks) {
 		loadBookmarks();
 	}
-
+	
+	setBack(window.currentPK);
+	setTitle('Bookmarks');	
+	
+	if(window.bookmarks.length == 0){
+		hideMenu();
+		var data="No bookmarks yet.";
+		$('#main-data').html(data);
+		setBack(1);
+		return;
+	}
+	
 	$('#bookmarks-button').hide();
 	$('#add-bookmark-button').hide();
-
-	showMenu();
+	
+	showMenu(true); //the true makes it hide the search bar
 	makeMenu(window.bookmarks, 0, true);
-
-	setBack(window.currentPK);
-	setTitle('Bookmarks');
 }
 
 function showToggleButton() {
